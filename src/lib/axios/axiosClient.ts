@@ -3,7 +3,7 @@ import { cookieName, petDiaryApiBaseUrl } from '@/boundary/constants/appConstant
 import { NextRequest } from 'next/server';
 import { AccessTokenModel } from '@/boundary/interfaces/token';
 
-const petDiariesApiClient = axios.create({
+const discussifyApiClient = axios.create({
   baseURL: `${petDiaryApiBaseUrl}`,
   timeout: 30000,
   headers: {
@@ -13,7 +13,7 @@ const petDiariesApiClient = axios.create({
   // httpsAgent: new https.Agent({ rejectUnauthorized: false })
 });
 
-petDiariesApiClient.interceptors.request.use(
+discussifyApiClient.interceptors.request.use(
   function(config: any) {
     if (
       config.url.includes('journal-entry/create') ||
@@ -33,7 +33,7 @@ petDiariesApiClient.interceptors.request.use(
     return Promise.reject(error);
   },
 );
-export default petDiariesApiClient;
+export default discussifyApiClient;
 
 export function getAxiosConfigs(request: NextRequest, queryParams?: any) {
   const tokenCookie = request.cookies.get(`${cookieName}`)?.value as string;

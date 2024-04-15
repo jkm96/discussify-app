@@ -6,8 +6,8 @@ import { NAVIGATION_LINKS } from '@/boundary/configs/navigationConfig';
 import { useRouter } from 'next/navigation';
 import { CircularProgress } from '@nextui-org/react';
 import { verifyUserEmailAsync } from '@/lib/services/auth/userAuthService';
-import MainNavbar from '@/components/site/sections/MainNavbar';
 import { useAuth } from '@/hooks/useAuth';
+import MainNavbar from "@/components/shared/navs/MainNavbar";
 
 export default function VerifyUser() {
   const { clearAuthToken } = useAuth();
@@ -56,6 +56,7 @@ export default function VerifyUser() {
   return (
     <>
       <MainNavbar />
+
       <div className='grid place-items-center text-black-2 mt-4'>
         {isLoading ? (
           <CircularProgress

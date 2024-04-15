@@ -1,4 +1,4 @@
-export const NAVIGATION_LINKS = {
+ export const NAVIGATION_LINKS = {
   HOME: '/',
   PRIVACY_POLICY: '/privacy-policy',
   TERMS_CONDITIONS: '/terms-conditions',

@@ -5,13 +5,13 @@ import React, { useEffect, useState } from 'react';
 import { NAVIGATION_LINKS } from '@/boundary/configs/navigationConfig';
 import { Input } from '@nextui-org/react';
 import { changeUserPasswordAsync } from '@/lib/services/auth/userAuthService';
-import MainNavbar from '@/components/site/sections/MainNavbar';
 import { Button } from '@nextui-org/button';
-import Spinner from '@/components/shared/icons/Spinner';
 import { validateResetPassFormInputErrors } from '@/helpers/validationHelpers';
 import { ResetPasswordRequest } from '@/boundary/interfaces/auth';
 import { EyeFilledIcon, EyeSlashFilledIcon } from '@nextui-org/shared-icons';
 import Link from 'next/link';
+import MainNavbar from "@/components/shared/navs/MainNavbar";
+import Spinner from "@/components/shared/icons/Spinner";
 
 const initialFormState: ResetPasswordRequest = {
   confirmPassword: '', password: '', token: '',

@@ -14,7 +14,7 @@ import Spinner from '@/components/shared/icons/Spinner';
 import { NAVIGATION_LINKS } from '@/boundary/configs/navigationConfig';
 import { AccessTokenModel } from '@/boundary/interfaces/token';
 import { useAuth } from '@/hooks/useAuth';
-import MainNavbar from '@/components/site/sections/MainNavbar';
+import MainNavbar from "@/components/shared/navs/MainNavbar";
 
 const initialFormState: RegisterUserRequest = {
   email: '', username: '', password: '', confirmPassword: '',

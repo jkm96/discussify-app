@@ -38,7 +38,7 @@ export default function MainNavbar() {
         />
         <NavbarBrand>
           <Link className='font-bold' href={NAVIGATION_LINKS.HOME}>
-            Pet Diaries
+            Discussify
           </Link>
         </NavbarBrand>
       </NavbarContent>

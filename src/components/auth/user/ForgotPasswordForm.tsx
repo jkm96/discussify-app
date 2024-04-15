@@ -3,12 +3,12 @@
 import React, { useState } from 'react';
 import { ForgotPasswordRequest } from '@/boundary/interfaces/auth';
 import { Input } from '@nextui-org/react';
-import MainNavbar from '@/components/site/sections/MainNavbar';
 import Spinner from '@/components/shared/icons/Spinner';
 import { Button } from '@nextui-org/button';
 import { validateForgotPassFormInputErrors } from '@/helpers/validationHelpers';
 import { requestPasswordReset } from '@/lib/services/auth/userAuthService';
 import { toast } from 'react-toastify';
+import MainNavbar from "@/components/shared/navs/MainNavbar";
 
 const initialFormState: ForgotPasswordRequest = {
   email: '',
