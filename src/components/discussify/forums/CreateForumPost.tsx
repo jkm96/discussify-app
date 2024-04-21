@@ -9,6 +9,9 @@ import {validateCreatePostFormInputErrors} from "@/helpers/validationHelpers";
 import {createPostAsync} from "@/lib/services/discussify/postService";
 import {ResetPasswordRequest} from "@/boundary/interfaces/auth";
 import dynamic from "next/dynamic";
+import {router} from "next/client";
+import {NAVIGATION_LINKS} from "@/boundary/configs/navigationConfig";
+import {useRouter} from "next/navigation";
 
 
 const CustomEditor = dynamic(() => {
@@ -20,6 +23,7 @@ const initialFormState: CreatePostRequest = {
 };
 
 export default function CreateForumPost({slug}: { slug: string }) {
+    const router = useRouter();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [createPostRequest, setCreatePostRequest] = useState(initialFormState);
     const [inputErrors, setInputErrors] = useState({
@@ -42,7 +46,6 @@ export default function CreateForumPost({slug}: { slug: string }) {
         const inputErrors = validateCreatePostFormInputErrors(createPostRequest);
 
         if (inputErrors && Object.keys(inputErrors).length > 0) {
-            console.info("inputErrors",inputErrors)
             setInputErrors(inputErrors);
             setIsSubmitting(false);
             return;
@@ -52,6 +55,7 @@ export default function CreateForumPost({slug}: { slug: string }) {
         if (response.statusCode === 200) {
             toast.success(response.message);
             setIsSubmitting(false);
+            router.push(NAVIGATION_LINKS.HOME)
         } else {
             setIsSubmitting(false);
             toast.error(response.message ?? 'Unknown error occurred');

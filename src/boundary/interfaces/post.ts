@@ -22,3 +22,9 @@ export interface CreatePostRequest {
     description: string;
     tags: string;
 }
+
+export interface EditPostRequest {
+    postId: number;
+    title: string;
+    description: string;
+}

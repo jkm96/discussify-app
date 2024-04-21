@@ -1,8 +1,10 @@
 import {PostResponse} from "@/boundary/interfaces/post";
 import {Avatar, Card, CardHeader} from "@nextui-org/react";
 import React from "react";
+import {VerticalDotsIcon} from "@/components/shared/icons/VerticalDotsIcon";
+import {EditIcon} from "@nextui-org/shared-icons";
 
-export function RenderPostAuthor(props: { postDetails: PostResponse }) {
+export function RenderPostAuthor({postDetails}: { postDetails: PostResponse }) {
     return <Card className="w-full"
                  shadow={"none"}
                  radius={"none"}>
@@ -11,7 +13,7 @@ export function RenderPostAuthor(props: { postDetails: PostResponse }) {
                 <Avatar isBordered radius="sm" size="md" name={"T"}/>
                 <div className="flex flex-col gap-1 items-start justify-center">
                     <h4 className="text-small font-semibold leading-none text-default-600">
-                        {props.postDetails.user.username}
+                        {postDetails.user.username}
                     </h4>
                     <h5 className="text-small tracking-tight text-default-400">
                         <span className="mr-1">Joined 2025</span>
@@ -19,6 +21,9 @@ export function RenderPostAuthor(props: { postDetails: PostResponse }) {
                     </h5>
                 </div>
             </div>
+            <span>
+                <EditIcon/>
+            </span>
         </CardHeader>
     </Card>;
 }

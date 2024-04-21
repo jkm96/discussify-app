@@ -10,6 +10,7 @@ import {toast} from "react-toastify";
 import {getLatestPosts} from "@/lib/services/discussify/postService";
 import Link from "next/link";
 import {NAVIGATION_LINKS} from "@/boundary/configs/navigationConfig";
+import {formatDateWithoutTime} from "@/helpers/dateHelpers";
 
 export default function Home() {
     const [queryParams, setQueryParams] = useState<PostQueryParameters>(new PostQueryParameters());
@@ -182,7 +183,7 @@ export default function Home() {
                                                 <Avatar
                                                     alt="nextui logo"
                                                     className="ml-1"
-                                                    name="P"
+                                                    name={post.user.username.charAt(0).toUpperCase()}
                                                     size='lg'
                                                     color='success'
                                                     isBordered={true}
@@ -197,7 +198,9 @@ export default function Home() {
                                                           href={`${NAVIGATION_LINKS.POST_OVERVIEW}/${post.slug}`}>
                                                         <p className="text-md">{post.title}</p>
                                                     </Link>
-                                                    <p className="text-small text-default-500">nextui.org</p>
+                                                    <div className="flex text-small text-default-500">
+                                                        {post.user.username} · {formatDateWithoutTime(post.createdAt)}
+                                                    </div>
                                                 </div>
                                             </CardHeader>
                                         </Card>

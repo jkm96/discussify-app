@@ -15,15 +15,8 @@ const discussifyApiClient = axios.create({
 
 discussifyApiClient.interceptors.request.use(
   function(config: any) {
-    if (
-      config.url.includes('post/create-thread')
-    ) {
-      if (config.headers['Content-Type'] == 'application/json' || config.headers['Accept'] == 'application/json') {
-        delete config.headers['Content-Type'];
-        delete config.headers['Accept'];
-      }
-    }
-    return config;
+    //do customizations here
+      return config;
   },
   function(error) {
     return Promise.reject(error);

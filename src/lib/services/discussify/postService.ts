@@ -1,6 +1,6 @@
 import {PostQueryParameters} from "@/boundary/parameters/postQueryParameters";
 import {apiKey, internalBaseUrl} from "@/boundary/constants/appConstants";
-import {CreatePostRequest} from "@/boundary/interfaces/post";
+import {CreatePostRequest, EditPostRequest} from "@/boundary/interfaces/post";
 
 export async function createPostAsync(createRequest: CreatePostRequest) {
     try {
@@ -12,6 +12,24 @@ export async function createPostAsync(createRequest: CreatePostRequest) {
                 'Content-type': 'application/json',
             },
             body: JSON.stringify(createRequest),
+        });
+
+        return response.json();
+    } catch (error) {
+        throw error;
+    }
+}
+
+export async function editPostAsync(editPostRequest: EditPostRequest) {
+    try {
+        const apiUrl = `${internalBaseUrl}/api/post/edit`;
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+                'x-api-key': `${apiKey}`,
+                'Content-type': 'application/json',
+            },
+            body: JSON.stringify(editPostRequest),
         });
 
         return response.json();

@@ -74,7 +74,7 @@ export default function LoginForm() {
 
   useEffect(() => {
     if (status === 'user_logged') {
-      router.push(NAVIGATION_LINKS.USER_DASHBOARD);
+      router.push(NAVIGATION_LINKS.HOME);
     }
   }, [status]);
 
