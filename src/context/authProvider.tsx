@@ -1,4 +1,4 @@
-'use client';
+ 'use client';
 import React, { useEffect, useState } from 'react';
 import { User } from '@/boundary/interfaces/user';
 import AuthContext from './authContext';
@@ -41,7 +41,6 @@ export function AuthProvider({ children }: AuthContextProps) {
       }
     } catch (error) {
       setLoading(false);
-      console.error('Error storing token:', error);
       return false;
     }
   };

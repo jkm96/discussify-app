@@ -77,10 +77,6 @@ export async function middleware(request: NextRequest) {
     } else {
       const tokenData: AccessTokenModel = JSON.parse(cookie);
       const user = tokenData.user;
-      //check if user is subscribed, if not redirect to payments
-      if (!user.isSubscribed && !user.isAdmin && !pathName.includes(NAVIGATION_LINKS.PAYMENTS)) {
-        return NextResponse.redirect(new URL(NAVIGATION_LINKS.PAYMENTS, request.url));
-      }
 
       if (protectedRoutes.includes(pathName)) {
         // User is authenticated and accessing a protected route
@@ -90,9 +86,11 @@ export async function middleware(request: NextRequest) {
       } else if (publicRoutes.includes(pathName) || authRoutes.includes(pathName)) {
         console.log('User is authenticated and trying to access a public/auth route');
         // User is authenticated and accessing a public route
-        // redirect to dashboard
-        const accessPath = user.isAdmin ? NAVIGATION_LINKS.ADMIN_DASHBOARD : NAVIGATION_LINKS.USER_DASHBOARD;
-        return NextResponse.redirect(new URL(accessPath, request.url));
+        // redirect to dashboard if admin
+        if (user.isAdmin)
+          return NextResponse.redirect(new URL(NAVIGATION_LINKS.ADMIN_DASHBOARD , request.url));
+        else
+          return NextResponse.next();
       }
     }
 

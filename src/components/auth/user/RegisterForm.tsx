@@ -65,15 +65,13 @@ export default function RegisterForm() {
   useEffect(() => {
     if (status === 'registered') {
       setTimeout(() => {
-        router.push(NAVIGATION_LINKS.PAYMENTS);
+        router.push(NAVIGATION_LINKS.HOME);
       }, 5000);
     }
   }, [status]);
 
   return (
     <>
-      <MainNavbar />
-
       <div className='flex items-center justify-center bg-white'>
         <div className='md:w-1/2 lg:w-1/2 w-full place-items-center p-4 sm:p-12.5 xl:p-17.5'>
 

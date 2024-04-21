@@ -1,10 +1,10 @@
 import axios, { AxiosRequestConfig } from 'axios';
-import { cookieName, petDiaryApiBaseUrl } from '@/boundary/constants/appConstants';
+import { cookieName, discussifyApiUrl } from '@/boundary/constants/appConstants';
 import { NextRequest } from 'next/server';
 import { AccessTokenModel } from '@/boundary/interfaces/token';
 
 const discussifyApiClient = axios.create({
-  baseURL: `${petDiaryApiBaseUrl}`,
+  baseURL: `${discussifyApiUrl}`,
   timeout: 30000,
   headers: {
     'Content-Type': 'application/json',
@@ -16,11 +16,7 @@ const discussifyApiClient = axios.create({
 discussifyApiClient.interceptors.request.use(
   function(config: any) {
     if (
-      config.url.includes('journal-entry/create') ||
-      config.url.includes('attachment/create') ||
-      config.url.includes('pet/profile/edit-picture') ||
-      config.url.includes('magic-studio/save-pdf') ||
-      config.url.includes('pet/create')
+      config.url.includes('post/create-thread')
     ) {
       if (config.headers['Content-Type'] == 'application/json' || config.headers['Accept'] == 'application/json') {
         delete config.headers['Content-Type'];
@@ -35,15 +31,18 @@ discussifyApiClient.interceptors.request.use(
 );
 export default discussifyApiClient;
 
-export function getAxiosConfigs(request: NextRequest, queryParams?: any) {
-  const tokenCookie = request.cookies.get(`${cookieName}`)?.value as string;
-  const tokenData: AccessTokenModel = JSON.parse(tokenCookie);
+export function getAxiosConfigs(request: NextRequest, isAuthenticated: boolean, queryParams?: any): AxiosRequestConfig {
   const config: AxiosRequestConfig = {
-    headers: {
-      Authorization: `Bearer ${tokenData.token.token}`,
-    },
     params: queryParams || {},
   };
+
+  if (isAuthenticated) {
+    const tokenCookie = request.cookies.get(`${cookieName}`)?.value as string;
+    const tokenData: AccessTokenModel = JSON.parse(tokenCookie);
+    config.headers = {
+      Authorization: `Bearer ${tokenData.token.token}`,
+    };
+  }
 
   return config;
 }

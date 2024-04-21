@@ -11,7 +11,7 @@ import { toast } from 'react-toastify';
 import Spinner from '@/components/shared/icons/Spinner';
 import { NAVIGATION_LINKS } from '@/boundary/configs/navigationConfig';
 import { loginAdmin } from '@/lib/services/auth/adminAuthService';
-import MainNavbar from '@/components/site/sections/MainNavbar';
+import MainNavbar from "@/components/shared/navs/MainNavbar";
 
 const initialFormState: LoginUserRequest = {
   username: '', password: '',

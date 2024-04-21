@@ -5,6 +5,6 @@ import {toast, ToastContainer} from "react-toastify";
 
 export default function ToastContainerWrapper() {
   return (
-    <ToastContainer />
+    <ToastContainer position={"bottom-right"} />
   );
 }

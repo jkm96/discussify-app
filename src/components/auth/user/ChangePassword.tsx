@@ -72,8 +72,6 @@ export default function ChangePassword() {
 
   return (
     <>
-      <MainNavbar />
-
       <div className='flex items-center justify-center bg-white'>
         <div className='md:w-1/2 lg:w-1/2 w-full place-items-center p-4 sm:p-12.5 xl:p-17.5'>
 

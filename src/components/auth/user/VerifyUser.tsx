@@ -55,8 +55,6 @@ export default function VerifyUser() {
 
   return (
     <>
-      <MainNavbar />
-
       <div className='grid place-items-center text-black-2 mt-4'>
         {isLoading ? (
           <CircularProgress
