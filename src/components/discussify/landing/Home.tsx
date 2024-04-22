@@ -183,9 +183,8 @@ export default function Home() {
                                                 <Avatar
                                                     alt="nextui logo"
                                                     className="ml-1"
-                                                    name={post.user.username.charAt(0).toUpperCase()}
+                                                   src={post.user.profileUrl || ''}
                                                     size='lg'
-                                                    color='success'
                                                     isBordered={true}
                                                     radius="sm"
                                                 />

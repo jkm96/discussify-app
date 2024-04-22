@@ -28,3 +28,8 @@ export interface EditPostRequest {
     title: string;
     description: string;
 }
+
+export interface PostCommentRequest {
+    postId: number;
+    description: string;
+}
