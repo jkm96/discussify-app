@@ -1,10 +1,22 @@
 'use client';
 
 import {useRouter} from "next/navigation";
-import {CreatePostRequest, EditPostRequest, PostCommentRequest, PostResponse} from "@/boundary/interfaces/post";
+import {
+    CreatePostRequest,
+    EditPostRequest,
+    PostReplyRequest,
+    PostRepliesResponse,
+    PostResponse, EditPostReplyRequest
+} from "@/boundary/interfaces/post";
 import React, {useEffect, useState} from "react";
 import {toast} from "react-toastify";
-import {createPostAsync, editPostAsync, getPostDetails, postCommentAsync} from "@/lib/services/discussify/postService";
+import {
+    createPostAsync,
+    editPostAsync, editPostReplyAsync,
+    getPostDetailsAsync,
+    getPostRepliesAsync,
+    postCommentAsync
+} from "@/lib/services/discussify/postService";
 import {Card, CardFooter, CardHeader, CircularProgress, Divider, Link, Image, Avatar, Button} from "@nextui-org/react";
 import {CardBody} from "@nextui-org/card";
 import {RenderPostTitle} from "@/components/discussify/posts/RenderPostTitle";
@@ -18,28 +30,57 @@ import {NAVIGATION_LINKS} from "@/boundary/configs/navigationConfig";
 import {useAuth} from "@/hooks/useAuth";
 import ShareIcon from "@/components/shared/icons/ShareIcon";
 import ReplyIcon from "@/components/shared/icons/ReplyIcon";
+import {PostQueryParameters} from "@/boundary/parameters/postQueryParameters";
+import {PostRepliesQueryParameters} from "@/boundary/parameters/postRepliesQueryParameters";
+import {formatDateWithoutTime, formatDateWithYear} from "@/helpers/dateHelpers";
+import TimerIcon from "@/components/shared/icons/TimerIcon";
 
 const CustomEditor = dynamic(() => {
     return import( '@/components/ckeditor5/custom-editor' );
 }, {ssr: false});
 
-const initialFormState: PostCommentRequest = {
+const initialPostReplyFormState: PostReplyRequest = {
     description: '', postId: 0
 };
+
+const initialEditReplyFormState: EditPostReplyRequest = {
+    description: '', postId: 0, postReplyId: 0
+};
+
+interface EditPostReplyFormState {
+    [postId: string]: {
+        isVisible: boolean;
+    };
+}
 
 export default function PostOverview({slug}: { slug: string }) {
     const {user} = useAuth();
     const [postDetails, setPostDetails] = useState<PostResponse>({} as PostResponse);
     const [isLoadingDetails, setIsLoadingDetails] = useState(true);
+
+    const [postReplies, setPostReplies] = useState<PostRepliesResponse[]>([]);
+    const [queryParams, setQueryParams] = useState<PostRepliesQueryParameters>(new PostRepliesQueryParameters());
+    const [isLoadingReplies, setIsLoadingReplies] = useState(true);
+
     const [showEditPost, setShowEditPost] = useState(false);
     const [showCommentForm, setShowCommentForm] = useState(false);
     const [editPostRequest, setEditPostRequest] = useState({} as EditPostRequest);
-    const [postCommentRequest, setPostCommentRequest] = useState(initialFormState);
+    const [postReplyRequest, setPostReplyRequest] = useState(initialPostReplyFormState);
+    const [editPostReplyRequest, setEditPostReplyRequest] = useState(initialEditReplyFormState);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
+    const [editPostReplyFormState, setEditPostReplyFormState] = useState<EditPostReplyFormState>({});
+    const toggleEditFormVisibility = (postId: number): void => {
+        setEditPostReplyFormState((prevState) => ({
+            ...prevState,
+            [postId]: {
+                isVisible: !prevState[postId]?.isVisible || true
+            }
+        }));
+    };
     const fetchPostDetails = async (postSlug: any) => {
         setIsLoadingDetails(true);
-        await getPostDetails(postSlug)
+        await getPostDetailsAsync(postSlug)
             .then((response) => {
                 if (response.statusCode === 200) {
                     const post: PostResponse = response.data;
@@ -69,7 +110,11 @@ export default function PostOverview({slug}: { slug: string }) {
     };
 
     const handleCommentEditorChange = (data: string) => {
-        setPostCommentRequest({...postCommentRequest, description: data});
+        setPostReplyRequest({...postReplyRequest, description: data});
+    };
+
+    const handlePostReplyEditorChange = (data: string) => {
+        setEditPostReplyRequest({...editPostReplyRequest, description: data});
     };
 
     const handleEditPost = async (e: any) => {
@@ -86,12 +131,13 @@ export default function PostOverview({slug}: { slug: string }) {
 
     const handlePostComment = async (e: any) => {
         e.preventDefault();
-        if (postCommentRequest.description.trim() === '') {
+        if (postReplyRequest.description.trim() === '') {
             toast.error("Please enter a valid comment")
             setIsSubmitting(false);
             return;
         }
-        const response = await postCommentAsync(postCommentRequest);
+        postReplyRequest.postId = postDetails.id;
+        const response = await postCommentAsync(postReplyRequest);
         if (response.statusCode === 200) {
             toast.success(response.message);
             setShowCommentForm(false)
@@ -99,6 +145,59 @@ export default function PostOverview({slug}: { slug: string }) {
             toast.error(response.message ?? 'Unknown error occurred');
         }
     };
+
+    const handleEditPostReply = async (postReplyId: number, e: any) => {
+        e.preventDefault();
+        if (editPostReplyRequest.description.trim() === '') {
+            toast.error("Please enter a valid message")
+            setIsSubmitting(false);
+            return;
+        }
+        editPostReplyRequest.postId = postDetails.id;
+        editPostReplyRequest.postReplyId = postReplyId;
+        const response = await editPostReplyAsync(editPostReplyRequest);
+        if (response.statusCode === 200) {
+            toast.success(response.message);
+            setEditPostReplyFormState((prevState) => ({
+                ...prevState,
+                [postReplyId]: {
+                    ...prevState[postReplyId],
+                    isVisible: false
+                }
+            }));
+        } else {
+            toast.error(response.message ?? 'Unknown error occurred');
+            setEditPostReplyFormState((prevState) => ({
+                ...prevState,
+                [postReplyId]: {
+                    ...prevState[postReplyId],
+                    isVisible: false
+                }
+            }));
+        }
+    };
+
+    const fetchPostReplies = async (postSlug: any) => {
+        setIsLoadingReplies(true);
+        await getPostRepliesAsync(postSlug)
+            .then((response) => {
+                if (response.statusCode === 200) {
+                    const parsedData = response.data;
+                    const {data, pagingMetaData} = parsedData;
+                    setPostReplies(data);
+                }
+            })
+            .catch((error) => {
+                toast.error(`Error fetching thread replies: ${error}`);
+            })
+            .finally(() => {
+                setIsLoadingReplies(false);
+            });
+    };
+
+    useEffect(() => {
+        fetchPostReplies(slug);
+    }, [slug]);
 
     return (
         <>
@@ -112,8 +211,7 @@ export default function PostOverview({slug}: { slug: string }) {
                         </div>
                     ) : (
                         <>
-                            <Card className="w-full"
-                                  radius='sm'>
+                            <Card className="w-full" radius='sm'>
                                 <CardHeader className="flex gap-3">
                                     {/*post header/title section*/}
                                     <RenderPostTitle postDetails={postDetails}/>
@@ -121,14 +219,14 @@ export default function PostOverview({slug}: { slug: string }) {
 
                                 <Divider className='mt-0'/>
 
-                                <CardBody>
+                                <CardBody className='pt-0'>
                                     {/*<RenderPostAuthor postDetails={postDetails}/>*/}
                                     {/*post author details section*/}
-                                    <Card className="w-full"
+                                    <Card className="w-full pl-0"
                                           shadow={"none"}
                                           radius={"none"}>
-                                        <CardHeader className="justify-between">
-                                            <div className="flex gap-5">
+                                        <CardHeader className="justify-between pl-0">
+                                            <div className="flex gap-2">
                                                 <Avatar radius="sm"
                                                         size="md"
                                                         src={postDetails.user.profileUrl || ''}/>
@@ -137,7 +235,8 @@ export default function PostOverview({slug}: { slug: string }) {
                                                         {postDetails.user.username}
                                                     </h4>
                                                     <h5 className="text-small tracking-tight text-default-400">
-                                                        <span className="mr-1">Joined 2025</span>
+                                                        <span
+                                                            className="mr-1">Joined {formatDateWithYear(postDetails.user.createdAt)}</span>
                                                         <span className="ml-1">10 posts</span>
                                                     </h5>
                                                 </div>
@@ -186,7 +285,7 @@ export default function PostOverview({slug}: { slug: string }) {
                                     )}
                                 </CardBody>
 
-                                <CardFooter className="text-small justify-between">
+                                <CardFooter className="text-small justify-between pt-0">
                                     <div className="flex justify-start w-1/2">
                                         {user ? (
                                             <span className='flex w-full' onClick={() => setShowCommentForm(true)}>
@@ -222,7 +321,7 @@ export default function PostOverview({slug}: { slug: string }) {
                                 {showCommentForm && (
                                     <>
                                         <CustomEditor
-                                            initialData={postCommentRequest.description}
+                                            initialData={postReplyRequest.description}
                                             onChange={handleCommentEditorChange}
                                         />
 
@@ -247,6 +346,120 @@ export default function PostOverview({slug}: { slug: string }) {
                                     </>
                                 )}
                             </Card>
+
+                            {/*post replies sections*/}
+                            {isLoadingReplies ? (
+                                <div className={'grid place-items-center'}>
+                                    <CircularProgress color={'primary'} className={'p-4'} label='Loading posts...'/>
+                                </div>
+                            ) : (
+                                <>
+                                    {postReplies.length > 0 && (
+                                        <>
+                                            {postReplies.map((postReply) => (
+                                                <Card key={postReply.id} className="w-full mt-5" radius='sm'>
+
+                                                    <CardBody>
+                                                        <Card className="w-full pt-0 pl-0"
+                                                              shadow={"none"}
+                                                              radius={"none"}>
+                                                            <CardHeader className="justify-between pt-0 pl-0">
+                                                                <div className="flex gap-2">
+                                                                    <Avatar radius="sm"
+                                                                            size="md"
+                                                                            src={postReply.user.profileUrl || ''}/>
+                                                                    <div
+                                                                        className="flex flex-col gap-1 items-start justify-center">
+                                                                        <h4 className="text-small font-semibold leading-none text-default-600">
+                                                                            {postReply.user.username}
+                                                                        </h4>
+                                                                        <h5 className="text-small tracking-tight text-default-400">
+                                                                            <span
+                                                                                className="mr-1">Joined {formatDateWithYear(postReply.user.createdAt)}</span>
+                                                                            <span className="ml-1">10 posts</span>
+                                                                        </h5>
+                                                                    </div>
+                                                                </div>
+                                                                <span
+                                                                    onClick={() => toggleEditFormVisibility(postReply.id)}>
+                                                                    {user && (
+                                                                        <>
+                                                                            {user.username == postReply.user.username && (
+                                                                                <EditIcon/>
+                                                                            )}
+                                                                        </>
+                                                                    )}
+                                                                </span>
+                                                            </CardHeader>
+                                                        </Card>
+                                                        <p className='flex'><TimerIcon/> <span
+                                                            className='text-small'>{formatDateWithoutTime(postReply.createdAt)}</span>
+                                                        </p>
+
+                                                        {editPostReplyFormState[postReply.id]?.isVisible ? (
+                                                            <>
+                                                                <CustomEditor
+                                                                    initialData={postReply.description}
+                                                                    onChange={handlePostReplyEditorChange}
+                                                                />
+
+                                                                <div className="flex gap-2 mt-2">
+                                                                    <Button color='primary'
+                                                                            type='submit'
+                                                                            size={'sm'}
+                                                                            onClick={(e) => handleEditPostReply(postReply.id, e)}
+                                                                            isLoading={isSubmitting}
+                                                                            spinner={<Spinner/>}>
+                                                                        {isSubmitting ? 'Submitting...' : 'Edit Reply'}
+                                                                    </Button>
+
+                                                                    <Button color='default'
+                                                                            onClick={() =>
+                                                                                setEditPostReplyFormState((prevState) => ({
+                                                                                    ...prevState,
+                                                                                    [postReply.id]: {
+                                                                                        ...prevState[postReply.id],
+                                                                                        isVisible: false
+                                                                                    }
+                                                                                }))
+                                                                            }
+                                                                            type='submit'
+                                                                            size={'sm'}>
+                                                                        Cancel
+                                                                    </Button>
+                                                                </div>
+                                                            </>
+                                                        ) : (
+                                                            <>
+                                                                <p dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(postReply.description)}}/>
+                                                            </>
+                                                        )}
+
+                                                    </CardBody>
+
+                                                    <CardFooter className="pt-0 text-small justify-between">
+                                                        <div className="flex justify-start w-1/2">
+                                                            <span className="flex mr-3">
+                                                                <p className="font-semibold text-default-400 text-small">Since</p>
+                                                                <p className="text-default-400 text-small">Like</p>
+                                                            </span>
+                                                        </div>
+
+                                                        <div className="flex justify-end w-1/2">
+                                                            <span className="flex">
+                                                                <p className="font-semibold text-small">
+                                                                    <ShareIcon/>
+                                                                </p>
+                                                                <p className="text-small">Share</p>
+                                                            </span>
+                                                        </div>
+                                                    </CardFooter>
+                                                </Card>
+                                            ))}
+                                        </>
+                                    )}
+                                </>
+                            )}
                         </>
                     )}
                 </div>

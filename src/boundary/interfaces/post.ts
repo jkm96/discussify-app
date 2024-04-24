@@ -16,6 +16,21 @@ export interface PostResponse {
     forum: ForumResponse;
 }
 
+export interface PostRepliesResponse {
+    id: number;
+    forumId: number;
+    userId: number;
+    title: string;
+    description: string;
+    tags: string;
+    sticker: any;
+    createdAt: string;
+    updatedAt: string;
+    slug: string;
+    user: UserResponse;
+    forum: ForumResponse;
+}
+
 export interface CreatePostRequest {
     forumSlug: string;
     title: string;
@@ -29,7 +44,13 @@ export interface EditPostRequest {
     description: string;
 }
 
-export interface PostCommentRequest {
+export interface PostReplyRequest {
     postId: number;
+    description: string;
+}
+
+export interface EditPostReplyRequest {
+    postId: number;
+    postReplyId: number;
     description: string;
 }

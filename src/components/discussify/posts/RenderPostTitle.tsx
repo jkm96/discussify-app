@@ -5,10 +5,11 @@ import {convertStringToList} from "@/helpers/stylingHelpers";
 import {EditIcon} from "@nextui-org/shared-icons";
 import TagsIcon from "@/components/shared/icons/TagsIcon";
 import {formatDateWithoutTime} from "@/helpers/dateHelpers";
+import TimerIcon from "@/components/shared/icons/TimerIcon";
 
 export function RenderPostTitle({postDetails}: { postDetails: PostResponse }) {
     return (
-        <Card className="w-full"
+        <Card className="w-full pb-0 pl-0"
               shadow={"none"}
               radius={"none"}>
             <CardHeader className="justify-between">
@@ -34,7 +35,9 @@ export function RenderPostTitle({postDetails}: { postDetails: PostResponse }) {
             </CardHeader>
             <CardFooter className="gap-3">
                 <div className="flex gap-1">
-                    <p className="font-semibold text-default-400 text-small">Since</p>
+                    <p className="font-bold text-small">
+                       <TimerIcon/>
+                    </p>
                     <p className=" text-default-400 text-small">{formatDateWithoutTime(postDetails.createdAt)}</p>
                 </div>
                 <div className="flex gap-1">

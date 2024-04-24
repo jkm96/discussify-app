@@ -24,3 +24,13 @@ export function formatDateWithoutTime(dateString: string) {
 
   return new Intl.DateTimeFormat('en-GB', options).format(dateObject);
 }
+
+export function formatDateWithYear(dateString: string) {
+  const dateObject = new Date(dateString);
+
+  const options: Intl.DateTimeFormatOptions = {
+    year: 'numeric'
+  };
+
+  return new Intl.DateTimeFormat('en-GB', options).format(dateObject);
+}
