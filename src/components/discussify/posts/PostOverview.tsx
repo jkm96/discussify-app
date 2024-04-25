@@ -141,6 +141,10 @@ export default function PostOverview({slug}: { slug: string }) {
         if (response.statusCode === 200) {
             toast.success(response.message);
             setShowCommentForm(false)
+            setPostReplyRequest(initialPostReplyFormState)
+
+            const updatedReplies = [response.data,...postReplies];
+            setPostReplies(updatedReplies);
         } else {
             toast.error(response.message ?? 'Unknown error occurred');
         }
@@ -165,15 +169,14 @@ export default function PostOverview({slug}: { slug: string }) {
                     isVisible: false
                 }
             }));
+
+            const updatedReplies = postReplies.map(reply =>
+                reply.id === postReplyId ? { ...reply, description: editPostReplyRequest.description } : reply
+            );
+
+            setPostReplies(updatedReplies);
         } else {
             toast.error(response.message ?? 'Unknown error occurred');
-            setEditPostReplyFormState((prevState) => ({
-                ...prevState,
-                [postReplyId]: {
-                    ...prevState[postReplyId],
-                    isVisible: false
-                }
-            }));
         }
     };
 

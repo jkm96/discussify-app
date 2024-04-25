@@ -12,7 +12,7 @@ export function RenderPostTitle({postDetails}: { postDetails: PostResponse }) {
         <Card className="w-full pb-0 pl-0"
               shadow={"none"}
               radius={"none"}>
-            <CardHeader className="justify-between">
+            <CardHeader className="justify-between pl-0">
                 <div className="gap-5">
                     <div className="flex flex-col gap-1 items-start justify-center">
                         <h4 className="font-semibold leading-none">
@@ -33,7 +33,7 @@ export function RenderPostTitle({postDetails}: { postDetails: PostResponse }) {
                     )}
                 </div>
             </CardHeader>
-            <CardFooter className="gap-3">
+            <CardFooter className="gap-3 pl-0">
                 <div className="flex gap-1">
                     <p className="font-bold text-small">
                        <TimerIcon/>
