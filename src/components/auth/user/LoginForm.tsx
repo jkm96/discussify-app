@@ -80,12 +80,12 @@ export default function LoginForm() {
 
   return (
     <>
-      <div className='flex items-center justify-center bg-white'>
-        <div className='md:w-1/2 lg:w-1/2 w-full place-items-center p-4 sm:p-12.5 xl:p-17.5'>
+      <div className='flex items-center justify-center bg-white dark:bg-black'>
+        <div className='dark:bg-boxdark-mode mt-3 md:w-1/2 lg:w-1/2 w-full place-items-center p-4 sm:p-12.5 xl:p-17.5'>
           <div className='text-center'>
             <span className='mb-1.5 block font-medium'>Start for free</span>
             <span className='mb-1.5 block font-medium'>or</span>
-            <h2 className='mb-9 text-2xl font-bold text-black sm:text-title-xl2'>
+            <h2 className='mb-9 text-2xl font-bold text-black dark:text-white sm:text-title-xl2'>
               Sign In To Your Account
             </h2>
           </div>

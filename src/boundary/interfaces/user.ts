@@ -7,6 +7,11 @@ export interface User {
   isEmailVerified: boolean;
   isSubscribed: boolean;
   isAdmin: boolean;
+  postsCount: number;
+  postRepliesCount: number;
+  commentsCount: number;
+  pointsEarned: number;
+  reactionScore: number;
   gracePeriodCount: number;
   isGracePeriodExpired: boolean;
 }
@@ -19,6 +24,11 @@ export interface UserResponse {
   email: string;
   profileUrl: string | null;
   profileCoverUrl: string | null;
+  postsCount: number;
+  postRepliesCount: number;
+  commentsCount: number;
+  pointsEarned: number;
+  reactionScore: number;
   isEmailVerified: boolean;
   isSubscribed: boolean;
   isAdmin: boolean;
@@ -26,5 +36,4 @@ export interface UserResponse {
   emailVerifiedAt: string;
   createdAt: string;
   updatedAt: string;
-  permissions: number[];
 }

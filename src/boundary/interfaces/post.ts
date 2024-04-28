@@ -9,6 +9,11 @@ export interface PostResponse {
     description: string;
     tags: string;
     sticker: any;
+    postRepliesCount: number;
+    commentsCount: number;
+    views: number;
+    participants: number;
+    likes: number;
     createdAt: string;
     updatedAt: string;
     slug: string;

@@ -8,11 +8,10 @@ function useLocalStorage<T>(
   key: string,
   initialValue: T,
 ): [T, (value: SetValue<T>) => void] {
-  const { user } = useAuth();
 
   const [storedValue, setStoredValue] = useState(() => {
     try {
-      if (typeof window !== 'undefined' && user) {
+      if (typeof window !== 'undefined') {
         const item = window.localStorage.getItem(key);
         return item ? JSON.parse(item) : initialValue;
       }
@@ -30,14 +29,13 @@ function useLocalStorage<T>(
         typeof storedValue === 'function'
           ? storedValue(storedValue)
           : storedValue;
-
-      if (typeof window !== 'undefined' && user) {
+      if (typeof window !== 'undefined') {
         window.localStorage.setItem(key, JSON.stringify(valueToStore));
       }
     } catch (error) {
       console.log(error);
     }
-  }, [key, storedValue, user]);
+  }, [key, storedValue]);
 
   return [storedValue, setStoredValue];
 }

@@ -11,6 +11,17 @@ export interface ForumResponse {
     updatedAt: string;
 }
 
+export interface ForumStatsResponse{
+    id: number;
+    members: number;
+    posts: number;
+    forumId: string;
+    forumName: string;
+    forumDescription: string;
+    createdAt: string;
+    updatedAt: string;
+}
+
 export interface ForumPostsResponse{
     forum: ForumResponse;
     posts: PostResponse[];

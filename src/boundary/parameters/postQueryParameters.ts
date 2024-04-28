@@ -7,7 +7,7 @@ export class PostQueryParameters extends RequestParameters {
   public fetch: string;
 
   constructor() {
-    super(10, 1, 'createdOn desc');
+    super(2, 1, 'createdOn desc');
     this.searchTerm = '';
     this.periodFrom = '';
     this.periodTo = '';

@@ -7,15 +7,17 @@ import MainNavbar from "@/components/shared/navs/MainNavbar";
 
 export default function RootLayout({children}: { children: React.ReactNode }) {
     return (
-        <html lang='en'>
+        <html suppressHydrationWarning={true} lang='en'>
         <body>
         <UIProvider>
             <AuthProvider>
                 <ToastContainerWrapper/>
-                <MainNavbar/>
-                <main className="mx-auto w-11/12 px-4 sm:px-6">
-                    {children}
-                </main>
+                <div className="w-full h-full dark:text-bodydark">
+                    <MainNavbar/>
+                    <div className="mx-auto w-11/12 px-4 sm:px-6">
+                        {children}
+                    </div>
+                </div>
             </AuthProvider>
         </UIProvider>
         </body>

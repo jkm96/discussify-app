@@ -34,6 +34,8 @@ import {PostQueryParameters} from "@/boundary/parameters/postQueryParameters";
 import {PostRepliesQueryParameters} from "@/boundary/parameters/postRepliesQueryParameters";
 import {formatDateWithoutTime, formatDateWithYear} from "@/helpers/dateHelpers";
 import TimerIcon from "@/components/shared/icons/TimerIcon";
+import ForumStats from "@/components/discussify/landing/ForumStats";
+import UserStatsComponent from "@/components/discussify/Shared/UserStatsComponent";
 
 const CustomEditor = dynamic(() => {
     return import( '@/components/ckeditor5/custom-editor' );
@@ -206,7 +208,7 @@ export default function PostOverview({slug}: { slug: string }) {
         <>
             <div className="flex w-full mt-10">
                 {/*post overview section*/}
-                <div className="w-10/12 bg-black mr-4">
+                <div className="w-10/12 mr-4">
                     {isLoadingDetails ? (
                         <div className={'grid place-items-center'}>
                             <CircularProgress color={'primary'} className={'p-4'}
@@ -216,7 +218,7 @@ export default function PostOverview({slug}: { slug: string }) {
                         <>
                             <Card className="w-full" radius='sm'>
                                 <CardHeader className="flex gap-3">
-                                    {/*post header/title section*/}
+                                    {/*post header section*/}
                                     <RenderPostTitle postDetails={postDetails}/>
                                 </CardHeader>
 
@@ -235,12 +237,14 @@ export default function PostOverview({slug}: { slug: string }) {
                                                         src={postDetails.user.profileUrl || ''}/>
                                                 <div className="flex flex-col gap-1 items-start justify-center">
                                                     <h4 className="text-small font-semibold leading-none text-default-600">
-                                                        {postDetails.user.username}
+                                                        <UserStatsComponent author={postDetails.user}
+                                                                            className={'dark:text-white mr-1'}
+                                                        />
                                                     </h4>
-                                                    <h5 className="text-small tracking-tight text-default-400">
+                                                    <h5 className="text-small tracking-tight text-default-400 dark:text-white">
                                                         <span
                                                             className="mr-1">Joined {formatDateWithYear(postDetails.user.createdAt)}</span>
-                                                        <span className="ml-1">10 posts</span>
+                                                        <span className="ml-1">{postDetails.user.postsCount} posts</span>
                                                     </h5>
                                                 </div>
                                             </div>
@@ -374,12 +378,15 @@ export default function PostOverview({slug}: { slug: string }) {
                                                                     <div
                                                                         className="flex flex-col gap-1 items-start justify-center">
                                                                         <h4 className="text-small font-semibold leading-none text-default-600">
-                                                                            {postReply.user.username}
+                                                                            <UserStatsComponent key={postReply.id}
+                                                                                                author={postReply.user}
+                                                                                                className={'dark:text-white mr-1'}
+                                                                            />
                                                                         </h4>
                                                                         <h5 className="text-small tracking-tight text-default-400">
                                                                             <span
                                                                                 className="mr-1">Joined {formatDateWithYear(postReply.user.createdAt)}</span>
-                                                                            <span className="ml-1">10 posts</span>
+                                                                            <span className="ml-1">{postReply.user.postsCount} posts</span>
                                                                         </h5>
                                                                     </div>
                                                                 </div>
@@ -468,8 +475,8 @@ export default function PostOverview({slug}: { slug: string }) {
                 </div>
 
                 {/*forum stats section*/}
-                <div className="w-2/12 bg-blue-200 mr-4">
-                    forum stats
+                <div className="w-2/12 mr-4">
+                    <ForumStats/>
                 </div>
             </div>
         </>

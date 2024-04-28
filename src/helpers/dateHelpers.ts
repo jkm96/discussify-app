@@ -22,7 +22,11 @@ export function formatDateWithoutTime(dateString: string) {
     year: 'numeric'
   };
 
-  return new Intl.DateTimeFormat('en-GB', options).format(dateObject);
+  const formattedDate = new Intl.DateTimeFormat('en-US', options).format(dateObject);
+  const [month, day, year] = formattedDate.split(' ');
+  const formattedDay = day.replace(/^0+/, '');
+
+  return `${month} ${formattedDay} ${year}`;
 }
 
 export function formatDateWithYear(dateString: string) {

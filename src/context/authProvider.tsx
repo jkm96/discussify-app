@@ -23,6 +23,11 @@ export function AuthProvider({ children }: AuthContextProps) {
       const response = await storeAccessTokenInCookie(cookieRequest);
       if (response.statusCode == 200) {
         const userObject: User = {
+          commentsCount: tokenData.user.commentsCount,
+          pointsEarned: tokenData.user.pointsEarned,
+          postRepliesCount: tokenData.user.postRepliesCount,
+          postsCount: tokenData.user.postsCount,
+          reactionScore: tokenData.user.reactionScore,
           gracePeriodCount: tokenData.user.gracePeriodCount,
           isGracePeriodExpired: tokenData.user.isGracePeriodExpired ,
           id: tokenData.user.id,

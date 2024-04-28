@@ -4,19 +4,18 @@ import useLocalStorage from './useLocalStorage';
 import { useAuth } from '@/hooks/useAuth';
 
 const useColorMode = () => {
-  const { user } = useAuth();
-  const [colorMode, setColorMode] = useLocalStorage('color-theme', 'light');
+  const [colorMode, setColorMode] = useLocalStorage('color-theme', 'dark');
 
   useEffect(() => {
     const className = 'dark';
     const bodyClass = window.document.body.classList;
 
-    if (user && colorMode === 'dark') {
+    if (colorMode === 'dark') {
       bodyClass.add(className);
     } else {
       bodyClass.remove(className);
     }
-  }, [user, colorMode]);
+  }, [colorMode]);
 
   return [colorMode, setColorMode];
 };

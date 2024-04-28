@@ -33,24 +33,24 @@ export function RenderPostTitle({postDetails}: { postDetails: PostResponse }) {
                     )}
                 </div>
             </CardHeader>
-            <CardFooter className="gap-3 pl-0">
+            <CardFooter className="gap-3 pl-0 text-default-400 text-small dark:text-white">
                 <div className="flex gap-1">
                     <p className="font-bold text-small">
                        <TimerIcon/>
                     </p>
-                    <p className=" text-default-400 text-small">{formatDateWithoutTime(postDetails.createdAt)}</p>
+                    <p className=" text-small">{formatDateWithoutTime(postDetails.createdAt)}</p>
                 </div>
                 <div className="flex gap-1">
-                    <p className="font-semibold text-default-400 text-small">97.1K</p>
-                    <p className="text-default-400 text-small">views</p>
+                    <p className="font-semibold ">{postDetails.views}</p>
+                    <p className="">views</p>
                 </div>
                 <div className="flex gap-1">
-                    <p className="font-semibold text-default-400 text-small">97.1K</p>
-                    <p className="text-default-400 text-small">replies</p>
+                    <p className="font-semibold ">{postDetails.postRepliesCount}</p>
+                    <p className="">replies</p>
                 </div>
                 <div className="flex gap-1">
-                    <p className="font-semibold text-default-400 text-small">97.1K</p>
-                    <p className="text-default-400 text-small">participants</p>
+                    <p className="font-semibold ">{postDetails.participants}</p>
+                    <p className="">participants</p>
                 </div>
             </CardFooter>
         </Card>

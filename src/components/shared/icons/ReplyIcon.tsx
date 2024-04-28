@@ -1,7 +1,7 @@
 import React from 'react';
 
 const ReplyIcon = ({
-                      width = 24, height = 24, color = '#ad0d32'
+                      width = 24, height = 24, color = '#686062'
                   }) => {
     return (
         <svg

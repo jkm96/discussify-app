@@ -1,7 +1,7 @@
 import type { Config } from "tailwindcss";
 import {nextui} from "@nextui-org/react";
 
-const defaultTheme = require('tailwindcss/defaultTheme');
+import defaultTheme from "tailwindcss/defaultTheme";
 
 const config: Config = {
   content: [
@@ -19,9 +19,7 @@ const config: Config = {
       current: 'currentColor',
       transparent: 'transparent',
       white: '#FFFFFF',
-      black: '#1C2434',
-      'black-2': '#010101',
-      black2: '#010101',
+      black: '#010101',
       body: '#64748B',
       blue: {
         100: '#f1efef',
@@ -71,6 +69,7 @@ const config: Config = {
       whiter: '#F5F7FD',
       boxdark: '#24303F',
       'boxdark-2': '#1A222C',
+      'boxdark-mode': '#18181b',
       strokedark: '#2E3A47',
       'form-strokedark': '#3d4d60',
       'form-input': '#1d2a39',
