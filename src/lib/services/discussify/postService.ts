@@ -1,6 +1,12 @@
 import {PostQueryParameters} from "@/boundary/parameters/postQueryParameters";
 import {apiKey, internalBaseUrl} from "@/boundary/constants/appConstants";
-import {CreatePostRequest, EditPostReplyRequest, EditPostRequest, PostReplyRequest} from "@/boundary/interfaces/post";
+import {
+    CommentRequest,
+    CreatePostRequest,
+    EditPostReplyRequest,
+    EditPostRequest,
+    PostReplyRequest
+} from "@/boundary/interfaces/post";
 
 export async function createPostAsync(createRequest: CreatePostRequest) {
     try {
@@ -38,9 +44,27 @@ export async function editPostAsync(editPostRequest: EditPostRequest) {
     }
 }
 
-export async function postCommentAsync(commentRequest: PostReplyRequest) {
+export async function addPostReplyAsync(commentRequest: PostReplyRequest) {
     try {
-        const apiUrl = `${internalBaseUrl}/api/post/comments/create`;
+        const apiUrl = `${internalBaseUrl}/api/post/post-replies/create`;
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+                'x-api-key': `${apiKey}`,
+                'Content-type': 'application/json',
+            },
+            body: JSON.stringify(commentRequest),
+        });
+
+        return response.json();
+    } catch (error) {
+        throw error;
+    }
+}
+
+export async function addCommentAsync(commentRequest: CommentRequest) {
+    try {
+        const apiUrl = `${internalBaseUrl}/api/post/post-replies/comments/create`;
         const response = await fetch(apiUrl, {
             method: 'POST',
             headers: {
@@ -58,7 +82,7 @@ export async function postCommentAsync(commentRequest: PostReplyRequest) {
 
 export async function editPostReplyAsync(editPostReplyRequest: EditPostReplyRequest) {
     try {
-        const apiUrl = `${internalBaseUrl}/api/post/comments/edit`;
+        const apiUrl = `${internalBaseUrl}/api/post/post-replies/edit`;
         const response = await fetch(apiUrl, {
             method: 'POST',
             headers: {

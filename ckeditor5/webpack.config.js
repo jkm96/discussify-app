@@ -35,7 +35,7 @@ module.exports = {
 				sourceMap: true,
 				terserOptions: {
 					output: {
-						// Preserve CKEditor 5 license comments.
+						// Preserve CKEditor 5 license post-replies.
 						comments: /^!/
 					}
 				},

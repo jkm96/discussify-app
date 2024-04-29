@@ -18,7 +18,8 @@ import {useAuth} from '@/hooks/useAuth';
 import {ThemeSwitcher} from "@/components/shared/navs/ThemeSwitcher";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import {User, UserResponse} from "@/boundary/interfaces/user";
-const initialUser:UserResponse = {
+
+const initialUser: UserResponse = {
     commentsCount: 0,
     createdAt: "",
     email: "",
@@ -43,7 +44,7 @@ export default function MainNavbar() {
     const {user, loading} = useAuth();
     const [isMenuOpen, setIsMenuOpen] = React.useState(false);
     const [storedUser, setStoredUser] = useLocalStorage('user', initialUser);
-    const [loggedUser,setLoggedUser] = useState({} as UserResponse);
+    const [loggedUser, setLoggedUser] = useState({} as UserResponse);
 
     const menuItems = [
         {label: 'Home', id: 'home'},
@@ -75,10 +76,10 @@ export default function MainNavbar() {
                     </NavbarBrand>
                 </NavbarContent>
 
-                <NavbarContent  as="div" justify='end'>
+                <NavbarContent as="div" justify='end'>
                     <ThemeSwitcher/>
 
-                    {user && !loading &&(
+                    {user && !loading && (
                         <>
                             <Dropdown placement="bottom-end">
                                 <DropdownTrigger>
@@ -111,18 +112,18 @@ export default function MainNavbar() {
                         </>
                     )}
 
-                    {!user && (
+                    {!user && !loading && (
                         <>
                             <NavbarItem>
-                                <Link className='text-black-2 dark:text-white' href={NAVIGATION_LINKS.LOGIN}>Sign
-                                    In</Link>
+                                <Link className='text-black-2 dark:text-white' href={NAVIGATION_LINKS.LOGIN}>
+                                    Sign In
+                                </Link>
                             </NavbarItem>
                             <NavbarItem>
                                 <Link className='text-black-2' href={NAVIGATION_LINKS.REGISTER}>
                                     <Button size='sm' color='primary'>Get Started</Button>
                                 </Link>
                             </NavbarItem>
-
                         </>
                     )}
                 </NavbarContent>
