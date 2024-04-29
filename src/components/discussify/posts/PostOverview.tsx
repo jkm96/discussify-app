@@ -36,6 +36,8 @@ import {formatDateWithoutTime, formatDateWithYear} from "@/helpers/dateHelpers";
 import TimerIcon from "@/components/shared/icons/TimerIcon";
 import ForumStats from "@/components/discussify/landing/ForumStats";
 import UserStatsComponent from "@/components/discussify/Shared/UserStatsComponent";
+import BookmarkIcon from "@/components/shared/icons/BookmarkIcon";
+import LikeIcon from "@/components/shared/icons/LikeIcon";
 
 const CustomEditor = dynamic(() => {
     return import( '@/components/ckeditor5/custom-editor' );
@@ -65,7 +67,7 @@ export default function PostOverview({slug}: { slug: string }) {
     const [isLoadingReplies, setIsLoadingReplies] = useState(true);
 
     const [showEditPost, setShowEditPost] = useState(false);
-    const [showCommentForm, setShowCommentForm] = useState(false);
+    const [showAddPostReplyForm, setShowAddPostReplyForm] = useState(false);
     const [editPostRequest, setEditPostRequest] = useState({} as EditPostRequest);
     const [postReplyRequest, setPostReplyRequest] = useState(initialPostReplyFormState);
     const [editPostReplyRequest, setEditPostReplyRequest] = useState(initialEditReplyFormState);
@@ -107,15 +109,15 @@ export default function PostOverview({slug}: { slug: string }) {
         fetchPostDetails(slug);
     }, [slug]);
 
-    const handlePostEditorChange = (data: string) => {
+    const handleEditPostEditorChange = (data: string) => {
         setEditPostRequest({...editPostRequest, description: data});
     };
 
-    const handleCommentEditorChange = (data: string) => {
+    const handleAddPostReplyEditorChange = (data: string) => {
         setPostReplyRequest({...postReplyRequest, description: data});
     };
 
-    const handlePostReplyEditorChange = (data: string) => {
+    const handleEditPostReplyEditorChange = (data: string) => {
         setEditPostReplyRequest({...editPostReplyRequest, description: data});
     };
 
@@ -131,7 +133,7 @@ export default function PostOverview({slug}: { slug: string }) {
         }
     };
 
-    const handlePostComment = async (e: any) => {
+    const handleAddPostReply = async (e: any) => {
         e.preventDefault();
         if (postReplyRequest.description.trim() === '') {
             toast.error("Please enter a valid comment")
@@ -142,10 +144,10 @@ export default function PostOverview({slug}: { slug: string }) {
         const response = await postCommentAsync(postReplyRequest);
         if (response.statusCode === 200) {
             toast.success(response.message);
-            setShowCommentForm(false)
+            setShowAddPostReplyForm(false)
             setPostReplyRequest(initialPostReplyFormState)
 
-            const updatedReplies = [response.data,...postReplies];
+            const updatedReplies = [response.data, ...postReplies];
             setPostReplies(updatedReplies);
         } else {
             toast.error(response.message ?? 'Unknown error occurred');
@@ -173,7 +175,7 @@ export default function PostOverview({slug}: { slug: string }) {
             }));
 
             const updatedReplies = postReplies.map(reply =>
-                reply.id === postReplyId ? { ...reply, description: editPostReplyRequest.description } : reply
+                reply.id === postReplyId ? {...reply, description: editPostReplyRequest.description} : reply
             );
 
             setPostReplies(updatedReplies);
@@ -244,26 +246,30 @@ export default function PostOverview({slug}: { slug: string }) {
                                                     <h5 className="text-small tracking-tight text-default-400 dark:text-white">
                                                         <span
                                                             className="mr-1">Joined {formatDateWithYear(postDetails.user.createdAt)}</span>
-                                                        <span className="ml-1">{postDetails.user.postsCount} posts</span>
+                                                        <span
+                                                            className="ml-1">{postDetails.user.postsCount} posts</span>
                                                     </h5>
                                                 </div>
                                             </div>
-                                            <span onClick={() => setShowEditPost(true)}>
-                                            {user && (
-                                                <>
-                                                    {user.username == postDetails.user.username && (
-                                                        <EditIcon/>
-                                                    )}
-                                                </>
-                                            )}
-                                        </span>
+                                            <Link href={""}
+                                                  underline="hover"
+                                                  className='dark:text-white text-tiny text-default-500'
+                                                  onClick={() => setShowEditPost(true)}>
+                                                {user && (
+                                                    <>
+                                                        {user.username == postDetails.user.username && (
+                                                            <EditIcon/>
+                                                        )}
+                                                    </>
+                                                )}
+                                            </Link>
                                         </CardHeader>
                                     </Card>
                                     {showEditPost ? (
                                         <>
                                             <CustomEditor
                                                 initialData={postDetails.description}
-                                                onChange={handlePostEditorChange}
+                                                onChange={handleEditPostEditorChange}
                                             />
 
                                             <div className="flex gap-2 mt-2">
@@ -292,44 +298,54 @@ export default function PostOverview({slug}: { slug: string }) {
                                     )}
                                 </CardBody>
 
-                                <CardFooter className="text-small justify-between pt-0">
+                                <CardFooter
+                                    className="text-default-400 dark:text-white text-small justify-between pt-0">
                                     <div className="flex justify-start w-1/2">
                                         {user ? (
-                                            <span className='flex w-full' onClick={() => setShowCommentForm(true)}>
-                                                <p className="font-semibold text-default-400 text-small"><ReplyIcon/></p>
-                                                <p className="text-default-400 text-small">Reply</p>
-                                        </span>
+                                            <>
+                                                <span className='flex items-center mr-1 cursor-pointer'
+                                                      onClick={() => setShowAddPostReplyForm(true)}>
+                                                    <p className="font-semibold items-center"><ReplyIcon
+                                                        width={20}/></p>
+                                                    <p className="hover:underline">Reply</p>
+                                                </span>
+
+                                                <span className="flex items-center cursor-pointer">
+                                                    <p className="font-semibold"><LikeIcon width={20}/></p>
+                                                    <p className="hover:underline">Like</p>
+                                                </span>
+                                            </>
                                         ) : (
-                                            <span className="flex mr-3">
-                                                <p className="font-semibold text-default-400 text-small">Since</p>
-                                                <p className="text-default-400 text-small">Like</p>
+                                            <span className="flex mr-3 items-center">
+                                                <p className="font-semibold"><LikeIcon width={20}/></p>
+                                                <p className="">Like</p>
                                             </span>
                                         )}
                                     </div>
 
                                     <div className="flex justify-end w-1/2">
-                                    <span className="flex mr-3">
-                                        <p className="font-semibold text-default-400 text-small">Since</p>
-                                        <p className="text-default-400 text-small">Save</p>
-                                    </span>
+                                        <span className="flex mr-3 items-center cursor-pointer">
+                                            <p className="font-semibold"><BookmarkIcon width={20}/></p>
+                                            <p className="hover:underline">Save</p>
+                                        </span>
 
-                                        <span className="flex">
-                                        <p className="font-semibold text-small">
-                                            <ShareIcon/>
-                                        </p>
-                                        <p className="text-small">Share</p>
-                                    </span>
+                                        <span className="flex items-center cursor-pointer">
+                                            <p className="font-semibold text-small">
+                                                <ShareIcon width={20}/>
+                                            </p>
+                                            <p className="hover:underline">Share</p>
+                                        </span>
                                     </div>
                                 </CardFooter>
                             </Card>
 
                             {/*comment form section*/}
                             <Card radius='sm' className='mt-5'>
-                                {showCommentForm && (
+                                {showAddPostReplyForm && (
                                     <>
                                         <CustomEditor
                                             initialData={postReplyRequest.description}
-                                            onChange={handleCommentEditorChange}
+                                            onChange={handleAddPostReplyEditorChange}
                                         />
 
                                         <div className="flex gap-2 mt-2">
@@ -338,7 +354,7 @@ export default function PostOverview({slug}: { slug: string }) {
                                                     size={'sm'}
                                                     isLoading={isSubmitting}
                                                     spinner={<Spinner/>}
-                                                    onClick={handlePostComment}>
+                                                    onClick={handleAddPostReply}>
                                                 {isSubmitting ? 'Submitting...' : 'Post Comment'}
                                             </Button>
 
@@ -346,7 +362,7 @@ export default function PostOverview({slug}: { slug: string }) {
                                                     type='submit'
                                                     size={'sm'}
                                                     spinner={<Spinner/>}
-                                                    onClick={() => setShowCommentForm(false)}>
+                                                    onClick={() => setShowAddPostReplyForm(false)}>
                                                 Cancel
                                             </Button>
                                         </div>
@@ -383,15 +399,17 @@ export default function PostOverview({slug}: { slug: string }) {
                                                                                                 className={'dark:text-white mr-1'}
                                                                             />
                                                                         </h4>
-                                                                        <h5 className="text-small tracking-tight text-default-400">
+                                                                        <h5 className="text-small dark:text-white text-default-400">
                                                                             <span
                                                                                 className="mr-1">Joined {formatDateWithYear(postReply.user.createdAt)}</span>
-                                                                            <span className="ml-1">{postReply.user.postsCount} posts</span>
+                                                                            <span
+                                                                                className="ml-1">{postReply.user.postsCount} posts</span>
                                                                         </h5>
                                                                     </div>
                                                                 </div>
-                                                                <span
-                                                                    onClick={() => toggleEditFormVisibility(postReply.id)}>
+                                                                <Link underline="hover"
+                                                                      className='dark:text-white text-default-500'
+                                                                      onClick={() => toggleEditFormVisibility(postReply.id)}>
                                                                     {user && (
                                                                         <>
                                                                             {user.username == postReply.user.username && (
@@ -399,7 +417,7 @@ export default function PostOverview({slug}: { slug: string }) {
                                                                             )}
                                                                         </>
                                                                     )}
-                                                                </span>
+                                                                </Link>
                                                             </CardHeader>
                                                         </Card>
                                                         <p className='flex'><TimerIcon/> <span
@@ -410,7 +428,7 @@ export default function PostOverview({slug}: { slug: string }) {
                                                             <>
                                                                 <CustomEditor
                                                                     initialData={postReply.description}
-                                                                    onChange={handlePostReplyEditorChange}
+                                                                    onChange={handleEditPostReplyEditorChange}
                                                                 />
 
                                                                 <div className="flex gap-2 mt-2">
@@ -447,20 +465,31 @@ export default function PostOverview({slug}: { slug: string }) {
 
                                                     </CardBody>
 
-                                                    <CardFooter className="pt-0 text-small justify-between">
+                                                    <CardFooter
+                                                        className="pt-0 text-default-400 text-small dark:text-white justify-between">
                                                         <div className="flex justify-start w-1/2">
-                                                            <span className="flex mr-3">
-                                                                <p className="font-semibold text-default-400 text-small">Since</p>
-                                                                <p className="text-default-400 text-small">Like</p>
+                                                            <span className='flex items-center mr-1 cursor-pointer'
+                                                                  // onClick={() => setShowAddCommentForm(true)}
+                                                                // click to open add comment to post reply
+                                                            >
+                                                                <p className="font-semibold items-center"><ReplyIcon
+                                                                    width={20}/></p>
+                                                                <p className="hover:underline">Reply</p>
+                                                            </span>
+                                                            <span className="flex mr-3 items-center cursor-pointer">
+                                                                <p className="font-semibold">
+                                                                    <LikeIcon width={20}/>
+                                                                </p>
+                                                                <p className="hover:underline">Like</p>
                                                             </span>
                                                         </div>
 
                                                         <div className="flex justify-end w-1/2">
-                                                            <span className="flex">
-                                                                <p className="font-semibold text-small">
-                                                                    <ShareIcon/>
+                                                            <span className="flex items-center cursor-pointer">
+                                                                <p className="font-semibold">
+                                                                    <ShareIcon width={20}/>
                                                                 </p>
-                                                                <p className="text-small">Share</p>
+                                                                <p className="hover:underline">Share</p>
                                                             </span>
                                                         </div>
                                                     </CardFooter>

@@ -53,21 +53,21 @@ export default function ForumStats() {
                                     </div>
                                 </div>
                             </CardHeader>
-                            <CardBody className="px-3 py-0 text-small text-default-400">
+                            <CardBody className="px-3 py-0 text-small text-black dark:text-white">
                                 <p>{forumStats.forumDescription}</p>
                             </CardBody>
-                            <CardFooter className="gap-3 dark:text-white">
+                            <CardFooter className="gap-3 text-small text-black dark:text-white">
                                 <div className="flex gap-1">
-                                    <p className="font-semibold text-default-400 dark:text-white text-small">Since</p>
-                                    <p className=" text-default-400 dark:text-white text-small">{formatDateWithYear(forumStats.createdAt)}</p>
+                                    <p className="font-semibold">Since</p>
+                                    <p className=" ">{formatDateWithYear(forumStats.createdAt)}</p>
                                 </div>
                                 <div className="flex gap-1">
-                                    <p className="font-semibold text-default-400 dark:text-white text-small">{forumStats.members}</p>
-                                    <p className="text-default-400 dark:text-white text-small">members</p>
+                                    <p className="font-semibold ">{forumStats.members}</p>
+                                    <p className="">members</p>
                                 </div>
                                 <div className="flex gap-1">
-                                    <p className="font-semibold text-default-400 dark:text-white text-small">{forumStats.posts}</p>
-                                    <p className="text-default-400 dark:text-white text-small">posts</p>
+                                    <p className="font-semibold ">{forumStats.posts}</p>
+                                    <p className="">posts</p>
                                 </div>
                             </CardFooter>
                         </Card>

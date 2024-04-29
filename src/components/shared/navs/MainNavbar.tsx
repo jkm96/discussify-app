@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
     Avatar,
     Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger,
@@ -16,10 +16,34 @@ import {
 import {NAVIGATION_LINKS} from '@/boundary/configs/navigationConfig';
 import {useAuth} from '@/hooks/useAuth';
 import {ThemeSwitcher} from "@/components/shared/navs/ThemeSwitcher";
-
-export default function  MainNavbar() {
-    const {user,loading} = useAuth();
+import useLocalStorage from "@/hooks/useLocalStorage";
+import {User, UserResponse} from "@/boundary/interfaces/user";
+const initialUser:UserResponse = {
+    commentsCount: 0,
+    createdAt: "",
+    email: "",
+    emailVerifiedAt: "",
+    gracePeriodCount: 0,
+    id: 0,
+    isActive: false,
+    isAdmin: false,
+    isEmailVerified: false,
+    isGracePeriodExpired: false,
+    isSubscribed: false,
+    pointsEarned: 0,
+    postRepliesCount: 0,
+    postsCount: 0,
+    profileCoverUrl: '',
+    profileUrl: '',
+    reactionScore: 0,
+    updatedAt: "",
+    username: ""
+}
+export default function MainNavbar() {
+    const {user, loading} = useAuth();
     const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+    const [storedUser, setStoredUser] = useLocalStorage('user', initialUser);
+    const [loggedUser,setLoggedUser] = useState({} as UserResponse);
 
     const menuItems = [
         {label: 'Home', id: 'home'},
@@ -31,9 +55,14 @@ export default function  MainNavbar() {
         setIsMenuOpen(false); // Close the menu when a menu item is clicked
     };
 
+    useEffect(() => {
+        setLoggedUser(storedUser)
+    }, [storedUser]);
+
     return (
         <>
-            <Navbar maxWidth={"2xl"} className='dark:bg-boxdark-mode' isMenuOpen={isMenuOpen} onMenuOpenChange={setIsMenuOpen}>
+            <Navbar maxWidth={"2xl"} className='dark:bg-boxdark-mode' isMenuOpen={isMenuOpen}
+                    onMenuOpenChange={setIsMenuOpen}>
                 <NavbarContent>
                     <NavbarMenuToggle
                         aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
@@ -46,48 +75,47 @@ export default function  MainNavbar() {
                     </NavbarBrand>
                 </NavbarContent>
 
-                {user && !loading && (
-                    <>
-                        <NavbarContent as="div" justify="end">
-                            Logout
-                            {/*<Dropdown placement="bottom-end">*/}
-                            {/*    <DropdownTrigger>*/}
-                            {/*        <Avatar*/}
-                            {/*            isBordered*/}
-                            {/*            as="button"*/}
-                            {/*            className="transition-transform"*/}
-                            {/*            color="secondary"*/}
-                            {/*            name="Jason Hughes"*/}
-                            {/*            size="sm"*/}
-                            {/*            src="https://i.pravatar.cc/150?u=a042581f4e29026704d"*/}
-                            {/*        />*/}
-                            {/*    </DropdownTrigger>*/}
-                            {/*    <DropdownMenu aria-label="Profile Actions" variant="flat">*/}
-                            {/*        <DropdownItem key="profile" className="h-14 gap-2">*/}
-                            {/*            <p className="font-semibold">Signed in as</p>*/}
-                            {/*            <p className="font-semibold">zoey@example.com</p>*/}
-                            {/*        </DropdownItem>*/}
-                            {/*        <DropdownItem key="settings">My Settings</DropdownItem>*/}
-                            {/*        <DropdownItem key="team_settings">Team Settings</DropdownItem>*/}
-                            {/*        <DropdownItem key="analytics">Analytics</DropdownItem>*/}
-                            {/*        <DropdownItem key="system">System</DropdownItem>*/}
-                            {/*        <DropdownItem key="configurations">Configurations</DropdownItem>*/}
-                            {/*        <DropdownItem key="help_and_feedback">Help & Feedback</DropdownItem>*/}
-                            {/*        <DropdownItem key="logout" color="danger">*/}
-                            {/*            Log Out*/}
-                            {/*        </DropdownItem>*/}
-                            {/*    </DropdownMenu>*/}
-                            {/*</Dropdown>*/}
-                        </NavbarContent>
-                    </>
-                )}
-
-                <NavbarContent justify='end'>
+                <NavbarContent  as="div" justify='end'>
                     <ThemeSwitcher/>
-                    {!user && !loading && (
+
+                    {user && !loading &&(
+                        <>
+                            <Dropdown placement="bottom-end">
+                                <DropdownTrigger>
+                                    <Avatar
+                                        isBordered
+                                        as="button"
+                                        className="transition-transform"
+                                        color="secondary"
+                                        name="Jason Hughes"
+                                        size="sm"
+                                        src={user.profileUrl || ''}
+                                    />
+                                </DropdownTrigger>
+                                <DropdownMenu aria-label="Profile Actions" variant="flat">
+                                    <DropdownItem key="profile" className="h-14 gap-2">
+                                        <p className="font-semibold">Signed in as</p>
+                                        <p className="font-semibold">{user.email}</p>
+                                    </DropdownItem>
+                                    <DropdownItem key="settings">My Settings</DropdownItem>
+                                    <DropdownItem key="team_settings">Team Settings</DropdownItem>
+                                    <DropdownItem key="analytics">Analytics</DropdownItem>
+                                    <DropdownItem key="system">System</DropdownItem>
+                                    <DropdownItem key="configurations">Configurations</DropdownItem>
+                                    <DropdownItem key="help_and_feedback">Help & Feedback</DropdownItem>
+                                    <DropdownItem key="logout" color="danger">
+                                        Log Out
+                                    </DropdownItem>
+                                </DropdownMenu>
+                            </Dropdown>
+                        </>
+                    )}
+
+                    {!user && (
                         <>
                             <NavbarItem>
-                                <Link className='text-black-2 dark:text-white' href={NAVIGATION_LINKS.LOGIN}>Sign In</Link>
+                                <Link className='text-black-2 dark:text-white' href={NAVIGATION_LINKS.LOGIN}>Sign
+                                    In</Link>
                             </NavbarItem>
                             <NavbarItem>
                                 <Link className='text-black-2' href={NAVIGATION_LINKS.REGISTER}>

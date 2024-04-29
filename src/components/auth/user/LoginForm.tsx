@@ -15,6 +15,7 @@ import { toast } from 'react-toastify';
 import Spinner from '@/components/shared/icons/Spinner';
 import { NAVIGATION_LINKS } from '@/boundary/configs/navigationConfig';
 import MainNavbar from "@/components/shared/navs/MainNavbar";
+import useLocalStorage from "@/hooks/useLocalStorage";
 
 const initialFormState: LoginUserRequest = {
   username: '', password: '',
@@ -29,6 +30,7 @@ export default function LoginForm() {
   const [inputErrors, setInputErrors] = useState({
     username: '', password: '',
   });
+  const [user, setUser] = useLocalStorage('user', {});
   const toggleVisibility = () => setIsVisible(!isVisible);
   const [status, setStatus] = useState<any>(null);
 
@@ -63,6 +65,7 @@ export default function LoginForm() {
       setIsSubmitting(false);
       setLoginFormData(initialFormState);
       let responseData: AccessTokenModel = response.data;
+      setUser(responseData.user)
       const success = await storeAuthToken(responseData);
       if (success)
         setStatus('user_logged');

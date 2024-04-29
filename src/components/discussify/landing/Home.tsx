@@ -163,26 +163,25 @@ export default function Home() {
                                                             <p className="text-large">{post.title}</p>
                                                         </Link>
                                                         <div className="flex text-small text-default-500">
-                                                            <UserStatsComponent author={post.user} className={'dark:text-white text-tiny text-default-500 mr-1'}/>
-                                                            ·
+                                                            <UserStatsComponent author={post.user}
+                                                                                className={'dark:text-white text-tiny text-default-500 mr-1'}/>
+                                                            <p className={'font-bold text-medium'}>.</p>
                                                             <Tooltip content={formatDateWithTime(post.createdAt)}
                                                                      placement="top"
                                                             >
                                                                 <Link href={""} underline="hover"
                                                                       size={'sm'}
-                                                                      className='dark:text-white text-tiny text-default-500 ml-1'>
+                                                                      className='dark:text-white text-tiny text-default-500 ml-1 mr-1'>
                                                                     {formatDateWithoutTime(post.createdAt)}
                                                                 </Link>
                                                             </Tooltip>
-                                                            .
-                                                            <Chip
-                                                                className={'text-white'}
-                                                                startContent={<ReplyIcon/>}
-                                                                size={'sm'}
-                                                                variant="flat"
-                                                            >
-                                                                {post.postRepliesCount}
-                                                            </Chip>
+                                                            <p className={'font-bold text-medium'}>.</p>
+                                                            <Link href={""} underline="hover"
+                                                                  size={'sm'}
+                                                                  className='dark:text-white text-tiny text-default-500 ml-1'>
+                                                                <ReplyIcon width={15}/> <span
+                                                                className={'ml-1'}>{post.postRepliesCount}</span>
+                                                            </Link>
                                                         </div>
                                                     </div>
                                                 </CardHeader>

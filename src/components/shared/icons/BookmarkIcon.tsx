@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ReplyIcon = ({
+const BookmarkIcon = ({
                       width = 24, height = 24, color = '#686062'
                   }) => {
     return (
@@ -9,10 +9,9 @@ const ReplyIcon = ({
             width={width}
             height={height}
             viewBox={'0 0 24 24'}>
-            <path fill="currentColor"
-                  d="M18 8H6V6h12zm0 3H6V9h12zm0 3H6v-2h12zm4-10a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h14l4 4z"/>
+            <path fill="currentColor" d="M5 21V5q0-.825.588-1.412T7 3h10q.825 0 1.413.588T19 5v16l-7-3z"/>
         </svg>
     );
 };
 
-export default ReplyIcon;
+export default BookmarkIcon;
