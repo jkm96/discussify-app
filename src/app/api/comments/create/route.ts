@@ -7,7 +7,7 @@ export async function POST(request: NextRequest) {
   try {
     const requestBody = await request.json();
     const config = getAxiosConfigs(request, true);
-    const response = await discussifyApiClient.post('api/v1/comments/create',requestBody, config);
+    const response = await discussifyApiClient.post('api/v1/post-replies/comments/create',requestBody, config);
 
     return handleAxiosResponse(response);
   } catch (error: unknown) {

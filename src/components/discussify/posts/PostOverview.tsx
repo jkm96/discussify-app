@@ -6,16 +6,13 @@ import {
     EditPostRequest,
     PostReplyRequest,
     PostRepliesResponse,
-    PostResponse, EditPostReplyRequest, CommentRequest
+    PostResponse, EditPostReplyRequest
 } from "@/boundary/interfaces/post";
 import React, {useEffect, useState} from "react";
 import {toast} from "react-toastify";
 import {
-    createPostAsync,
-    editPostAsync, editPostReplyAsync,
-    getPostDetailsAsync,
-    getPostRepliesAsync,
-    addPostReplyAsync, addCommentAsync
+    editPostAsync,
+    getPostDetailsAsync
 } from "@/lib/services/discussify/postService";
 import {Card, CardFooter, CardHeader, CircularProgress, Divider, Link, Image, Avatar, Button} from "@nextui-org/react";
 import {CardBody} from "@nextui-org/card";
@@ -38,6 +35,9 @@ import ForumStats from "@/components/discussify/landing/ForumStats";
 import UserStatsComponent from "@/components/discussify/Shared/UserStatsComponent";
 import BookmarkIcon from "@/components/shared/icons/BookmarkIcon";
 import LikeIcon from "@/components/shared/icons/LikeIcon";
+import {addPostReplyAsync, editPostReplyAsync, getPostRepliesAsync} from "@/lib/services/discussify/postReplyService";
+import {addCommentAsync, getCommentsAsync} from "@/lib/services/discussify/commentService";
+import {CommentRequest, CommentResponse} from "@/boundary/interfaces/comment";
 
 const CustomEditor = dynamic(() => {
     return import( '@/components/ckeditor5/custom-editor' );
@@ -78,6 +78,7 @@ export default function PostOverview({slug}: { slug: string }) {
 
     const [showAddCommentForm, setShowAddCommentForm] = useState<number | null>(null);
     const [commentRequest, setCommentRequest] = useState({} as CommentRequest);
+    const [commentResponse, setCommentResponse] = useState<CommentResponse[]>([]);
 
     const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -235,7 +236,7 @@ export default function PostOverview({slug}: { slug: string }) {
             setCommentRequest(initialComment);
             // Assuming response.data contains the newly added comment
             // const updatedReplies = postReplies.map(reply =>
-            //     reply.id === postId ? { ...reply, post-replies: [response.data, ...reply.post-replies] } : reply
+            //     reply.id === postId ? { ...reply, comments: [response.data, ...reply.comments] } : reply
             // );
             // setPostReplies(updatedReplies);
         } else {
@@ -243,6 +244,29 @@ export default function PostOverview({slug}: { slug: string }) {
         }
     };
 
+    const fetchComments = async (postReplyId: any) => {
+        setIsLoadingReplies(true);
+        await getCommentsAsync(postReplyId)
+            .then((response) => {
+                if (response.statusCode === 200) {
+                    const parsedData = response.data;
+                    const {data, pagingMetaData} = parsedData;
+                    setPostReplies(data);
+                }
+            })
+            .catch((error) => {
+                toast.error(`Error fetching post reply comments: ${error}`);
+            })
+            .finally(() => {
+                setIsLoadingReplies(false);
+            });
+    };
+
+    useEffect(() => {
+        if (postReplies && !isLoadingReplies){
+            fetchComments(slug);
+        }
+    }, [slug]);
 
     return (
         <>

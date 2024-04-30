@@ -8,16 +8,16 @@ import {
     PostReplyRequest
 } from "@/boundary/interfaces/post";
 
-export async function createPostAsync(createRequest: CreatePostRequest) {
+export async function addPostReplyAsync(commentRequest: PostReplyRequest) {
     try {
-        const apiUrl = `${internalBaseUrl}/api/post/create`;
+        const apiUrl = `${internalBaseUrl}/api/post-replies/create`;
         const response = await fetch(apiUrl, {
             method: 'POST',
             headers: {
                 'x-api-key': `${apiKey}`,
                 'Content-type': 'application/json',
             },
-            body: JSON.stringify(createRequest),
+            body: JSON.stringify(commentRequest),
         });
 
         return response.json();
@@ -26,16 +26,16 @@ export async function createPostAsync(createRequest: CreatePostRequest) {
     }
 }
 
-export async function editPostAsync(editPostRequest: EditPostRequest) {
+export async function editPostReplyAsync(editPostReplyRequest: EditPostReplyRequest) {
     try {
-        const apiUrl = `${internalBaseUrl}/api/post/edit`;
+        const apiUrl = `${internalBaseUrl}/api/post-replies/edit`;
         const response = await fetch(apiUrl, {
             method: 'POST',
             headers: {
                 'x-api-key': `${apiKey}`,
                 'Content-type': 'application/json',
             },
-            body: JSON.stringify(editPostRequest),
+            body: JSON.stringify(editPostReplyRequest),
         });
 
         return response.json();
@@ -44,27 +44,9 @@ export async function editPostAsync(editPostRequest: EditPostRequest) {
     }
 }
 
-export async function getLatestPosts(queryParams: PostQueryParameters) {
+export async function getPostRepliesAsync(postSlug: string) {
     try {
-        const apiUrl = `${internalBaseUrl}/api/post/latest/${JSON.stringify(queryParams)}`;
-        const response = await fetch(apiUrl, {
-            method: 'GET',
-            headers: {
-                'x-api-key': `${apiKey}`,
-                'Content-type': 'application/json',
-            },
-            body: null,
-        });
-
-        return response.json();
-    } catch (error) {
-        throw error;
-    }
-}
-
-export async function getPostDetailsAsync(postSlug: string) {
-    try {
-        const response = await fetch(`${internalBaseUrl}/api/post/${postSlug}`, {
+        const response = await fetch(`${internalBaseUrl}/api/post/${postSlug}/post-replies`, {
             method: 'GET',
             headers: {
                 'x-api-key': `${apiKey}`,

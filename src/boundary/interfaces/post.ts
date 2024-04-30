@@ -60,7 +60,3 @@ export interface EditPostReplyRequest {
     description: string;
 }
 
-export interface CommentRequest {
-    postReplyId: number;
-    description: string;
-}
