@@ -1,7 +1,7 @@
 import React from 'react';
-import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/react';
-import { ChevronDownIcon } from '@/components/shared/icons/ChevronDownIcon';
-import { capitalize } from '@/lib/utils/tableUtils';
+import {Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger} from '@nextui-org/react';
+import {ChevronDownIcon} from '@/components/shared/icons/ChevronDownIcon';
+import {capitalize} from '@/lib/utils/tableUtils';
 
 
 export function TableVisibleColumns({ visibleColumns, setVisibleColumns, tableColumns }: any) {

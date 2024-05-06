@@ -1,5 +1,5 @@
-import { getAccessToken } from '@/lib/services/token/tokenService';
-import { AccessTokenModel } from '@/boundary/interfaces/token';
+import {getAccessToken} from '@/lib/services/token/tokenService';
+import {AccessTokenModel} from '@/boundary/interfaces/token';
 
 
 export async function checkEmailVerificationStatus() {

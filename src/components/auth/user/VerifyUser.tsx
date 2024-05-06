@@ -1,13 +1,12 @@
 'use client';
 
-import { toast } from 'react-toastify';
-import React, { useEffect, useState } from 'react';
-import { NAVIGATION_LINKS } from '@/boundary/configs/navigationConfig';
-import { useRouter } from 'next/navigation';
-import { CircularProgress } from '@nextui-org/react';
-import { verifyUserEmailAsync } from '@/lib/services/auth/userAuthService';
-import { useAuth } from '@/hooks/useAuth';
-import MainNavbar from "@/components/shared/navs/MainNavbar";
+import {toast} from 'react-toastify';
+import React, {useEffect, useState} from 'react';
+import {NAVIGATION_LINKS} from '@/boundary/configs/navigationConfig';
+import {useRouter} from 'next/navigation';
+import {CircularProgress} from '@nextui-org/react';
+import {verifyUserEmailAsync} from '@/lib/services/auth/userAuthService';
+import {useAuth} from '@/hooks/useAuth';
 
 export default function VerifyUser() {
   const { clearAuthToken } = useAuth();

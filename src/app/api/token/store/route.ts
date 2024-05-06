@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { cookieName } from '@/boundary/constants/appConstants';
-import { AccessTokenModel } from '@/boundary/interfaces/token';
+import {NextRequest, NextResponse} from 'next/server';
+import {cookieName} from '@/boundary/constants/appConstants';
+import {AccessTokenModel} from '@/boundary/interfaces/token';
 
 export async function POST(request: NextRequest) {
   try {

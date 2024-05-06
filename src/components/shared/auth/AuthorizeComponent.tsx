@@ -1,6 +1,6 @@
 'use client';
-import { useEffect, useState } from 'react';
-import { checkEmailVerificationStatus } from '@/helpers/authHelper';
+import {useEffect, useState} from 'react';
+import {checkEmailVerificationStatus} from '@/helpers/authHelper';
 import PermissionDeniedMessage from "@/components/shared/auth/PermissionDeniedMessage";
 import UnVerifiedEmail from "@/components/shared/auth/UnVerifiedEmail";
 import Authorizing from "@/components/shared/auth/Authorizing";

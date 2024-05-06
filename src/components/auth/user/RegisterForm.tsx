@@ -1,20 +1,19 @@
 'use client';
 
 import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { RegisterUserRequest } from '@/boundary/interfaces/auth';
-import { validateRegisterFormInputErrors } from '@/helpers/validationHelpers';
-import { Input } from '@nextui-org/react';
-import { EyeFilledIcon, EyeSlashFilledIcon } from '@nextui-org/shared-icons';
-import { registerUser } from '@/lib/services/auth/userAuthService';
-import { Button } from '@nextui-org/button';
-import { toast } from 'react-toastify';
+import React, {useEffect, useState} from 'react';
+import {useRouter} from 'next/navigation';
+import {RegisterUserRequest} from '@/boundary/interfaces/auth';
+import {validateRegisterFormInputErrors} from '@/helpers/validationHelpers';
+import {Input} from '@nextui-org/react';
+import {EyeFilledIcon, EyeSlashFilledIcon} from '@nextui-org/shared-icons';
+import {registerUser} from '@/lib/services/auth/userAuthService';
+import {Button} from '@nextui-org/button';
+import {toast} from 'react-toastify';
 import Spinner from '@/components/shared/icons/Spinner';
-import { NAVIGATION_LINKS } from '@/boundary/configs/navigationConfig';
-import { AccessTokenModel } from '@/boundary/interfaces/token';
-import { useAuth } from '@/hooks/useAuth';
-import MainNavbar from "@/components/shared/navs/MainNavbar";
+import {NAVIGATION_LINKS} from '@/boundary/configs/navigationConfig';
+import {AccessTokenModel} from '@/boundary/interfaces/token';
+import {useAuth} from '@/hooks/useAuth';
 
 const initialFormState: RegisterUserRequest = {
   email: '', username: '', password: '', confirmPassword: '',

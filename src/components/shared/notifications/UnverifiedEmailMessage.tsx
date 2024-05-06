@@ -1,6 +1,6 @@
-import { useAuth } from '@/hooks/useAuth';
-import { useEffect, useState } from 'react';
-import { User } from '@/boundary/interfaces/user';
+import {useAuth} from '@/hooks/useAuth';
+import {useEffect, useState} from 'react';
+import {User} from '@/boundary/interfaces/user';
 
 export default function UnverifiedEmailMessage() {
   const { user, loading: authLoading } = useAuth();

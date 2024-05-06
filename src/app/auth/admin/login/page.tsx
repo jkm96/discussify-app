@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import AdminLoginForm from '@/components/auth/admin/AdminLoginForm';
 import Loader from "@/components/shared/dashboard/Loader";
 

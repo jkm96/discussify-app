@@ -1,9 +1,9 @@
-import { apiKey, internalBaseUrl } from '@/boundary/constants/appConstants';
+import {apiKey, internalBaseUrl} from '@/boundary/constants/appConstants';
 import {
-  ForgotPasswordRequest,
-  LoginUserRequest,
-  RegisterUserRequest,
-  ResetPasswordRequest,
+    ForgotPasswordRequest,
+    LoginUserRequest,
+    RegisterUserRequest,
+    ResetPasswordRequest,
 } from '@/boundary/interfaces/auth';
 
 export async function loginUser(loginRequest: LoginUserRequest) {

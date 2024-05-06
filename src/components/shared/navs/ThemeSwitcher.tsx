@@ -1,6 +1,5 @@
-import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
-import styles from "./ThemeSwitcher.module.css";
+import {useTheme} from "next-themes";
+import {useEffect, useState} from "react";
 import {MoonIcon, SunIcon} from "@nextui-org/shared-icons";
 import {Switch} from "@nextui-org/react";
 

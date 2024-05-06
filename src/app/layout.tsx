@@ -14,7 +14,7 @@ export default function RootLayout({children}: { children: React.ReactNode }) {
                 <ToastContainerWrapper/>
                 <div className="w-full h-full dark:text-bodydark">
                     <MainNavbar/>
-                    <div className="mx-auto w-11/12 px-4 sm:px-6">
+                    <div className="mx-auto md:px-4">
                         {children}
                     </div>
                 </div>

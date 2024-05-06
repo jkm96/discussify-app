@@ -1,5 +1,6 @@
 import {UserResponse} from "@/boundary/interfaces/user";
 import {ForumResponse} from "@/boundary/interfaces/forum";
+import {LikeResponse} from "@/boundary/interfaces/shared";
 
 export interface PostResponse {
     id: number;
@@ -17,8 +18,10 @@ export interface PostResponse {
     createdAt: string;
     updatedAt: string;
     slug: string;
+    userHasViewed: boolean;
     user: UserResponse;
     forum: ForumResponse;
+    postLikes: LikeResponse;
 }
 
 export interface PostRepliesResponse {

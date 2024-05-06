@@ -5,9 +5,8 @@ import discussifyApiClient, {getAxiosConfigs} from "@/lib/axios/axiosClient";
 export async function POST(request: NextRequest) {
   try {
     const requestBody = await request.json();
-    const postReplyId = requestBody.postReplyId;
     const config = getAxiosConfigs(request, true);
-    const response = await discussifyApiClient.put(`api/v1/comments/${postReplyId}/edit`,requestBody, config);
+    const response = await discussifyApiClient.post('api/v1/like',requestBody, config);
 
     return handleAxiosResponse(response);
   } catch (error: unknown) {

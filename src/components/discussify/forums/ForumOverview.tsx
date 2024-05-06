@@ -1,18 +1,15 @@
 'use client';
 
-import {Card, CardFooter, CardHeader, Image, Button, Avatar, CircularProgress} from "@nextui-org/react";
+import {Avatar, Button, Card, CardHeader, CircularProgress} from "@nextui-org/react";
 import React, {useEffect, useState} from "react";
-import {CardBody} from "@nextui-org/card";
 import {usePathname, useRouter, useSearchParams} from "next/navigation";
 import {toast} from "react-toastify";
 import Link from "next/link";
 import {NAVIGATION_LINKS} from "@/boundary/configs/navigationConfig";
-import {ForumPostsResponse, ForumResponse} from "@/boundary/interfaces/forum";
-import {ForumQueryParameters} from "@/boundary/parameters/forumQueryParameters";
+import {ForumPostsResponse} from "@/boundary/interfaces/forum";
 import {getForumPosts} from "@/lib/services/discussify/forumService";
 import {ForumPostsQueryParameters} from "@/boundary/parameters/forumPostsQueryParameters";
-import {PlusIcon} from "@/components/shared/icons/PlusIcon";
-import {EditIcon, SearchIcon} from "@nextui-org/shared-icons";
+import {EditIcon} from "@nextui-org/shared-icons";
 import {convertSlugToTitleCase} from "@/lib/utils/seoUtils";
 import ForumStats from "@/components/discussify/landing/ForumStats";
 

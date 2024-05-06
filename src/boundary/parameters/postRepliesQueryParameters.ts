@@ -1,4 +1,4 @@
-import { RequestParameters } from '@/boundary/parameters/requestParameters';
+import {RequestParameters} from '@/boundary/parameters/requestParameters';
 
 export class PostRepliesQueryParameters extends RequestParameters {
   public searchTerm: string;

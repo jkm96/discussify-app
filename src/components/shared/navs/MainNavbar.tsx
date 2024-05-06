@@ -3,7 +3,11 @@
 import React, {useEffect, useState} from 'react';
 import {
     Avatar,
-    Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger,
+    Button,
+    Dropdown,
+    DropdownItem,
+    DropdownMenu,
+    DropdownTrigger,
     Link,
     Navbar,
     NavbarBrand,
@@ -17,7 +21,7 @@ import {NAVIGATION_LINKS} from '@/boundary/configs/navigationConfig';
 import {useAuth} from '@/hooks/useAuth';
 import {ThemeSwitcher} from "@/components/shared/navs/ThemeSwitcher";
 import useLocalStorage from "@/hooks/useLocalStorage";
-import {User, UserResponse} from "@/boundary/interfaces/user";
+import {UserResponse} from "@/boundary/interfaces/user";
 
 const initialUser: UserResponse = {
     commentsCount: 0,
@@ -62,7 +66,7 @@ export default function MainNavbar() {
 
     return (
         <>
-            <Navbar maxWidth={"2xl"} className='dark:bg-boxdark-mode' isMenuOpen={isMenuOpen}
+            <Navbar maxWidth={"full"} className='dark:bg-boxdark-mode' isMenuOpen={isMenuOpen}
                     onMenuOpenChange={setIsMenuOpen}>
                 <NavbarContent>
                     <NavbarMenuToggle

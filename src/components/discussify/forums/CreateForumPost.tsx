@@ -1,15 +1,13 @@
 'use client';
 
-import {Button, Divider, Input} from "@nextui-org/react";
+import {Button, Input} from "@nextui-org/react";
 import React, {useState} from "react";
 import {CreatePostRequest} from "@/boundary/interfaces/post";
 import {toast} from "react-toastify";
 import Spinner from "@/components/shared/icons/Spinner";
 import {validateCreatePostFormInputErrors} from "@/helpers/validationHelpers";
 import {createPostAsync} from "@/lib/services/discussify/postService";
-import {ResetPasswordRequest} from "@/boundary/interfaces/auth";
 import dynamic from "next/dynamic";
-import {router} from "next/client";
 import {NAVIGATION_LINKS} from "@/boundary/configs/navigationConfig";
 import {useRouter} from "next/navigation";
 

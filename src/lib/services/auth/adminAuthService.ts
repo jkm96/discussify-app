@@ -1,5 +1,5 @@
-import { apiKey, internalBaseUrl } from '@/boundary/constants/appConstants';
-import { LoginUserRequest } from '@/boundary/interfaces/auth';
+import {apiKey, internalBaseUrl} from '@/boundary/constants/appConstants';
+import {LoginUserRequest} from '@/boundary/interfaces/auth';
 
 export async function loginAdmin(loginRequest: LoginUserRequest) {
   try {

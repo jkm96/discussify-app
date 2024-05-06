@@ -1,5 +1,5 @@
-import { apiKey, internalBaseUrl } from '@/boundary/constants/appConstants';
-import { UserQueryParameters } from '@/boundary/parameters/userQueryParameters';
+import {apiKey, internalBaseUrl} from '@/boundary/constants/appConstants';
+import {UserQueryParameters} from '@/boundary/parameters/userQueryParameters';
 
 export async function getUsers(queryParams: UserQueryParameters) {
   try {

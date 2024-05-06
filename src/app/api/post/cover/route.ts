@@ -2,12 +2,10 @@ import {handleApiException, handleAxiosResponse} from '@/helpers/responseHelpers
 import {NextRequest} from 'next/server';
 import discussifyApiClient, {getAxiosConfigs} from "@/lib/axios/axiosClient";
 
-export async function POST(request: NextRequest) {
+export async function GET(request: NextRequest) {
   try {
-    const requestBody = await request.json();
-    const postReplyId = requestBody.postReplyId;
-    const config = getAxiosConfigs(request, true);
-    const response = await discussifyApiClient.put(`api/v1/comments/${postReplyId}/edit`,requestBody, config);
+    const config = getAxiosConfigs(request, false);
+    const response = await discussifyApiClient.get('api/v1/posts/cover-posts', config);
 
     return handleAxiosResponse(response);
   } catch (error: unknown) {

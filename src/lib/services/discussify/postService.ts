@@ -1,12 +1,6 @@
 import {PostQueryParameters} from "@/boundary/parameters/postQueryParameters";
 import {apiKey, internalBaseUrl} from "@/boundary/constants/appConstants";
-import {
-    CommentRequest,
-    CreatePostRequest,
-    EditPostReplyRequest,
-    EditPostRequest,
-    PostReplyRequest
-} from "@/boundary/interfaces/post";
+import {CreatePostRequest, EditPostRequest} from "@/boundary/interfaces/post";
 
 export async function createPostAsync(createRequest: CreatePostRequest) {
     try {
@@ -47,6 +41,24 @@ export async function editPostAsync(editPostRequest: EditPostRequest) {
 export async function getLatestPosts(queryParams: PostQueryParameters) {
     try {
         const apiUrl = `${internalBaseUrl}/api/post/latest/${JSON.stringify(queryParams)}`;
+        const response = await fetch(apiUrl, {
+            method: 'GET',
+            headers: {
+                'x-api-key': `${apiKey}`,
+                'Content-type': 'application/json',
+            },
+            body: null,
+        });
+
+        return response.json();
+    } catch (error) {
+        throw error;
+    }
+}
+
+export async function getCoverPostsAsync() {
+    try {
+        const apiUrl = `${internalBaseUrl}/api/post/cover`;
         const response = await fetch(apiUrl, {
             method: 'GET',
             headers: {

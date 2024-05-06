@@ -1,7 +1,7 @@
-import { NextRequest } from 'next/server';
-import { cookieName } from '@/boundary/constants/appConstants';
-import { createNextResponse } from '@/helpers/responseHelpers';
-import { AccessTokenModel } from '@/boundary/interfaces/token';
+import {NextRequest} from 'next/server';
+import {cookieName} from '@/boundary/constants/appConstants';
+import {createNextResponse} from '@/helpers/responseHelpers';
+import {AccessTokenModel} from '@/boundary/interfaces/token';
 
 export async function POST(request: NextRequest) {
   try {

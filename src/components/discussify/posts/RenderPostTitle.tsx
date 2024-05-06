@@ -2,7 +2,6 @@ import {PostResponse} from "@/boundary/interfaces/post";
 import {Card, CardFooter, CardHeader, Chip} from "@nextui-org/react";
 import React from "react";
 import {convertStringToList} from "@/helpers/stylingHelpers";
-import {EditIcon} from "@nextui-org/shared-icons";
 import TagsIcon from "@/components/shared/icons/TagsIcon";
 import {formatDateWithoutTime} from "@/helpers/dateHelpers";
 import TimerIcon from "@/components/shared/icons/TimerIcon";

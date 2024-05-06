@@ -1,5 +1,4 @@
 import React from 'react';
-import { IconSvgProps } from '@/boundary/types/IconSvgProps';
 
 export const VerticalDotsIcon = () => (
   <svg

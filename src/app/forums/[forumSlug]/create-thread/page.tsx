@@ -1,7 +1,5 @@
 import {getPageMetadata} from "@/lib/utils/seoUtils";
 import {Metadata} from "next";
-import Home from "@/components/discussify/landing/Home";
-import PostOverview from "@/components/discussify/posts/PostOverview";
 import CreateForumPost from "@/components/discussify/forums/CreateForumPost";
 
 const title = 'Pet Diaries - Online Diary for Pet Lovers.';

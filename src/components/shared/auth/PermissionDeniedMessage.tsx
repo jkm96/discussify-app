@@ -1,5 +1,5 @@
-import { Button } from '@nextui-org/react';
-import { NAVIGATION_LINKS } from '@/boundary/configs/navigationConfig';
+import {Button} from '@nextui-org/react';
+import {NAVIGATION_LINKS} from '@/boundary/configs/navigationConfig';
 import Link from 'next/link';
 
 function PermissionDeniedMessage() {

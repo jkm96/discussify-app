@@ -1,6 +1,6 @@
-import { handleApiException, handleAxiosResponse } from '@/helpers/responseHelpers';
-import discussifyApiClient, { getAxiosConfigs } from '@/lib/axios/axiosClient';
-import { NextRequest } from 'next/server';
+import {handleApiException, handleAxiosResponse} from '@/helpers/responseHelpers';
+import discussifyApiClient, {getAxiosConfigs} from '@/lib/axios/axiosClient';
+import {NextRequest} from 'next/server';
 
 export async function POST(request: NextRequest) {
   try {

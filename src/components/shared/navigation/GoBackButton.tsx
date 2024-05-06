@@ -1,4 +1,4 @@
-import { Button } from '@nextui-org/react';
+import {Button} from '@nextui-org/react';
 import BackArrowIcon from '@/components/shared/icons/BackArrowIcon';
 
 export function GoBackButton(props: { onPress: () => void }) {

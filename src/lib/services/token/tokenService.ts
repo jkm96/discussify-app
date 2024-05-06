@@ -1,5 +1,5 @@
-import { AccessTokenModel } from '@/boundary/interfaces/token';
-import { apiKey, internalBaseUrl } from '@/boundary/constants/appConstants';
+import {AccessTokenModel} from '@/boundary/interfaces/token';
+import {apiKey, internalBaseUrl} from '@/boundary/constants/appConstants';
 
 export async function storeAccessTokenInCookie(storeTokenRequest: AccessTokenModel) {
   try {

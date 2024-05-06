@@ -1,7 +1,7 @@
-import axios, { AxiosRequestConfig } from 'axios';
-import { cookieName, discussifyApiUrl } from '@/boundary/constants/appConstants';
-import { NextRequest } from 'next/server';
-import { AccessTokenModel } from '@/boundary/interfaces/token';
+import axios, {AxiosRequestConfig} from 'axios';
+import {cookieName, discussifyApiUrl} from '@/boundary/constants/appConstants';
+import {NextRequest} from 'next/server';
+import {AccessTokenModel} from '@/boundary/interfaces/token';
 
 const discussifyApiClient = axios.create({
   baseURL: `${discussifyApiUrl}`,
@@ -31,10 +31,12 @@ export function getAxiosConfigs(request: NextRequest, isAuthenticated: boolean, 
 
   if (isAuthenticated) {
     const tokenCookie = request.cookies.get(`${cookieName}`)?.value as string;
-    const tokenData: AccessTokenModel = JSON.parse(tokenCookie);
-    config.headers = {
-      Authorization: `Bearer ${tokenData.token.token}`,
-    };
+    if (tokenCookie){
+      const tokenData: AccessTokenModel = JSON.parse(tokenCookie);
+      config.headers = {
+        Authorization: `Bearer ${tokenData.token.token}`,
+      };
+    }
   }
 
   return config;

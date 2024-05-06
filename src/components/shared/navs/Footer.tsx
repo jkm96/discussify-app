@@ -1,5 +1,5 @@
-import { NAVIGATION_LINKS } from '@/boundary/configs/navigationConfig';
-import { useAuth } from '@/hooks/useAuth';
+import {NAVIGATION_LINKS} from '@/boundary/configs/navigationConfig';
+import {useAuth} from '@/hooks/useAuth';
 
 export function Footer() {
   const { user } = useAuth();

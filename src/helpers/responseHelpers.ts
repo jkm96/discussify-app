@@ -1,7 +1,7 @@
-import { NextResponse } from 'next/server';
-import { AxiosError, AxiosResponse } from 'axios';
+import {NextResponse} from 'next/server';
+import {AxiosError, AxiosResponse} from 'axios';
 import camelcaseKeys from 'camelcase-keys';
-import { ApiErrorResponse } from '@/boundary/interfaces/shared';
+import {ApiErrorResponse} from '@/boundary/interfaces/shared';
 
 export function handleAxiosResponse(response: AxiosResponse<any>) {
   const axiosResponse = response.data;

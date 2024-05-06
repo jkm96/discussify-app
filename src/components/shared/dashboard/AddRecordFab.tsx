@@ -1,6 +1,6 @@
-import { Button } from '@nextui-org/button';
+import {Button} from '@nextui-org/button';
 import React from 'react';
-import { PlusIcon } from '@/components/shared/icons/PlusIcon';
+import {PlusIcon} from '@/components/shared/icons/PlusIcon';
 
 export function AddRecordFab(props: { onClick: (e: any) => void }) {
   return <div className='fixed bottom-4 right-4 md:hidden'>

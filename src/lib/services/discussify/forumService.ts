@@ -1,7 +1,6 @@
 import {PostQueryParameters} from "@/boundary/parameters/postQueryParameters";
 import {apiKey, internalBaseUrl} from "@/boundary/constants/appConstants";
 import {ForumPostsQueryParameters} from "@/boundary/parameters/forumPostsQueryParameters";
-import {CreatePostRequest} from "@/boundary/interfaces/post";
 
 export async function getForumStatsAsync() {
     try {

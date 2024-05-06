@@ -1,7 +1,6 @@
 import {UserStats} from "@/components/discussify/landing/UserStats";
 import {Link, Tooltip} from "@nextui-org/react";
 import React from "react";
-import {PostResponse} from "@/boundary/interfaces/post";
 import {UserResponse} from "@/boundary/interfaces/user";
 
 export default function UserStatsComponent({author,className}:{author:UserResponse,className:string}) {

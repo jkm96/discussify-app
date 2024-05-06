@@ -1,20 +1,19 @@
 'use client';
 
 import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
-import { validateLoginFormInputErrors } from '@/helpers/validationHelpers';
-import { useAuth } from '@/hooks/useAuth';
-import { useRouter } from 'next/navigation';
-import { LoginUserRequest } from '@/boundary/interfaces/auth';
-import { AccessTokenModel } from '@/boundary/interfaces/token';
-import { loginUser } from '@/lib/services/auth/userAuthService';
-import { Input } from '@nextui-org/react';
-import { EyeFilledIcon, EyeSlashFilledIcon } from '@nextui-org/shared-icons';
-import { Button } from '@nextui-org/button';
-import { toast } from 'react-toastify';
+import React, {useEffect, useState} from 'react';
+import {validateLoginFormInputErrors} from '@/helpers/validationHelpers';
+import {useAuth} from '@/hooks/useAuth';
+import {useRouter} from 'next/navigation';
+import {LoginUserRequest} from '@/boundary/interfaces/auth';
+import {AccessTokenModel} from '@/boundary/interfaces/token';
+import {loginUser} from '@/lib/services/auth/userAuthService';
+import {Input} from '@nextui-org/react';
+import {EyeFilledIcon, EyeSlashFilledIcon} from '@nextui-org/shared-icons';
+import {Button} from '@nextui-org/button';
+import {toast} from 'react-toastify';
 import Spinner from '@/components/shared/icons/Spinner';
-import { NAVIGATION_LINKS } from '@/boundary/configs/navigationConfig';
-import MainNavbar from "@/components/shared/navs/MainNavbar";
+import {NAVIGATION_LINKS} from '@/boundary/configs/navigationConfig';
 import useLocalStorage from "@/hooks/useLocalStorage";
 
 const initialFormState: LoginUserRequest = {

@@ -1,5 +1,5 @@
-import { apiKey, internalBaseUrl } from '@/boundary/constants/appConstants';
-import { CreateUserSubscriptionRequest } from '@/boundary/interfaces/admin';
+import {apiKey, internalBaseUrl} from '@/boundary/constants/appConstants';
+import {CreateUserSubscriptionRequest} from '@/boundary/interfaces/admin';
 
 export async function toggleUserSubscription(userId: number) {
   try {

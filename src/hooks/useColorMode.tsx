@@ -1,7 +1,6 @@
 'use client';
-import { useEffect } from 'react';
+import {useEffect} from 'react';
 import useLocalStorage from './useLocalStorage';
-import { useAuth } from '@/hooks/useAuth';
 
 const useColorMode = () => {
   const [colorMode, setColorMode] = useLocalStorage('color-theme', 'dark');

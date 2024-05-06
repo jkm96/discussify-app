@@ -1,4 +1,4 @@
-import { apiKey, internalBaseUrl } from '@/boundary/constants/appConstants';
+import {apiKey, internalBaseUrl} from '@/boundary/constants/appConstants';
 
 export async function fetchCustomerFeedbackAsync() {
   try {

@@ -1,4 +1,4 @@
-import { UserResponse } from '@/boundary/interfaces/user';
+import {UserResponse} from '@/boundary/interfaces/user';
 
 export interface RefreshTokenRequest {
   token: string;

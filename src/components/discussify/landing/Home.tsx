@@ -1,19 +1,7 @@
 'use client';
 
-import {
-    Card,
-    CardFooter,
-    CardHeader,
-    Image,
-    Button,
-    Avatar,
-    CircularProgress,
-    Tooltip,
-    Link,
-    PopoverContent, Popover, PopoverTrigger, Chip
-} from "@nextui-org/react";
+import {Avatar, Button, Card, CardHeader, CircularProgress, Link, Tooltip} from "@nextui-org/react";
 import React, {useEffect, useState} from "react";
-import {CardBody} from "@nextui-org/card";
 import {usePathname, useRouter, useSearchParams} from "next/navigation";
 import {PostResponse} from "@/boundary/interfaces/post";
 import {PostQueryParameters} from "@/boundary/parameters/postQueryParameters";
@@ -23,13 +11,12 @@ import {NAVIGATION_LINKS} from "@/boundary/configs/navigationConfig";
 import {formatDateWithoutTime, formatDateWithTime} from "@/helpers/dateHelpers";
 import ForumStats from "@/components/discussify/landing/ForumStats";
 import CoverPosts from "@/components/discussify/landing/CoverPosts";
-import {User} from "@nextui-org/user";
-import {UserStats} from "@/components/discussify/landing/UserStats";
 import ReplyIcon from "@/components/shared/icons/ReplyIcon";
-import {CheckIcon} from "@nextui-org/shared-icons";
 import UserStatsComponent from "@/components/discussify/Shared/UserStatsComponent";
+import {useAuth} from "@/hooks/useAuth";
 
 export default function Home() {
+    const {user} = useAuth();
     const [queryParams, setQueryParams] = useState<PostQueryParameters>(new PostQueryParameters());
     const [postResponses, setPostResponses] = useState<PostResponse[]>([]);
     const [isLoadingPosts, setIsLoadingPosts] = useState(true);
@@ -116,9 +103,9 @@ export default function Home() {
 
     return (
         <>
-            <div className="flex w-full h-full mt-10">
+            <div className="flex w-full h-full md:mt-10 mt-5">
                 {/*main forum section*/}
-                <div className="w-10/12 mr-4">
+                <div className="md:w-10/12 md:mr-4 w-full ml-1 mr-1">
                     {/*cover post section*/}
                     <CoverPosts/>
 
@@ -154,13 +141,23 @@ export default function Home() {
                                                               underline="hover"
                                                               className='dark:text-white text-default-500 text-small'
                                                               href={`${NAVIGATION_LINKS.FORUM_OVERVIEW}/${post.forum.slug}`}>
-                                                            <p className={'text-tiny'}>{post.forum.title}</p>
+                                                            <p className="text-tiny">{post.forum.title}</p>
                                                         </Link>
                                                         <Link key={post.id}
                                                               underline="hover"
                                                               className='dark:text-white text-blue-600'
                                                               href={`${NAVIGATION_LINKS.POST_OVERVIEW}/${post.slug}`}>
-                                                            <p className="text-large">{post.title}</p>
+                                                            {user ? (
+                                                                <>
+                                                                    {post.userHasViewed ? (
+                                                                        <p className="text-large">{post.title}</p>
+                                                                    ) : (
+                                                                        <p className="text-xl font-bold">{post.title}</p>
+                                                                    )}
+                                                                </>
+                                                            ) : (
+                                                                <p className="text-large">{post.title}</p>
+                                                            )}
                                                         </Link>
                                                         <div className="flex text-small text-default-500">
                                                             <UserStatsComponent author={post.user}
@@ -198,7 +195,7 @@ export default function Home() {
                                 </div>
                             )}
 
-                            {totalPages > 1 && !isLoadingMorePosts && (
+                            {totalPages > 1 && !isLoadingMorePosts && totalPages !== currentPage && (
                                 <div className="flex justify-center mt-4">
                                     <div className="flex justify-center mt-4">
                                         <Button size={'md'} onClick={handleLoadMore}>
@@ -213,7 +210,7 @@ export default function Home() {
                 </div>
 
                 {/*forum stats section*/}
-                <div className="w-2/12 mr-4">
+                <div className="w-2/12 mr-4 hidden md:block">
                     <ForumStats/>
                 </div>
             </div>

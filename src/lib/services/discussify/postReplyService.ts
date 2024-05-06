@@ -1,12 +1,5 @@
-import {PostQueryParameters} from "@/boundary/parameters/postQueryParameters";
 import {apiKey, internalBaseUrl} from "@/boundary/constants/appConstants";
-import {
-    CommentRequest,
-    CreatePostRequest,
-    EditPostReplyRequest,
-    EditPostRequest,
-    PostReplyRequest
-} from "@/boundary/interfaces/post";
+import {EditPostReplyRequest, PostReplyRequest} from "@/boundary/interfaces/post";
 
 export async function addPostReplyAsync(commentRequest: PostReplyRequest) {
     try {

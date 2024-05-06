@@ -1,4 +1,4 @@
-import {Card, CardFooter, CardHeader, CircularProgress} from "@nextui-org/react";
+import {Card, CardFooter, CardHeader, CircularProgress, Skeleton} from "@nextui-org/react";
 import {CardBody} from "@nextui-org/card";
 import React, {useEffect, useState} from "react";
 import {getPostDetailsAsync} from "@/lib/services/discussify/postService";
@@ -7,6 +7,26 @@ import {toast} from "react-toastify";
 import {ForumStatsResponse} from "@/boundary/interfaces/forum";
 import {getForumStatsAsync} from "@/lib/services/discussify/forumService";
 import {formatDateWithYear} from "@/helpers/dateHelpers";
+
+const SkeletonForumStats = () => {
+    return (
+        <Card className="w-full" radius="sm">
+            <div className="animate-pulse p-4">
+                <CardHeader className="justify-between">
+                    <Skeleton className="w-24 h-6" />
+                </CardHeader>
+                <CardBody className="px-3 py-0">
+                    <Skeleton className="w-full h-16" />
+                </CardBody>
+                <CardFooter className="gap-3">
+                    <Skeleton className="w-16 h-4" />
+                    <Skeleton className="w-12 h-4" />
+                    <Skeleton className="w-12 h-4" />
+                </CardFooter>
+            </div>
+        </Card>
+    );
+};
 
 export default function ForumStats() {
     const [forumStats, setForumStats] = useState<ForumStatsResponse>({} as ForumStatsResponse);
@@ -36,11 +56,7 @@ export default function ForumStats() {
     return (
         <>
             {isLoadingDetails ? (
-                <>
-                    <div className={'grid place-items-center'}>
-                        <CircularProgress color={'primary'} className={'p-4'}/>
-                    </div>
-                </>
+                <SkeletonForumStats />
             ) : (
                 <>
                     {forumStats && !isLoadingDetails && (
