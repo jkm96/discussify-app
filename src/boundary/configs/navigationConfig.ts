@@ -8,7 +8,7 @@ export const NAVIGATION_LINKS = {
     FORGOT_PASSWORD: '/auth/forgot-password',
 
     FORUM_OVERVIEW: '/forums',
-  CREATE_POST: '/forums',
+    CREATE_POST: '/create-thread',
     POST_OVERVIEW: '/posts',
     SETTINGS: '/dashboard/settings',
 
@@ -23,12 +23,14 @@ export const NAVIGATION_LINKS = {
 export const protectedRoutes = [
 
     NAVIGATION_LINKS.SETTINGS,
+    NAVIGATION_LINKS.CREATE_POST,
 
     NAVIGATION_LINKS.ADMIN_DASHBOARD,
     NAVIGATION_LINKS.ADMIN_MANAGE_USERS,
     NAVIGATION_LINKS.ADMIN_MANAGE_SITE_CONTENT,
     NAVIGATION_LINKS.ADMIN_MANAGE_USER_SUBSCRIPTIONS,
 ];
+
 export const authRoutes = [
     NAVIGATION_LINKS.LOGIN,
     NAVIGATION_LINKS.REGISTER,
@@ -38,7 +40,7 @@ export const authRoutes = [
 
 export const publicRoutes = [
     NAVIGATION_LINKS.HOME,
-  NAVIGATION_LINKS.CREATE_POST,
+    NAVIGATION_LINKS.CREATE_POST,
 ];
 
 export const specialRoutes = [

@@ -103,7 +103,7 @@ export default function Home() {
 
     return (
         <>
-            <div className="flex w-full h-full md:mt-10 mt-5">
+            <div className="flex w-full h-full mt-5">
                 {/*main forum section*/}
                 <div className="md:w-10/12 md:mr-4 w-full ml-1 mr-1">
                     {/*cover post section*/}
@@ -161,7 +161,7 @@ export default function Home() {
                                                         </Link>
                                                         <div className="flex text-small text-default-500">
                                                             <UserStatsComponent author={post.user}
-                                                                                className={'dark:text-white text-tiny text-default-500 mr-1'}/>
+                                                                                className={'dark:text-white text-default-500 mr-1'}/>
                                                             <p className={'font-bold text-medium'}>.</p>
                                                             <Tooltip content={formatDateWithTime(post.createdAt)}
                                                                      placement="top"

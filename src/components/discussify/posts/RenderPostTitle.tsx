@@ -4,7 +4,7 @@ import React from "react";
 import {convertStringToList} from "@/helpers/stylingHelpers";
 import TagsIcon from "@/components/shared/icons/TagsIcon";
 import {formatDateWithoutTime} from "@/helpers/dateHelpers";
-import TimerIcon from "@/components/shared/icons/TimerIcon";
+import {CommentIcon, EyeIcon, PeopleIcon, TimerIcon} from "@/components/shared/icons/LikeIcon";
 
 export function RenderPostTitle({postDetails}: { postDetails: PostResponse }) {
     return (
@@ -35,21 +35,27 @@ export function RenderPostTitle({postDetails}: { postDetails: PostResponse }) {
             <CardFooter className="gap-3 pl-0 text-default-400 text-small dark:text-white">
                 <div className="flex gap-1">
                     <p className="font-bold text-small">
-                       <TimerIcon/>
+                       <TimerIcon width={15} height={20}/>
                     </p>
                     <p className=" text-small">{formatDateWithoutTime(postDetails.createdAt)}</p>
                 </div>
                 <div className="flex gap-1">
-                    <p className="font-semibold ">{postDetails.views}</p>
-                    <p className="">views</p>
+                    <p className="font-semibold text-small">
+                        <EyeIcon width={15} height={20}/>
+                    </p>
+                    <p className="">{postDetails.views} views</p>
                 </div>
                 <div className="flex gap-1">
-                    <p className="font-semibold ">{postDetails.postRepliesCount}</p>
-                    <p className="">replies</p>
+                    <p className="font-semibold text-small">
+                        <CommentIcon width={15} height={20}/>
+                    </p>
+                    <p className="">{postDetails.postRepliesCount} replies</p>
                 </div>
                 <div className="flex gap-1">
-                    <p className="font-semibold ">{postDetails.participants}</p>
-                    <p className="">participants</p>
+                    <p className="font-semibold text-small">
+                        <PeopleIcon width={15} height={20}/>
+                    </p>
+                    <p className="">{postDetails.participants} participants</p>
                 </div>
             </CardFooter>
         </Card>

@@ -1,19 +1,54 @@
 'use client';
 
-import {Avatar, Button, Card, CardHeader, CircularProgress} from "@nextui-org/react";
+import {
+    Avatar,
+    Button,
+    Card,
+    CardFooter,
+    CardHeader, Chip,
+    CircularProgress,
+    Link,
+    Skeleton, Slider,
+    Tooltip
+} from "@nextui-org/react";
 import React, {useEffect, useState} from "react";
 import {usePathname, useRouter, useSearchParams} from "next/navigation";
 import {toast} from "react-toastify";
-import Link from "next/link";
 import {NAVIGATION_LINKS} from "@/boundary/configs/navigationConfig";
 import {ForumPostsResponse} from "@/boundary/interfaces/forum";
 import {getForumPosts} from "@/lib/services/discussify/forumService";
 import {ForumPostsQueryParameters} from "@/boundary/parameters/forumPostsQueryParameters";
-import {EditIcon} from "@nextui-org/shared-icons";
+import {EditIcon, Eye} from "@nextui-org/shared-icons";
 import {convertSlugToTitleCase} from "@/lib/utils/seoUtils";
 import ForumStats from "@/components/discussify/landing/ForumStats";
+import {PlusIcon} from "@/components/shared/icons/PlusIcon";
+import {useAuth} from "@/hooks/useAuth";
+import UserStatsComponent, {CreatedAtCard} from "@/components/discussify/Shared/UserStatsComponent";
+import {formatDateWithoutTime, formatDateWithTime} from "@/helpers/dateHelpers";
+import {CardBody} from "@nextui-org/card";
+import {CommentIcon, EyeIcon, PeopleIcon, TimerIcon} from "@/components/shared/icons/LikeIcon";
+
+const SkeletonForumPost = () => {
+    return (
+        <>
+            <Card className="w-full mb-2">
+                <div className="animate-pulse">
+                    <CardHeader className="flex gap-3 p-1">
+                        <Avatar radius="sm" size='lg'/>
+                        <Skeleton className="w-full h-16"/>
+                        <div className="flex flex-col">
+                            <Skeleton className="text-tiny text-white/60"/>
+                            <Skeleton className="text-tiny text-white/60"/>
+                        </div>
+                    </CardHeader>
+                </div>
+            </Card>
+        </>
+    );
+};
 
 export default function ForumOverview({slug}: { slug: string }) {
+    const {user} = useAuth();
     const [queryParams, setQueryParams] = useState<ForumPostsQueryParameters>(new ForumPostsQueryParameters());
     const [forumPosts, setForumPosts] = useState<ForumPostsResponse>({} as ForumPostsResponse);
     const [isLoadingForumPosts, setIsLoadingForumPosts] = useState(true);
@@ -82,31 +117,32 @@ export default function ForumOverview({slug}: { slug: string }) {
     return (
         <>
             <div className="">
-                <div className='flex flex-col gap-4 pt-5 pb-5 mr-4'>
+                <div className='flex flex-col gap-4 pt-5 mr-4'>
                     <div className='flex justify-between gap-3 items-end'>
 
-                        <h1>{convertSlugToTitleCase(slug)}</h1>
+                        <h1 className={'text-title-md'}>{convertSlugToTitleCase(slug)}</h1>
 
                         <div className='gap-3 hidden lg:block'>
-                           <Link  href={`${NAVIGATION_LINKS.CREATE_POST}/${slug}/create-thread`}>
-                               <Button startContent={<EditIcon/>}
-                                       color='primary'
-                                       variant='shadow'>
-                                   Create Thread
-                               </Button>
-                           </Link>
+                            <Link href={`${NAVIGATION_LINKS.FORUM_OVERVIEW}/${slug}/create-thread`}>
+                                <Button startContent={<PlusIcon/>}
+                                        color='primary'>
+                                    Create Thread
+                                </Button>
+                            </Link>
                         </div>
                     </div>
                 </div>
 
-                <div className="flex h-screen w-full mt-10">
+                <div className="flex h-full w-full mt-5">
                     {/*main forum section*/}
-                    <div className="w-10/12 mr-4">
+                    <div className="md:w-10/12 md:mr-4 w-full ml-1 mr-1">
                         {/*latest Forums section*/}
                         {isLoadingForumPosts ? (
-                            <div className={'grid place-items-center'}>
-                                <CircularProgress color={'primary'} className={'p-4'} label='Loading forum posts...'/>
-                            </div>
+                            <>
+                                {Array.from({length: 2}, (_, index) => (
+                                    <SkeletonForumPost key={index}/>
+                                ))}
+                            </>
                         ) : (
                             <>
                                 {forumPosts.posts.length < 1 ? (
@@ -121,20 +157,129 @@ export default function ForumOverview({slug}: { slug: string }) {
                                             <Card key={forumPost.id} className="w-full mb-2">
                                                 <CardHeader className="flex gap-3 p-1">
                                                     <Avatar
-                                                        alt="nextui logo"
+                                                        alt={forumPost.slug}
                                                         className="ml-1"
-                                                        name="P"
-                                                        size='lg'
-                                                        color='success'
+                                                        name={forumPost.user.username}
+                                                        size='md'
+                                                        src={forumPost.user.profileUrl || ''}
                                                         isBordered={true}
                                                         radius="sm"
                                                     />
-                                                    <div className="flex flex-col">
-                                                        <Link key={forumPost.id}
-                                                              href={`${NAVIGATION_LINKS.POST_OVERVIEW}/${forumPost.slug}`}>
-                                                            <p className="text-md">{forumPost.title}</p>
-                                                        </Link>
-                                                        <p className="text-small text-default-500">nextui.org</p>
+                                                    <div className="flex flex-col col-span-6 md:col-span-8 w-full">
+                                                        <div className="flex justify-between items-start">
+                                                            <div className="flex flex-col gap-0">
+                                                                <Link key={forumPost.id}
+                                                                      underline="hover"
+                                                                      className='dark:text-white text-blue-600'
+                                                                      href={`${NAVIGATION_LINKS.POST_OVERVIEW}/${forumPost.slug}`}>
+                                                                    {user ? (
+                                                                        <>
+                                                                            {forumPost.userHasViewed ? (
+                                                                                <p className="text-large">{forumPost.title}</p>
+                                                                            ) : (
+                                                                                <p className="text-xl font-bold">{forumPost.title}</p>
+                                                                            )}
+                                                                        </>
+                                                                    ) : (
+                                                                        <p className="text-large">{forumPost.title}</p>
+                                                                    )}
+                                                                </Link>
+                                                            </div>
+
+                                                            <div className='text-small col-span-3 md:block hidden'>
+                                                                <div className="flex gap-10 justify-center pr-2">
+                                                                    <div className='flex gap-3'>
+                                                                        <Chip
+                                                                            startContent={<EyeIcon width={15} />}
+                                                                            variant="light"
+                                                                            color="default"
+                                                                            radius='sm'
+                                                                            size='sm'
+                                                                        >
+                                                                            {forumPost.views}
+                                                                        </Chip>
+
+                                                                        <Chip
+                                                                            startContent={<CommentIcon width={15} />}
+                                                                            variant="light"
+                                                                            color="default"
+                                                                            radius='sm'
+                                                                            size='sm'
+                                                                        >
+                                                                            {forumPost.postRepliesCount}
+                                                                        </Chip>
+
+                                                                        <Chip
+                                                                            startContent={<PeopleIcon width={15} />}
+                                                                            variant="light"
+                                                                            color="default"
+                                                                            radius='sm'
+                                                                            size='sm'
+                                                                        >
+                                                                            {forumPost.participants}
+                                                                        </Chip>
+                                                                    </div>
+
+                                                                    <p>5 days ago</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div className="flex flex-col gap-1 pr-2">
+                                                            <div className="flex md:justify-between">
+                                                                <span className='flex'>
+                                                                    <UserStatsComponent author={forumPost.user}
+                                                                                        className={'dark:text-white text-default-500 mr-1'}/>
+
+                                                                     <Tooltip content={formatDateWithTime(forumPost.createdAt)}
+                                                                              placement="top"
+                                                                     >
+                                                                        <Link href={""} underline="hover"
+                                                                          size={'sm'}
+                                                                          className='dark:text-white text-tiny text-default-500 ml-1 mr-1'>
+                                                                        {formatDateWithoutTime(forumPost.createdAt)}
+                                                                        </Link>
+                                                                    </Tooltip>
+                                                                </span>
+
+                                                                <div className='flex md:hidden'>
+                                                                    <Chip
+                                                                        startContent={<EyeIcon width={15} />}
+                                                                        variant="light"
+                                                                        color="default"
+                                                                        radius='sm'
+                                                                        size='md'
+                                                                    >
+                                                                        {forumPost.views}
+                                                                    </Chip>
+
+                                                                    <Chip
+                                                                        startContent={<CommentIcon width={15} />}
+                                                                        variant="light"
+                                                                        color="default"
+                                                                        radius='sm'
+                                                                        size='md'
+                                                                    >
+                                                                        {forumPost.postRepliesCount}
+                                                                    </Chip>
+
+                                                                    <Chip
+                                                                        startContent={<PeopleIcon width={15} />}
+                                                                        variant="light"
+                                                                        color="default"
+                                                                        radius='sm'
+                                                                        size='md'
+                                                                    >
+                                                                        {forumPost.participants}
+                                                                    </Chip>
+                                                                </div>
+
+                                                                <div
+                                                                    className="text-foreground/50 text-small md:block hidden">
+                                                                    by Author One
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </CardHeader>
                                             </Card>
@@ -147,7 +292,7 @@ export default function ForumOverview({slug}: { slug: string }) {
                     </div>
 
                     {/*forum stats section*/}
-                    <div className="w-2/12 mr-4">
+                    <div className="w-2/12 mr-4 hidden md:block">
                         <ForumStats/>
                     </div>
                 </div>

@@ -38,7 +38,7 @@ export default function PostOverview({slug}: { slug: string }) {
     const {user} = useAuth();
     const [postDetails, setPostDetails] = useState<PostResponse>({} as PostResponse);
     const [isLoadingDetails, setIsLoadingDetails] = useState(true);
-    const [postReplies, setPostReplies] = useState([]);
+    const [postReplyCallback, setPostReplyCallback] = useState([]);
 
     const [showEditPost, setShowEditPost] = useState(false);
     const [showAddPostReplyForm, setShowAddPostReplyForm] = useState(false);
@@ -101,6 +101,7 @@ export default function PostOverview({slug}: { slug: string }) {
 
     const handleAddPostReply = async (e: any) => {
         e.preventDefault();
+        setPostReplyCallback([])
         if (postReplyRequest.description.trim() === '') {
             toast.error("Please enter a valid comment")
             setIsSubmitting(false);
@@ -112,8 +113,8 @@ export default function PostOverview({slug}: { slug: string }) {
             toast.success(response.message);
             setShowAddPostReplyForm(false)
 
-            const updatedReplies:any = [response.data, ...postReplies];
-            setPostReplies(updatedReplies);
+            const updatedReplies:any = [response.data, ...postReplyCallback];
+            setPostReplyCallback(updatedReplies);
 
             setPostReplyRequest(initialPostReplyFormState)
         } else {
@@ -151,7 +152,7 @@ export default function PostOverview({slug}: { slug: string }) {
 
     return (
         <>
-            <div className="flex w-full mt-5 md:mt-10">
+            <div className="flex w-full mt-5 md:mt-5">
                 {/*post overview section*/}
                 <div className="md:w-10/12 md:mr-4 w-full ml-1 mr-1">
                     {isLoadingDetails ? (
@@ -201,19 +202,30 @@ export default function PostOverview({slug}: { slug: string }) {
                                             <p dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(postDetails.description)}}/>
 
                                             {postDetails.postLikes !== undefined && (
-                                                <AvatarGroup isBordered max={3}
-                                                             size={'sm'}
-                                                             classNames={{
-                                                                 base: 'justify-items-start items-start text-blue-600'
-                                                             }}
-                                                             total={postDetails.postLikes.users.length}>
-                                                    {postDetails.postLikes.users.map((profileUrl, index) => (
-                                                        <Avatar key={index}
-                                                                size={'sm'}
-                                                                src={profileUrl}
-                                                        />
-                                                    ))}
-                                                </AvatarGroup>
+                                                <div className='flex gap-2 mt-1'>
+                                                    <LikedIcon width={20}/>
+                                                    <AvatarGroup isBordered
+                                                                 size={'sm'}
+                                                                 classNames={{
+                                                                     base: 'justify-start items-start'
+                                                                 }}
+                                                                 max={3}
+                                                                 total={postDetails.postLikes.users.length}
+                                                                 renderCount={(count) => (
+                                                                     <p className="text-small text-foreground font-medium ms-2">+{count} others</p>
+                                                                 )}
+                                                    >
+                                                        {postDetails.postLikes.users.map((profileUrl, index) => (
+                                                            <Avatar key={index}
+                                                                    size={'sm'}
+                                                                    classNames={{
+                                                                        base: 'w-5 h-5'
+                                                                    }}
+                                                                    src={profileUrl}
+                                                            />
+                                                        ))}
+                                                    </AvatarGroup>
+                                                </div>
                                             )}
                                         </>
                                     )}
@@ -312,7 +324,7 @@ export default function PostOverview({slug}: { slug: string }) {
                             {/*post replies sections*/}
                             <PostRepliesComponent user={user}
                                                   postDetails={postDetails}
-                                                  initialPostReplies={postReplies}
+                                                  initialPostReplies={postReplyCallback}
                             />
                         </>
                     )

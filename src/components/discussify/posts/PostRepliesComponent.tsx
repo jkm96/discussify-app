@@ -9,11 +9,10 @@ import {CardBody} from "@nextui-org/card";
 import UserStatsComponent from "@/components/discussify/Shared/UserStatsComponent";
 import {formatDateWithoutTime, formatDateWithYear} from "@/helpers/dateHelpers";
 import {EditIcon} from "@nextui-org/shared-icons";
-import TimerIcon from "@/components/shared/icons/TimerIcon";
 import Spinner from "@/components/shared/icons/Spinner";
 import DOMPurify from "dompurify";
 import ReplyIcon from "@/components/shared/icons/ReplyIcon";
-import {LikeIcon} from "@/components/shared/icons/LikeIcon";
+import {LikeIcon, TimerIcon} from "@/components/shared/icons/LikeIcon";
 import ShareIcon from "@/components/shared/icons/ShareIcon";
 import {addCommentAsync, getCommentsAsync} from "@/lib/services/discussify/commentService";
 import {CommentRequest, CommentResponse} from "@/boundary/interfaces/comment";
@@ -68,8 +67,15 @@ export function PostRepliesComponent({user, postDetails,initialPostReplies }:Pro
 
     useEffect(() => {
         if (initialPostReplies.length !== 0){
-            setPostReplies(prevPostReplies => [...initialPostReplies, ...prevPostReplies]);
-            initialPostReplies = []
+            // Use map to add unique keys to the new replies
+            const newPostReplies = initialPostReplies.map((reply, index) => ({
+                ...reply,
+                // Assuming each reply has an ID, use it as the key
+                key: reply.id || index // If ID is not available, use index as fallback
+            }));
+            setPostReplies(prevPostReplies => [...newPostReplies, ...prevPostReplies]);
+            // Clear initialPostReplies after adding them to postReplies
+            initialPostReplies = [];
         }
         console.info("initialPostReplies",initialPostReplies)
     }, [initialPostReplies]);
@@ -235,7 +241,8 @@ export function PostRepliesComponent({user, postDetails,initialPostReplies }:Pro
                                                     </Link>
                                                 </CardHeader>
                                             </Card>
-                                            <p className='flex'><TimerIcon/> <span
+                                            <p className='flex'><TimerIcon width={15} height={20}/>
+                                                <span
                                                 className='text-small'>{formatDateWithoutTime(postReply.createdAt)}</span>
                                             </p>
 

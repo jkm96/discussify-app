@@ -25,7 +25,7 @@ export function RenderPostAuthor({user, postDetails, setShowEditPost  }:Props) {
                     <div className="flex flex-col gap-1 items-start justify-center">
                         <h4 className="text-small font-semibold leading-none text-default-600">
                             <UserStatsComponent author={postDetails.user}
-                                                className={'dark:text-white mr-1'}
+                                                className={'dark:text-white text-black mr-1'}
                             />
                         </h4>
                         <h5 className="text-small tracking-tight text-default-400 dark:text-white">
