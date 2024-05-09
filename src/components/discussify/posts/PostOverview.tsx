@@ -5,7 +5,7 @@ import {EditPostRequest, PostReplyRequest, PostResponse} from "@/boundary/interf
 import React, {useEffect, useState} from "react";
 import {toast} from "react-toastify";
 import {editPostAsync, getPostDetailsAsync} from "@/lib/services/discussify/postService";
-import {Avatar, AvatarGroup, Button, Card, CardFooter, CardHeader, Divider} from "@nextui-org/react";
+import {Avatar, AvatarGroup, Button, Card, CardFooter, CardHeader, Divider, Link} from "@nextui-org/react";
 import {CardBody} from "@nextui-org/card";
 import {RenderPostTitle} from "@/components/discussify/posts/RenderPostTitle";
 import {RenderPostAuthor} from "@/components/discussify/posts/RenderPostAuthor";
@@ -24,6 +24,9 @@ import {LikeRequest} from "@/boundary/interfaces/shared";
 import {saveLikeAsync} from "@/lib/services/discussify/sharedService";
 import {LikedIcon, LikeIcon} from "@/components/shared/icons/LikeIcon";
 import {PostRepliesComponent} from "@/components/discussify/posts/PostRepliesComponent";
+import UserStatsComponent from "@/components/discussify/Shared/UserStatsComponent";
+import {formatDateWithYear} from "@/helpers/dateHelpers";
+import {EditIcon} from "@nextui-org/shared-icons";
 
 const CustomEditor = dynamic(() => {
     return import( '@/components/ckeditor5/custom-editor' );
@@ -58,6 +61,7 @@ export default function PostOverview({slug}: { slug: string }) {
                         ...post,
                         postLikes: postLikes
                     };
+
                     setPostDetails(postWithLikes);
                     const editRequest: EditPostRequest = {
                         description: post.description,
@@ -162,7 +166,7 @@ export default function PostOverview({slug}: { slug: string }) {
                             <Card className="w-full" radius='sm'>
                                 <CardHeader className="flex gap-3 pb-0">
                                     {/*post header section*/}
-                                    <RenderPostTitle postDetails={postDetails}/>
+                                    <RenderPostTitle user={user} postDetails={postDetails}/>
                                 </CardHeader>
 
                                 <Divider className='mt-0'/>
@@ -201,7 +205,7 @@ export default function PostOverview({slug}: { slug: string }) {
                                         <>
                                             <p dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(postDetails.description)}}/>
 
-                                            {postDetails.postLikes !== undefined && (
+                                            {postDetails.postLikes !== undefined && postDetails.postLikes.likes > 0 && (
                                                 <div className='flex gap-2 mt-1'>
                                                     <LikedIcon width={20}/>
                                                     <AvatarGroup isBordered

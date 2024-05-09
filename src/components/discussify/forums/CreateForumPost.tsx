@@ -59,6 +59,7 @@ export default function CreateForumPost({slug}: { slug: string }) {
             toast.error(response.message ?? 'Unknown error occurred');
         }
     };
+
     return (
         <div className="h-screen w-full mt-10">
             <h1>Create Thread</h1>
@@ -89,6 +90,8 @@ export default function CreateForumPost({slug}: { slug: string }) {
                     label='Tags'
                     labelPlacement={'outside'}
                     name='tags'
+                    onChange={handleChange}
+                    value={createPostRequest.tags}
                     variant='bordered'
                     description={'More than one tags should be separated by comma'}
                     placeholder={'Enter thread tags'}

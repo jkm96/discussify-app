@@ -12,8 +12,8 @@ interface Props {
     setShowEditPost: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export function RenderPostAuthor({user, postDetails, setShowEditPost  }:Props) {
-    return(
+export function RenderPostAuthor({user, postDetails, setShowEditPost}: Props) {
+    return (
         <Card className="w-full pl-0"
               shadow={"none"}
               radius={"none"}>
@@ -29,16 +29,13 @@ export function RenderPostAuthor({user, postDetails, setShowEditPost  }:Props) {
                             />
                         </h4>
                         <h5 className="text-small tracking-tight text-default-400 dark:text-white">
-                                                        <span
-                                                            className="mr-1">Joined {formatDateWithYear(postDetails.user.createdAt)}</span>
-                            <span
-                                className="ml-1">{postDetails.user.postsCount} posts</span>
+                            <span className="mr-1">Joined {formatDateWithYear(postDetails.user.createdAt)}</span>
+                            <span className="ml-1">{postDetails.user.postsCount} posts</span>
                         </h5>
                     </div>
                 </div>
-                <Link href={""}
-                      underline="hover"
-                      className='dark:text-white text-tiny text-default-500'
+                <Link underline="hover"
+                      className='dark:text-white text-small hover:underline cursor-pointer text-default-500'
                       onClick={() => setShowEditPost(true)}>
                     {user && (
                         <>
