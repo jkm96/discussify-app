@@ -4,6 +4,7 @@ export const NAVIGATION_LINKS = {
     TERMS_CONDITIONS: '/terms-conditions',
     CUSTOMER_FEEDBACK: '/customer-feedback',
     LOGIN: '/auth/login',
+    LOGOUT: '/auth/logout',
     REGISTER: '/auth/register',
     FORGOT_PASSWORD: '/auth/forgot-password',
 
@@ -17,13 +18,14 @@ export const NAVIGATION_LINKS = {
     ADMIN_MANAGE_USERS: '/admin/dashboard/users',
     ADMIN_MANAGE_USER_SUBSCRIPTIONS: '/admin/dashboard/user-subscriptions',
     ADMIN_MANAGE_SITE_CONTENT: '/admin/dashboard/site-content',
-    ADMIN_MANAGE_CUSTOMER_FEEDBACK: '/admin/dashboard/customer-feedback',
+    ADMIN_MANAGE_CUSTOMER_FEEDBACK: '/admin/dashboard/customer-feedback'
 };
 
 export const protectedRoutes = [
 
     NAVIGATION_LINKS.SETTINGS,
     NAVIGATION_LINKS.CREATE_POST,
+    NAVIGATION_LINKS.LOGOUT,
 
     NAVIGATION_LINKS.ADMIN_DASHBOARD,
     NAVIGATION_LINKS.ADMIN_MANAGE_USERS,

@@ -1,22 +1,49 @@
 'use client';
 
-import {Avatar, Button, Card, CardHeader, CircularProgress, Link, Tooltip} from "@nextui-org/react";
+import {
+    Avatar,
+    Button,
+    Card, CardFooter,
+    CardHeader,
+    CircularProgress,
+    Input,
+    Link,
+    Select,
+    SelectItem,
+    Tooltip
+} from "@nextui-org/react";
 import React, {useEffect, useState} from "react";
 import {usePathname, useRouter, useSearchParams} from "next/navigation";
 import {PostResponse} from "@/boundary/interfaces/post";
 import {PostQueryParameters} from "@/boundary/parameters/postQueryParameters";
 import {toast} from "react-toastify";
-import {getLatestPosts} from "@/lib/services/discussify/postService";
+import {createPostAsync, getLatestPosts} from "@/lib/services/discussify/postService";
 import {NAVIGATION_LINKS} from "@/boundary/configs/navigationConfig";
 import {formatDateWithoutTime, formatDateWithTime} from "@/helpers/dateHelpers";
 import ForumStats from "@/components/discussify/landing/ForumStats";
 import CoverPosts from "@/components/discussify/landing/CoverPosts";
-import ReplyIcon from "@/components/shared/icons/ReplyIcon";
-import UserStatsComponent from "@/components/discussify/Shared/UserStatsComponent";
+import RecordAuthorStatsComponent from "@/components/discussify/Shared/RecordAuthorStatsComponent";
 import {useAuth} from "@/hooks/useAuth";
+import {ReplyIcon} from "@/components/shared/icons/ReplyIcon";
+import {PlusIcon} from "@/components/shared/icons/PlusIcon";
+import {EditIcon} from "@nextui-org/shared-icons";
+import {start} from "node:repl";
+import Spinner from "@/components/shared/icons/Spinner";
+import {initialPostFormState} from "@/components/discussify/forums/CreateForumPost";
+import dynamic from "next/dynamic";
+import {ForumResponse} from "@/boundary/interfaces/forum";
+import {getForums} from "@/lib/services/discussify/forumService";
+import {validateCreatePostFormInputErrors} from "@/helpers/validationHelpers";
+
+const CustomEditor = dynamic(() => {
+    return import( '@/components/ckeditor5/custom-editor' );
+}, {ssr: false});
 
 export default function Home() {
     const {user} = useAuth();
+    const pathname = usePathname();
+    const router = useRouter();
+    const {replace} = useRouter();
     const [queryParams, setQueryParams] = useState<PostQueryParameters>(new PostQueryParameters());
     const [postResponses, setPostResponses] = useState<PostResponse[]>([]);
     const [isLoadingPosts, setIsLoadingPosts] = useState(true);
@@ -27,8 +54,6 @@ export default function Home() {
     const [totalPages, setTotalPages] = useState<number>(0);
     const [isOpen, setIsOpen] = React.useState(false);
     const searchParams = useSearchParams();
-    const pathname = usePathname();
-    const {replace} = useRouter();
 
     const fetchLatestPosts = async (queryParams: PostQueryParameters, currentPage: number) => {
         setIsLoadingMorePosts(true);
@@ -101,13 +126,180 @@ export default function Home() {
         fetchLatestPosts(queryParams, nextPage);
     };
 
+    const updateAuthorFollowStatus = (uniqueId: string, authorId: number, followed: boolean) => {
+        if (uniqueId === "home") {
+            setPostResponses(prevPosts =>
+                prevPosts.map(post =>
+                    post.user.id === authorId ? {...post, userHasFollowedAuthor: followed} : post
+                )
+            );
+        }
+    };
+
+
+    const [startQuickThread, setStartQuickThread] = useState(false);
+    const [createPostRequest, setCreatePostRequest] = useState(initialPostFormState);
+    const [forums, setForums] = useState<ForumResponse[]>([]);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [inputErrors, setInputErrors] = useState({
+        forumSlug: '', description: '', tags: '', title: ''
+    });
+    const handleStartQuickThread = async () => {
+        if (user == null) {
+            router.push(NAVIGATION_LINKS.LOGIN)
+            return
+        }
+        const response = await getForums();
+        if (response.statusCode === 200) {
+            setForums(response.data)
+        }
+        setStartQuickThread(true)
+    }
+
+    const handleEditorChange = (data: string) => {
+        setCreatePostRequest({...createPostRequest, description: data});
+    };
+
+    const handleChange = (e: any) => {
+        const {name, value} = e.target;
+        setCreatePostRequest({...createPostRequest, [name]: value});
+    };
+
+    const handleCreatePost = async (e: any) => {
+        e.preventDefault();
+        setIsSubmitting(true)
+
+        const inputErrors = validateCreatePostFormInputErrors(createPostRequest);
+        if (inputErrors && Object.keys(inputErrors).length > 0) {
+            setInputErrors(inputErrors);
+            setIsSubmitting(false);
+            return;
+        }
+
+        if (createPostRequest.description === null || createPostRequest.description === '') {
+            toast.error('Please provide a valid message')
+            return
+        }
+        const response = await createPostAsync(createPostRequest);
+        if (response.statusCode === 200) {
+            toast.success(response.message);
+            setIsSubmitting(false);
+            setStartQuickThread(false)
+            setCreatePostRequest(initialPostFormState)
+            setPostResponses(prevPostResponses => [response.data, ...prevPostResponses]);
+        } else {
+            setIsSubmitting(false);
+            toast.error(response.message ?? 'Unknown error occurred');
+        }
+    }
+
     return (
         <>
-            <div className="flex w-full h-full mt-5">
+            <div className="flex w-full h-full mt-5 mb-5">
                 {/*main forum section*/}
                 <div className="md:w-10/12 md:mr-4 w-full ml-1 mr-1">
                     {/*cover post section*/}
                     <CoverPosts/>
+
+                    <Card className='mt-4 mb-4 p-4 dark:bg-boxdark-mode'>
+                        <form>
+                            <Input
+                                value={startQuickThread ? createPostRequest.title : ''}
+                                className='mt-2 mb-2'
+                                type="text"
+                                radius='sm'
+                                size='md'
+                                onChange={handleChange}
+                                name='title'
+                                variant='bordered'
+                                label={startQuickThread ? 'Title' : ''}
+                                labelPlacement="outside"
+                                placeholder={startQuickThread ? 'Thread title' : 'Start a quick thread'}
+                                onClick={handleStartQuickThread}
+                                onInput={() => {
+                                    setInputErrors({...inputErrors, title: ''});
+                                }}
+                                startContent={
+                                    <EditIcon height={20} width={20}/>
+                                }
+                                isInvalid={inputErrors.title !== ''}
+                                errorMessage={inputErrors.title}
+                            />
+                        </form>
+
+                        {startQuickThread && (
+                            <>
+                                <div className='grid md:grid-cols-1 md:gap-6 mt-2 mb-2'>
+                                    <Select
+                                        label='Forum'
+                                        labelPlacement='outside'
+                                        placeholder="Select a forum"
+                                        variant='bordered'
+                                        size='md'
+                                        onSelectionChange={() => {
+                                            setInputErrors({...inputErrors, forumSlug: ''});
+                                        }}
+                                        onChange={(e) => {
+                                            const selectedSlug = e.target.value;
+                                            setCreatePostRequest({
+                                                ...createPostRequest,
+                                                forumSlug: selectedSlug
+                                            })
+                                        }}
+                                        isInvalid={inputErrors.forumSlug !== ''}
+                                        errorMessage={inputErrors.forumSlug}
+                                    >
+                                        {forums.map((forum) => (
+                                            <SelectItem key={forum.slug} value={forum.slug}>
+                                                {forum.title}
+                                            </SelectItem>
+                                        ))}
+                                    </Select>
+
+                                    <h3>Thread message</h3>
+                                    <CustomEditor
+                                        initialData={createPostRequest.description}
+                                        onChange={handleEditorChange}
+                                    />
+
+                                    <Input
+                                        label='Tags'
+                                        labelPlacement={'outside'}
+                                        name='tags'
+                                        onChange={handleChange}
+                                        value={createPostRequest.tags}
+                                        variant='bordered'
+                                        description={'More than one tags should be separated by comma'}
+                                        placeholder={'Enter thread tags'}
+                                        isInvalid={inputErrors.tags !== ''}
+                                        errorMessage={inputErrors.tags}/>
+                                </div>
+
+                                <CardFooter>
+                                    <Button color='primary'
+                                            type='submit'
+                                            isLoading={isSubmitting}
+                                            spinner={<Spinner/>}
+                                            size='sm'
+                                            onClick={handleCreatePost}>
+                                        {isSubmitting ? 'Submitting...' : 'Submit Thread'}
+                                    </Button>
+
+                                    <Button color='default'
+                                            type='submit'
+                                            size='sm'
+                                            className='ml-2'
+                                            spinner={<Spinner/>}
+                                            onClick={() => {
+                                                setStartQuickThread(false)
+                                                setInputErrors(initialPostFormState)
+                                            }}>
+                                        Cancel
+                                    </Button>
+                                </CardFooter>
+                            </>
+                        )}
+                    </Card>
 
                     {/*latest post section*/}
                     {isLoadingPosts ? (
@@ -160,22 +352,26 @@ export default function Home() {
                                                             )}
                                                         </Link>
                                                         <div className="flex text-small text-default-500">
-                                                            <UserStatsComponent author={post.user}
-                                                                                className={'dark:text-white text-default-500 mr-1'}/>
+                                                            <RecordAuthorStatsComponent key={post.user.id}
+                                                                                        uniqueId={"home"}
+                                                                                        author={post.user}
+                                                                                        userHasFollowedAuthor={post.userHasFollowedAuthor}
+                                                                                        updateAuthorFollowStatus={updateAuthorFollowStatus}
+                                                            />
                                                             <p className={'font-bold text-medium'}>.</p>
                                                             <Tooltip content={formatDateWithTime(post.createdAt)}
                                                                      placement="top"
                                                             >
-                                                                <Link href={""} underline="hover"
+                                                                <Link underline="hover"
                                                                       size={'sm'}
-                                                                      className='dark:text-white text-tiny text-default-500 ml-1 mr-1'>
+                                                                      className='dark:text-white text-tiny text-default-500 ml-1 mr-1 cursor-pointer'>
                                                                     {formatDateWithoutTime(post.createdAt)}
                                                                 </Link>
                                                             </Tooltip>
                                                             <p className={'font-bold text-medium'}>.</p>
-                                                            <Link href={""} underline="hover"
+                                                            <Link underline="hover"
                                                                   size={'sm'}
-                                                                  className='dark:text-white text-tiny text-default-500 ml-1'>
+                                                                  className='dark:text-white text-tiny text-default-500 ml-1 cursor-pointer'>
                                                                 <ReplyIcon width={15}/> <span
                                                                 className={'ml-1'}>{post.postRepliesCount}</span>
                                                             </Link>
@@ -196,12 +392,10 @@ export default function Home() {
                             )}
 
                             {totalPages > 1 && !isLoadingMorePosts && totalPages !== currentPage && (
-                                <div className="flex justify-center mt-4">
-                                    <div className="flex justify-center mt-4">
-                                        <Button size={'md'} onClick={handleLoadMore}>
-                                            Load More
-                                        </Button>
-                                    </div>
+                                <div className="flex justify-center mt-4 mb-4">
+                                    <Button size={'md'} onClick={handleLoadMore}>
+                                        Load More
+                                    </Button>
                                 </div>
                             )}
                         </>

@@ -1,13 +1,12 @@
 import {handleApiException, handleAxiosResponse} from '@/helpers/responseHelpers';
+import discussifyApiClient, {getAxiosConfigs} from '@/lib/axios/axiosClient';
 import {NextRequest} from 'next/server';
-import discussifyApiClient, {getAxiosConfigs} from "@/lib/axios/axiosClient";
+import {getForumPostsQueryParams} from '@/helpers/urlHelpers';
 
 export async function POST(request: NextRequest) {
   try {
-    const requestBody = await request.json();
-    const config = getAxiosConfigs(request, true);
-    const response = await discussifyApiClient.post('api/v1/like',requestBody, config);
-
+    const config = getAxiosConfigs(request,true);
+    const response = await discussifyApiClient.get(`api/v1/forums`, config);
     return handleAxiosResponse(response);
   } catch (error: unknown) {
     return handleApiException(error);

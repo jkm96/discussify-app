@@ -16,14 +16,14 @@ const CustomEditor = dynamic(() => {
     return import( '@/components/ckeditor5/custom-editor' );
 }, {ssr: false});
 
-const initialFormState: CreatePostRequest = {
+export const initialPostFormState: CreatePostRequest = {
     forumSlug: '', description: '', tags: '', title: ''
 };
 
 export default function CreateForumPost({slug}: { slug: string }) {
     const router = useRouter();
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [createPostRequest, setCreatePostRequest] = useState(initialFormState);
+    const [createPostRequest, setCreatePostRequest] = useState(initialPostFormState);
     const [inputErrors, setInputErrors] = useState({
         forumSlug: '', description: '', tags: '', title: ''
     });
@@ -33,6 +33,7 @@ export default function CreateForumPost({slug}: { slug: string }) {
     };
 
     const handleEditorChange = (data: string) => {
+        setInputErrors({...inputErrors, description: ''});
         setCreatePostRequest({...createPostRequest, description: data});
     };
 

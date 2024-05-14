@@ -1,13 +1,12 @@
-import {NextRequest} from 'next/server';
 import {handleApiException, handleAxiosResponse} from '@/helpers/responseHelpers';
-import adminApiClient, {getAxiosConfigs} from '@/lib/axios/axiosClient';
+import {NextRequest} from 'next/server';
+import discussifyApiClient, {getAxiosConfigs} from "@/lib/axios/axiosClient";
 
 export async function POST(request: NextRequest) {
   try {
-    const config = getAxiosConfigs(request,true);
     const requestBody = await request.json();
-    const response = await adminApiClient
-      .post('api/v1/admin/user-subscriptions', requestBody, config);
+    const config = getAxiosConfigs(request, true);
+    const response = await discussifyApiClient.post('api/v1/toggle-follow-like',requestBody, config);
 
     return handleAxiosResponse(response);
   } catch (error: unknown) {

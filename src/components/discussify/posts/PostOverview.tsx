@@ -5,7 +5,7 @@ import {EditPostRequest, PostReplyRequest, PostResponse} from "@/boundary/interf
 import React, {useEffect, useState} from "react";
 import {toast} from "react-toastify";
 import {editPostAsync, getPostDetailsAsync} from "@/lib/services/discussify/postService";
-import {Avatar, AvatarGroup, Button, Card, CardFooter, CardHeader, Divider, Link} from "@nextui-org/react";
+import {Avatar, AvatarGroup, Button, Card, CardFooter, CardHeader, Chip, Divider, Link} from "@nextui-org/react";
 import {CardBody} from "@nextui-org/card";
 import {RenderPostTitle} from "@/components/discussify/posts/RenderPostTitle";
 import {RenderPostAuthor} from "@/components/discussify/posts/RenderPostAuthor";
@@ -15,18 +15,18 @@ import Spinner from "@/components/shared/icons/Spinner";
 import {NAVIGATION_LINKS} from "@/boundary/configs/navigationConfig";
 import {useAuth} from "@/hooks/useAuth";
 import ShareIcon from "@/components/shared/icons/ShareIcon";
-import ReplyIcon from "@/components/shared/icons/ReplyIcon";
 import ForumStats from "@/components/discussify/landing/ForumStats";
 import BookmarkIcon from "@/components/shared/icons/BookmarkIcon";
 import {addPostReplyAsync} from "@/lib/services/discussify/postReplyService";
 import {SkeletonPostCard} from "@/components/discussify/skeletons/SkeletonPostCard";
-import {LikeRequest} from "@/boundary/interfaces/shared";
-import {saveLikeAsync} from "@/lib/services/discussify/sharedService";
+import {ToggleFollowLikeRequest} from "@/boundary/interfaces/shared";
+import {toggleFollowLikeAsync} from "@/lib/services/discussify/sharedService";
 import {LikedIcon, LikeIcon} from "@/components/shared/icons/LikeIcon";
 import {PostRepliesComponent} from "@/components/discussify/posts/PostRepliesComponent";
-import UserStatsComponent from "@/components/discussify/Shared/UserStatsComponent";
+import RecordAuthorStatsComponent from "@/components/discussify/Shared/RecordAuthorStatsComponent";
 import {formatDateWithYear} from "@/helpers/dateHelpers";
 import {EditIcon} from "@nextui-org/shared-icons";
+import {ReplyIcon} from "@/components/shared/icons/ReplyIcon";
 
 const CustomEditor = dynamic(() => {
     return import( '@/components/ckeditor5/custom-editor' );
@@ -56,7 +56,8 @@ export default function PostOverview({slug}: { slug: string }) {
         await getPostDetailsAsync(postSlug)
             .then((response) => {
                 if (response.statusCode === 200) {
-                    const {post, postLikes} = response.data;
+                    const {post, postLikes, userHasFollowedAuthor} = response.data;
+                    post.userHasFollowedAuthor = userHasFollowedAuthor;
                     const postWithLikes = {
                         ...post,
                         postLikes: postLikes
@@ -64,9 +65,11 @@ export default function PostOverview({slug}: { slug: string }) {
 
                     setPostDetails(postWithLikes);
                     const editRequest: EditPostRequest = {
+                        type: "description",
                         description: post.description,
                         postId: post.id,
-                        title: post.title
+                        title: post.title,
+                        tags: post.tags
                     }
                     setEditPostRequest(editRequest)
                 }
@@ -117,7 +120,7 @@ export default function PostOverview({slug}: { slug: string }) {
             toast.success(response.message);
             setShowAddPostReplyForm(false)
 
-            const updatedReplies:any = [response.data, ...postReplyCallback];
+            const updatedReplies: any = [response.data, ...postReplyCallback];
             setPostReplyCallback(updatedReplies);
 
             setPostReplyRequest(initialPostReplyFormState)
@@ -133,30 +136,67 @@ export default function PostOverview({slug}: { slug: string }) {
             router.push(NAVIGATION_LINKS.LOGIN)
             return;
         }
-        const likeRequest: LikeRequest = {
+        const likeRequest: ToggleFollowLikeRequest = {
             recordId: recordId, type: type
         }
-        const response = await saveLikeAsync(likeRequest)
+        const response = await toggleFollowLikeAsync(likeRequest)
         if (response.statusCode === 200) {
             toast.success(response.message);
             setIsLiked(true)
 
-            setPostDetails((prevPostDetails): any => ({
-                ...prevPostDetails,
-                postLikes: {
-                    likes: (prevPostDetails.postLikes ? prevPostDetails.postLikes.likes : 0) + 1,
-                    users: [...(prevPostDetails.postLikes ? prevPostDetails.postLikes.users : []), user?.profileUrl]
-                }
-            }));
+            setIsLiked(response.message.toLowerCase().trim() !== "post unliked successfully");
+
+            if (response.message.toLowerCase().trim() === "post unliked successfully") {
+                setPostDetails((prevPostDetails: any) => ({
+                    ...prevPostDetails,
+                    postLikes: {
+                        likes: prevPostDetails.postLikes ? prevPostDetails.postLikes.likes - 1 : 0,
+                        users: prevPostDetails.postLikes
+                            ? prevPostDetails.postLikes.users.filter(
+                                (likedUser: any) => likedUser !== user?.profileUrl
+                            )
+                            : []
+                    }
+                }));
+            } else {
+                setPostDetails((prevPostDetails: any) => ({
+                    ...prevPostDetails,
+                    postLikes: {
+                        likes: (prevPostDetails.postLikes ? prevPostDetails.postLikes.likes : 0) + 1,
+                        users: [
+                            ...(prevPostDetails.postLikes ? prevPostDetails.postLikes.users : []),
+                            user?.profileUrl
+                        ]
+                    }
+                }));
+            }
 
         } else {
             toast.error(response.message ?? 'Unknown error occurred');
         }
     }
 
+    const updateAuthorFollowStatus = (uniqueId: string, authorId: number, followed: boolean) => {
+        if (uniqueId === "post") {
+            setPostDetails(prevPostDetails => ({
+                ...prevPostDetails,
+                userHasFollowedAuthor: followed
+            }));
+        }
+    };
+
+    const getStartContent = () => {
+        if (postDetails.postLikes === undefined) {
+            return isLiked ? <LikedIcon width={20}/> : <LikeIcon width={20}/>;
+        } else {
+            const isUserLiked = postDetails.postLikes?.users.some((likedUser) => likedUser === user?.profileUrl);
+            return isUserLiked ? <LikedIcon width={20}/> : (isLiked ? <LikedIcon width={20}/> : <LikeIcon width={20}/>);
+        }
+    };
+
     return (
         <>
-            <div className="flex w-full mt-5 md:mt-5">
+            <div className="flex w-full mt-5 md:mt-5 mb-5">
                 {/*post overview section*/}
                 <div className="md:w-10/12 md:mr-4 w-full ml-1 mr-1">
                     {isLoadingDetails ? (
@@ -173,7 +213,11 @@ export default function PostOverview({slug}: { slug: string }) {
 
                                 <CardBody className='pt-0'>
                                     {/*post author details section*/}
-                                    <RenderPostAuthor user={user} postDetails={postDetails} setShowEditPost={setShowEditPost}/>
+                                    <RenderPostAuthor user={user}
+                                                      postDetails={postDetails}
+                                                      setShowEditPost={setShowEditPost}
+                                                      updateAuthorFollowStatus={updateAuthorFollowStatus}
+                                    />
 
                                     {showEditPost ? (
                                         <>
@@ -214,9 +258,11 @@ export default function PostOverview({slug}: { slug: string }) {
                                                                      base: 'justify-start items-start'
                                                                  }}
                                                                  max={3}
-                                                                 total={postDetails.postLikes.users.length}
+                                                                 total={Math.max(postDetails.postLikes.users.length - 3, 0)}
                                                                  renderCount={(count) => (
-                                                                     <p className="text-small text-foreground font-medium ms-2">+{count} others</p>
+                                                                     <p className="text-small text-foreground font-medium ms-2">
+                                                                         +{Math.max(postDetails.postLikes.users.length - 3, 0)} others
+                                                                     </p>
                                                                  )}
                                                     >
                                                         {postDetails.postLikes.users.map((profileUrl, index) => (
@@ -241,55 +287,47 @@ export default function PostOverview({slug}: { slug: string }) {
                                     <div className="flex justify-start w-1/2">
                                         {user && (
                                             <>
-                                                <span className='flex items-center mr-1 cursor-pointer'
-                                                      onClick={() => setShowAddPostReplyForm(true)}>
-                                                    <p className="font-semibold items-center"><ReplyIcon
-                                                        width={20}/></p>
+                                                <Chip
+                                                    onClick={() => setShowAddPostReplyForm(true)}
+                                                    startContent={<ReplyIcon width={18}/>}
+                                                    variant="light"
+                                                    className='cursor-pointer'
+                                                    size={'sm'}
+                                                >
                                                     <p className="hover:underline">Reply</p>
-                                                </span>
+                                                </Chip>
                                             </>
                                         )}
 
-                                        <span className="flex mr-3 items-center cursor-pointer"
-                                              onClick={(e) => toggleLike(postDetails.id, 'post', e)}>
-                                            <p className="font-semibold">
-                                               {postDetails.postLikes === undefined ? (
-                                                   <>
-                                                       {isLiked ? (<LikedIcon width={20}/>) : (<LikeIcon width={20}/>)}
-                                                   </>
-                                               ) : (
-                                                   <>
-                                                       {postDetails.postLikes?.users.some((likedUser) => likedUser === user?.profileUrl) ? (
-                                                           <>
-                                                               <LikedIcon width={20}/>
-                                                           </>
-                                                       ) : (
-                                                           <>
-                                                               {isLiked ? (<LikedIcon width={20}/>) : (
-                                                                   <LikeIcon width={20}/>)}
-                                                           </>
-                                                       )}
-                                                   </>
-                                               )}
-                                            </p>
+                                        <Chip
+                                            onClick={(e) => toggleLike(postDetails.id, 'post', e)}
+                                            startContent={getStartContent()}
+                                            variant="light"
+                                            className='cursor-pointer'
+                                            size={'sm'}
+                                        >
                                             <p className="hover:underline">Like</p>
-                                        </span>
+                                        </Chip>
                                     </div>
 
                                     <div className="flex justify-end w-1/2">
                                         {user && (
-                                            <span className="flex mr-3 items-center cursor-pointer">
-                                                <p className="font-semibold"><BookmarkIcon width={20}/></p>
+                                            <Chip
+                                                startContent={<BookmarkIcon width={18}/>}
+                                                variant="light"
+                                                size={'sm'}
+                                            >
                                                 <p className="hover:underline">Save</p>
-                                            </span>
+                                            </Chip>
                                         )}
 
-                                        <span className="flex items-center cursor-pointer">
-                                            <p className="font-semibold text-small">
-                                                <ShareIcon width={20}/>
-                                            </p>
+                                        <Chip
+                                            startContent={<ShareIcon width={18}/>}
+                                            variant="light"
+                                            size={'sm'}
+                                        >
                                             <p className="hover:underline">Share</p>
-                                        </span>
+                                        </Chip>
                                     </div>
                                 </CardFooter>
                             </Card>

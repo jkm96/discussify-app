@@ -11,7 +11,7 @@ export function RedirectUserToDashboard(user: User | null, setLoading: any) {
         if (user.isAdmin) {
           router.push(NAVIGATION_LINKS.ADMIN_DASHBOARD);
         } else if (user.isSubscribed) {
-          router.push(NAVIGATION_LINKS.USER_DASHBOARD);
+          router.push(NAVIGATION_LINKS.HOME);
         } else {
           setLoading(false);
         }

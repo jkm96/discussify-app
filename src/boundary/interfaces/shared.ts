@@ -5,7 +5,7 @@ export interface ApiErrorResponse {
   succeeded: boolean;
 }
 
-export interface LikeRequest {
+export interface ToggleFollowLikeRequest {
   recordId:number;
   type:string;
 }

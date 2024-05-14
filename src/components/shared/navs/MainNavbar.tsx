@@ -22,32 +22,12 @@ import {useAuth} from '@/hooks/useAuth';
 import {ThemeSwitcher} from "@/components/shared/navs/ThemeSwitcher";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import {UserResponse} from "@/boundary/interfaces/user";
+import {useRouter} from "next/navigation";
 
-const initialUser: UserResponse = {
-    commentsCount: 0,
-    createdAt: "",
-    email: "",
-    emailVerifiedAt: "",
-    gracePeriodCount: 0,
-    id: 0,
-    isActive: false,
-    isAdmin: false,
-    isEmailVerified: false,
-    isGracePeriodExpired: false,
-    isSubscribed: false,
-    pointsEarned: 0,
-    postRepliesCount: 0,
-    postsCount: 0,
-    profileCoverUrl: '',
-    profileUrl: '',
-    reactionScore: 0,
-    updatedAt: "",
-    username: ""
-}
 export default function MainNavbar() {
+    const router = useRouter();
     const {user, loading} = useAuth();
     const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-    const [storedUser, setStoredUser] = useLocalStorage('user', initialUser);
     const [loggedUser, setLoggedUser] = useState({} as UserResponse);
 
     const menuItems = [
@@ -60,9 +40,10 @@ export default function MainNavbar() {
         setIsMenuOpen(false); // Close the menu when a menu item is clicked
     };
 
-    useEffect(() => {
-        setLoggedUser(storedUser)
-    }, [storedUser]);
+    function handleLogout() {
+        console.info("logout")
+        router.push(NAVIGATION_LINKS.LOGOUT)
+    }
 
     return (
         <>
@@ -108,8 +89,10 @@ export default function MainNavbar() {
                                     <DropdownItem key="system">System</DropdownItem>
                                     <DropdownItem key="configurations">Configurations</DropdownItem>
                                     <DropdownItem key="help_and_feedback">Help & Feedback</DropdownItem>
-                                    <DropdownItem key="logout" color="danger">
-                                        Log Out
+                                    <DropdownItem key="logout"
+                                                  href={NAVIGATION_LINKS.LOGOUT}
+                                                  color="danger">
+                                            Log Out
                                     </DropdownItem>
                                 </DropdownMenu>
                             </Dropdown>

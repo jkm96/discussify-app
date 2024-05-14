@@ -23,7 +23,7 @@ import {convertSlugToTitleCase} from "@/lib/utils/seoUtils";
 import ForumStats from "@/components/discussify/landing/ForumStats";
 import {PlusIcon} from "@/components/shared/icons/PlusIcon";
 import {useAuth} from "@/hooks/useAuth";
-import UserStatsComponent, {CreatedAtCard} from "@/components/discussify/Shared/UserStatsComponent";
+import RecordAuthorStatsComponent, {CreatedAtCard} from "@/components/discussify/Shared/RecordAuthorStatsComponent";
 import {formatDateWithoutTime, formatDateWithTime} from "@/helpers/dateHelpers";
 import {CardBody} from "@nextui-org/card";
 import {CommentIcon, EyeIcon, PeopleIcon, TimerIcon} from "@/components/shared/icons/LikeIcon";
@@ -111,6 +111,17 @@ export default function ForumOverview({slug}: { slug: string }) {
 
         if (searchTerm.length >= 3 || searchTerm === '') {
             setQueryParams((prevParams) => ({...prevParams, searchTerm: searchTerm}));
+        }
+    };
+
+    const updateAuthorFollowStatus = (uniqueId: string, authorId: number, followed: boolean) => {
+        if (uniqueId === "forum-overview") {
+            setForumPosts(prevPosts => ({
+                ...prevPosts,
+                posts: prevPosts.posts.map(post =>
+                    post.user.id === authorId ? {...post, userHasFollowedAuthor: followed} : post
+                )
+            }));
         }
     };
 
@@ -228,8 +239,12 @@ export default function ForumOverview({slug}: { slug: string }) {
                                                         <div className="flex flex-col gap-1 pr-2">
                                                             <div className="flex md:justify-between">
                                                                 <span className='flex'>
-                                                                    <UserStatsComponent author={forumPost.user}
-                                                                                        className={'dark:text-white text-default-500 mr-1'}/>
+                                                                    <RecordAuthorStatsComponent
+                                                                        uniqueId={"home"}
+                                                                        author={forumPost.user}
+                                                                        userHasFollowedAuthor={forumPost.userHasFollowedAuthor}
+                                                                        updateAuthorFollowStatus={updateAuthorFollowStatus}
+                                                                    />
 
                                                                      <Tooltip content={formatDateWithTime(forumPost.createdAt)}
                                                                               placement="top"

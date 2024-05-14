@@ -1,6 +1,7 @@
 import {PostQueryParameters} from "@/boundary/parameters/postQueryParameters";
 import {apiKey, internalBaseUrl} from "@/boundary/constants/appConstants";
 import {ForumPostsQueryParameters} from "@/boundary/parameters/forumPostsQueryParameters";
+import {json} from "node:stream/consumers";
 
 export async function getForumStatsAsync() {
     try {
@@ -20,11 +21,11 @@ export async function getForumStatsAsync() {
     }
 }
 
-export async function getForums(queryParams: PostQueryParameters) {
+export async function getForums() {
     try {
-        const apiUrl = `${internalBaseUrl}/api/forum/latest/${JSON.stringify(queryParams)}`;
+        const apiUrl = `${internalBaseUrl}/api/forum/list`;
         const response = await fetch(apiUrl, {
-            method: 'GET',
+            method: 'POST',
             headers: {
                 'x-api-key': `${apiKey}`,
                 'Content-type': 'application/json',
@@ -40,14 +41,16 @@ export async function getForums(queryParams: PostQueryParameters) {
 
 export async function getForumPosts(queryParams: ForumPostsQueryParameters) {
     try {
-        const apiUrl = `${internalBaseUrl}/api/forum/posts/${JSON.stringify(queryParams)}`;
+        const apiUrl = `${internalBaseUrl}/api/forum/posts`;
         const response = await fetch(apiUrl, {
-            method: 'GET',
+            method: 'POST',
             headers: {
                 'x-api-key': `${apiKey}`,
                 'Content-type': 'application/json',
             },
-            body: null,
+            body: JSON.stringify({
+                'queryParams':queryParams
+            }),
         });
 
         return response.json();

@@ -3,9 +3,10 @@ import {NextRequest} from 'next/server';
 import {getPostQueryParams} from '@/helpers/urlHelpers';
 import discussifyApiClient, {getAxiosConfigs} from "@/lib/axios/axiosClient";
 
-export async function GET(request: NextRequest, { params }: { params: { queryParams: string } }) {
+export async function POST(request: NextRequest) {
   try {
-    const queryParams = getPostQueryParams(params.queryParams);
+    const data = await request.json();
+    const queryParams = getPostQueryParams(data.queryParams);
     const config = getAxiosConfigs(request, true,queryParams);
     const response = await discussifyApiClient.get('api/v1/posts', config);
 

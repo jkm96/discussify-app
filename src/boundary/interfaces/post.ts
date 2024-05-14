@@ -19,6 +19,7 @@ export interface PostResponse {
     updatedAt: string;
     slug: string;
     userHasViewed: boolean;
+    userHasFollowedAuthor: boolean;
     user: UserResponse;
     forum: ForumResponse;
     postLikes: LikeResponse;
@@ -28,13 +29,11 @@ export interface PostRepliesResponse {
     id: number;
     forumId: number;
     userId: number;
-    title: string;
     description: string;
-    tags: string;
     sticker: any;
     createdAt: string;
     updatedAt: string;
-    slug: string;
+    userHasFollowedAuthor: boolean;
     user: UserResponse;
     forum: ForumResponse;
 }
@@ -49,6 +48,8 @@ export interface CreatePostRequest {
 export interface EditPostRequest {
     postId: number;
     title: string;
+    tags: string;
+    type: string;
     description: string;
 }
 

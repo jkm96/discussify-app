@@ -1,5 +1,5 @@
-import {CommentRequest} from "@/boundary/interfaces/post";
 import {apiKey, internalBaseUrl} from "@/boundary/constants/appConstants";
+import {CommentRequest} from "@/boundary/interfaces/comment";
 
 export async function addCommentAsync(commentRequest: CommentRequest) {
     try {

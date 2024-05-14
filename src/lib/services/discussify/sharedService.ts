@@ -1,9 +1,9 @@
 import {apiKey, internalBaseUrl} from "@/boundary/constants/appConstants";
-import {LikeRequest} from "@/boundary/interfaces/shared";
+import {ToggleFollowLikeRequest} from "@/boundary/interfaces/shared";
 
-export async function saveLikeAsync(likeRequest: LikeRequest) {
+export async function toggleFollowLikeAsync(likeRequest: ToggleFollowLikeRequest) {
     try {
-        const apiUrl = `${internalBaseUrl}/api/shared/like`;
+        const apiUrl = `${internalBaseUrl}/api/shared/follow-like`;
         const response = await fetch(apiUrl, {
             method: 'POST',
             headers: {

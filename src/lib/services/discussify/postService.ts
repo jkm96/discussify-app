@@ -40,14 +40,16 @@ export async function editPostAsync(editPostRequest: EditPostRequest) {
 
 export async function getLatestPosts(queryParams: PostQueryParameters) {
     try {
-        const apiUrl = `${internalBaseUrl}/api/post/latest/${JSON.stringify(queryParams)}`;
+        const apiUrl = `${internalBaseUrl}/api/post/latest`;
         const response = await fetch(apiUrl, {
-            method: 'GET',
+            method: 'POST',
             headers: {
                 'x-api-key': `${apiKey}`,
                 'Content-type': 'application/json',
             },
-            body: null,
+            body: JSON.stringify({
+                'queryParams':queryParams
+            }),
         });
 
         return response.json();

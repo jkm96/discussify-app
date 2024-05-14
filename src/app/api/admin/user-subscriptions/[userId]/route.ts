@@ -5,7 +5,7 @@ import {NextRequest} from 'next/server';
 export async function GET(request: NextRequest, { params }: { params: { userId: number } }) {
   try {
     const userId = params.userId;
-    const config = getAxiosConfigs(request);
+    const config = getAxiosConfigs(request,true);
     const response = await adminApiClient.get(`api/v1/admin/user-subscriptions/${userId}`, config);
 
     return handleAxiosResponse(response);

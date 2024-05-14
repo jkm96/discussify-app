@@ -132,6 +132,10 @@ export function validateCreatePostFormInputErrors(formData: CreatePostRequest) {
         errors.title = 'Title must be at least 4 characters long';
     }
 
+    if (formData.forumSlug.trim() === '') {
+        errors.forumSlug = 'Forum is required';
+    }
+
     if (formData.description.trim() === '') {
         errors.description = 'Thread message is required';
     }

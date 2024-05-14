@@ -1,8 +1,6 @@
 import React from 'react';
 
-const ReplyIcon = ({
-                      width = 24, height = 24, color = '#686062'
-                  }) => {
+export function ReplyIcon({width = 24, height = 24, color = '#ffffff'}) {
     return (
         <svg
             xmlns='http://www.w3.org/2000/svg'
@@ -14,5 +12,3 @@ const ReplyIcon = ({
         </svg>
     );
 };
-
-export default ReplyIcon;

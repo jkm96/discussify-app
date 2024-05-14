@@ -17,7 +17,7 @@ export interface User {
 }
 
 export interface UserResponse {
-  isGracePeriodExpired: boolean;
+   isGracePeriodExpired: boolean;
   gracePeriodCount: number;
   id: number;
   username: string;
@@ -36,4 +36,7 @@ export interface UserResponse {
   emailVerifiedAt: string;
   createdAt: string;
   updatedAt: string;
+  followers: number;
+  following: number;
+  likes: number;
 }

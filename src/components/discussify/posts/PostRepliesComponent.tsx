@@ -1,22 +1,33 @@
 import {User} from "@/boundary/interfaces/user";
 import {EditPostReplyRequest, PostRepliesResponse, PostResponse} from "@/boundary/interfaces/post";
-import React, {useEffect, useState} from "react";
+import React, {Key, useEffect, useState} from "react";
 import {PostRepliesQueryParameters} from "@/boundary/parameters/postRepliesQueryParameters";
 import {editPostReplyAsync, getPostRepliesAsync} from "@/lib/services/discussify/postReplyService";
 import {toast} from "react-toastify";
-import {Avatar, Button, Card, CardFooter, CardHeader, CircularProgress, Link} from "@nextui-org/react";
+import {
+    Avatar,
+    Button,
+    Card,
+    CardFooter,
+    CardHeader,
+    Chip,
+    CircularProgress,
+    Dropdown, DropdownItem, DropdownMenu,
+    DropdownTrigger,
+    Link
+} from "@nextui-org/react";
 import {CardBody} from "@nextui-org/card";
-import UserStatsComponent from "@/components/discussify/Shared/UserStatsComponent";
+import RecordAuthorStatsComponent from "@/components/discussify/Shared/RecordAuthorStatsComponent";
 import {formatDateWithoutTime, formatDateWithYear} from "@/helpers/dateHelpers";
 import {EditIcon} from "@nextui-org/shared-icons";
 import Spinner from "@/components/shared/icons/Spinner";
 import DOMPurify from "dompurify";
-import ReplyIcon from "@/components/shared/icons/ReplyIcon";
 import {LikeIcon, TimerIcon} from "@/components/shared/icons/LikeIcon";
 import ShareIcon from "@/components/shared/icons/ShareIcon";
-import {addCommentAsync, getCommentsAsync} from "@/lib/services/discussify/commentService";
 import {CommentRequest, CommentResponse} from "@/boundary/interfaces/comment";
 import dynamic from "next/dynamic";
+import {addCommentAsync, getCommentsAsync} from "@/lib/services/discussify/commentService";
+import {ReplyIcon} from "@/components/shared/icons/ReplyIcon";
 
 const CustomEditor = dynamic(() => {
     return import( '@/components/ckeditor5/custom-editor' );
@@ -42,7 +53,9 @@ interface EditPostReplyFormState {
     };
 }
 
-export function PostRepliesComponent({user, postDetails,initialPostReplies }:Props) {
+export function PostRepliesComponent({user, postDetails, initialPostReplies}: Props) {
+    const [selectedKeys, setSelectedKeys] = useState<string>('latest_first');
+
     const [postReplies, setPostReplies] = useState<PostRepliesResponse[]>([]);
     const [queryParams, setQueryParams] = useState<PostRepliesQueryParameters>(new PostRepliesQueryParameters());
     const [isLoadingReplies, setIsLoadingReplies] = useState(true);
@@ -65,8 +78,20 @@ export function PostRepliesComponent({user, postDetails,initialPostReplies }:Pro
         }));
     };
 
+    const handleDropdownSelection = (key: string) => {
+        setSelectedKeys(key);
+
+        const newQueryParams = new PostRepliesQueryParameters(); // Create a new instance or copy the existing state
+        if (key === 'oldest_first') {
+            newQueryParams.sortBy = 'oldest';
+        } else if (key === 'latest_first') {
+            newQueryParams.sortBy = 'latest';
+        }
+        setQueryParams(newQueryParams);
+    };
+
     useEffect(() => {
-        if (initialPostReplies.length !== 0){
+        if (initialPostReplies.length !== 0) {
             // Use map to add unique keys to the new replies
             const newPostReplies = initialPostReplies.map((reply, index) => ({
                 ...reply,
@@ -77,12 +102,11 @@ export function PostRepliesComponent({user, postDetails,initialPostReplies }:Pro
             // Clear initialPostReplies after adding them to postReplies
             initialPostReplies = [];
         }
-        console.info("initialPostReplies",initialPostReplies)
     }, [initialPostReplies]);
 
-    const fetchPostReplies = async (postSlug: any) => {
+    const fetchPostReplies = async (postSlug: any,queryParams:PostRepliesQueryParameters) => {
         setIsLoadingReplies(true);
-        await getPostRepliesAsync(postSlug)
+        await getPostRepliesAsync(postSlug,queryParams)
             .then((response) => {
                 if (response.statusCode === 200) {
                     const parsedData = response.data;
@@ -99,8 +123,8 @@ export function PostRepliesComponent({user, postDetails,initialPostReplies }:Pro
     };
 
     useEffect(() => {
-        fetchPostReplies(postDetails.slug);
-    }, [postDetails.slug]);
+        fetchPostReplies(postDetails.slug,queryParams);
+    }, [postDetails.slug,queryParams]);
 
     const handleEditPostReplyEditorChange = (data: string) => {
         setEditPostReplyRequest({...editPostReplyRequest, description: data});
@@ -189,7 +213,22 @@ export function PostRepliesComponent({user, postDetails,initialPostReplies }:Pro
         }
     };
 
-    return(
+    const updateAuthorFollowStatus = (uniqueId: string,authorId: number, followed: boolean) => {
+        if (uniqueId === 'post-reply'){
+            const updatedPostReplies = postReplies.map(reply => {
+                if (reply.user.id === authorId) {
+                    return {
+                        ...reply,
+                        userHasFollowedAuthor: followed
+                    };
+                }
+                return reply;
+            });
+            setPostReplies(updatedPostReplies);
+        }
+    };
+
+    return (
         <>
             {isLoadingReplies ? (
                 <div className={'grid place-items-center'}>
@@ -199,6 +238,29 @@ export function PostRepliesComponent({user, postDetails,initialPostReplies }:Pro
                 <>
                     {postReplies.length > 0 && (
                         <>
+                            <div>
+                                Sort by:
+                                <Dropdown>
+                                    <DropdownTrigger>
+                                        <Button
+                                            variant="bordered"
+                                        >
+                                            {selectedKeys === 'oldest_first' ? 'Oldest First' : 'Latest First'}
+                                        </Button>
+                                    </DropdownTrigger>
+                                    <DropdownMenu
+                                        aria-label="Sort by:"
+                                        variant="flat"
+                                        disallowEmptySelection
+                                        selectionMode="single"
+                                        selectedKeys={selectedKeys}
+                                        onAction={(key: Key) => handleDropdownSelection(key as string)}
+                                    >
+                                        <DropdownItem key="oldest_first">Oldest First</DropdownItem>
+                                        <DropdownItem key="latest_first">Latest First</DropdownItem>
+                                    </DropdownMenu>
+                                </Dropdown>
+                            </div>
                             {postReplies.map((postReply) => (
                                 <div key={postReply.id}>
                                     <Card key={postReply.id} className="w-full mt-3" radius='sm'>
@@ -215,9 +277,11 @@ export function PostRepliesComponent({user, postDetails,initialPostReplies }:Pro
                                                         <div
                                                             className="flex flex-col gap-1 items-start justify-center">
                                                             <h4 className="text-small font-semibold leading-none text-default-600">
-                                                                <UserStatsComponent key={postReply.id}
-                                                                                    author={postReply.user}
-                                                                                    className={'dark:text-white mr-1'}
+                                                                <RecordAuthorStatsComponent key={postReply.id}
+                                                                                            uniqueId={'post-reply'}
+                                                                                            author={postReply.user}
+                                                                                            userHasFollowedAuthor={postReply.userHasFollowedAuthor}
+                                                                                            updateAuthorFollowStatus={updateAuthorFollowStatus}
                                                                 />
                                                             </h4>
                                                             <h5 className="text-small dark:text-white text-default-400">
@@ -243,7 +307,7 @@ export function PostRepliesComponent({user, postDetails,initialPostReplies }:Pro
                                             </Card>
                                             <p className='flex'><TimerIcon width={15} height={20}/>
                                                 <span
-                                                className='text-small'>{formatDateWithoutTime(postReply.createdAt)}</span>
+                                                    className='text-small'>{formatDateWithoutTime(postReply.createdAt)}</span>
                                             </p>
 
                                             {editPostReplyFormState[postReply.id]?.isVisible ? (
@@ -291,31 +355,32 @@ export function PostRepliesComponent({user, postDetails,initialPostReplies }:Pro
                                             className="pt-0 text-default-400 text-small dark:text-white justify-between">
                                             <div className="flex justify-start w-1/2">
                                                 {user && (
-                                                    <span
-                                                        className='flex items-center mr-1 cursor-pointer'
-                                                        onClick={() => setShowAddCommentForm(postReply.id)}
-                                                    >
-                                                                        <p className="font-semibold items-center">
-                                                                            <ReplyIcon width={20}/></p>
-                                                                        <p className="hover:underline">Reply</p>
-                                                                    </span>
+                                                    <>
+                                                        <Chip
+                                                            onClick={() => setShowAddCommentForm(postReply.id)}
+                                                            startContent={<ReplyIcon width={18}/>}
+                                                            variant="light"
+                                                        >
+                                                            <p className="hover:underline">Reply</p>
+                                                        </Chip>
+                                                    </>
                                                 )}
 
-                                                <span className="flex mr-3 items-center cursor-pointer">
-                                                                    <p className="font-semibold">
-                                                                        <LikeIcon width={20}/>
-                                                                    </p>
-                                                                    <p className="hover:underline">Like</p>
-                                                                </span>
+                                                <Chip
+                                                    startContent={<LikeIcon width={18}/>}
+                                                    variant="light"
+                                                >
+                                                    <p className="hover:underline">Like</p>
+                                                </Chip>
                                             </div>
 
                                             <div className="flex justify-end w-1/2">
-                                                            <span className="flex items-center cursor-pointer">
-                                                                <p className="font-semibold">
-                                                                    <ShareIcon width={20}/>
-                                                                </p>
-                                                                <p className="hover:underline">Share</p>
-                                                            </span>
+                                                <Chip
+                                                    startContent={<ShareIcon width={18}/>}
+                                                    variant="light"
+                                                >
+                                                    <p className="hover:underline">Share</p>
+                                                </Chip>
                                             </div>
                                         </CardFooter>
                                     </Card>
