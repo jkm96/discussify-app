@@ -14,9 +14,10 @@ type RecordAuthorStatsProps = {
     author: UserResponse;
     userHasFollowedAuthor: boolean;
     updateAuthorFollowStatus: (uniqueId: string,authorId: number,followed: boolean) => void;
+    followButtonDisabled:boolean;
 };
 
-export const RecordAuthorStats = ({uniqueId, author, userHasFollowedAuthor,updateAuthorFollowStatus }: RecordAuthorStatsProps) => {
+export const RecordAuthorStats = ({uniqueId, author, userHasFollowedAuthor,updateAuthorFollowStatus,followButtonDisabled }: RecordAuthorStatsProps) => {
     const {user} = useAuth();
     const [followStatus, setFollowStatus] = useState<{ [key: string]: boolean }>({});
      const isCurrentUser = user && user.id === author.id;
@@ -68,7 +69,7 @@ export const RecordAuthorStats = ({uniqueId, author, userHasFollowedAuthor,updat
                         <h5 className="text-tiny tracking-tight text-default-500">Joined {formatDateWithoutTime(author.createdAt)}</h5>
                     </div>
                 </div>
-                {user && (
+                {user && !followButtonDisabled &&(
                     <>
                         {!isCurrentUser && (
                             <Button

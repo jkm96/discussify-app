@@ -9,9 +9,10 @@ type RecordAuthorStatsProps = {
     author: UserResponse;
     userHasFollowedAuthor: boolean;
     updateAuthorFollowStatus: (uniqueId: string,authorId: number,followed: boolean) => void;
+    followButtonDisabled:boolean;
 };
 
-export default function RecordAuthorStatsComponent({uniqueId,author,userHasFollowedAuthor,updateAuthorFollowStatus}:RecordAuthorStatsProps) {
+export default function RecordAuthorStatsComponent({uniqueId,author,userHasFollowedAuthor,updateAuthorFollowStatus,followButtonDisabled}:RecordAuthorStatsProps) {
 
     return(
         <Tooltip
@@ -21,6 +22,7 @@ export default function RecordAuthorStatsComponent({uniqueId,author,userHasFollo
             author={author}
             userHasFollowedAuthor={userHasFollowedAuthor}
             updateAuthorFollowStatus={updateAuthorFollowStatus}
+            followButtonDisabled={followButtonDisabled}
         />}
         >
             <Link underline="hover"

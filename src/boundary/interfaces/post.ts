@@ -20,6 +20,8 @@ export interface PostResponse {
     slug: string;
     userHasViewed: boolean;
     userHasFollowedAuthor: boolean;
+    lastReplyCreatedAt: string;
+    lastReplyUser: UserResponse;
     user: UserResponse;
     forum: ForumResponse;
     postLikes: LikeResponse;

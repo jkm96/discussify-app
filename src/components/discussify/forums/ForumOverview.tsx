@@ -231,7 +231,9 @@ export default function ForumOverview({slug}: { slug: string }) {
                                                                         </Chip>
                                                                     </div>
 
-                                                                    <p>5 days ago</p>
+                                                                    {forumPost.lastReplyCreatedAt && (
+                                                                        <p>{formatDateWithoutTime(forumPost.lastReplyCreatedAt)}</p>
+                                                                    )}
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -240,10 +242,11 @@ export default function ForumOverview({slug}: { slug: string }) {
                                                             <div className="flex md:justify-between">
                                                                 <span className='flex'>
                                                                     <RecordAuthorStatsComponent
-                                                                        uniqueId={"home"}
+                                                                        uniqueId="forum-overview"
                                                                         author={forumPost.user}
                                                                         userHasFollowedAuthor={forumPost.userHasFollowedAuthor}
                                                                         updateAuthorFollowStatus={updateAuthorFollowStatus}
+                                                                        followButtonDisabled={false}
                                                                     />
 
                                                                      <Tooltip content={formatDateWithTime(forumPost.createdAt)}
@@ -291,7 +294,15 @@ export default function ForumOverview({slug}: { slug: string }) {
 
                                                                 <div
                                                                     className="text-foreground/50 text-small md:block hidden">
-                                                                    by Author One
+                                                                    {forumPost.lastReplyUser && (
+                                                                        <RecordAuthorStatsComponent
+                                                                            uniqueId="forum-overview-last-author"
+                                                                            author={forumPost.lastReplyUser}
+                                                                            userHasFollowedAuthor={forumPost.userHasFollowedAuthor}
+                                                                            updateAuthorFollowStatus={updateAuthorFollowStatus}
+                                                                            followButtonDisabled={true}
+                                                                        />
+                                                                    )}
                                                                 </div>
                                                             </div>
                                                         </div>

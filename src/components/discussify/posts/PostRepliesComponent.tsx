@@ -231,8 +231,8 @@ export function PostRepliesComponent({user, postDetails, initialPostReplies}: Pr
     return (
         <>
             {isLoadingReplies ? (
-                <div className={'grid place-items-center'}>
-                    <CircularProgress color={'primary'} className={'p-4'} label='Loading posts...'/>
+                <div className='grid place-items-center'>
+                    <CircularProgress color='primary' className='p-4' label='Loading posts...'/>
                 </div>
             ) : (
                 <>
@@ -261,6 +261,7 @@ export function PostRepliesComponent({user, postDetails, initialPostReplies}: Pr
                                     </DropdownMenu>
                                 </Dropdown>
                             </div>
+
                             {postReplies.map((postReply) => (
                                 <div key={postReply.id}>
                                     <Card key={postReply.id} className="w-full mt-3" radius='sm'>
@@ -282,6 +283,7 @@ export function PostRepliesComponent({user, postDetails, initialPostReplies}: Pr
                                                                                             author={postReply.user}
                                                                                             userHasFollowedAuthor={postReply.userHasFollowedAuthor}
                                                                                             updateAuthorFollowStatus={updateAuthorFollowStatus}
+                                                                                            followButtonDisabled={false}
                                                                 />
                                                             </h4>
                                                             <h5 className="text-small dark:text-white text-default-400">
@@ -360,6 +362,7 @@ export function PostRepliesComponent({user, postDetails, initialPostReplies}: Pr
                                                             onClick={() => setShowAddCommentForm(postReply.id)}
                                                             startContent={<ReplyIcon width={18}/>}
                                                             variant="light"
+                                                            className='cursor-pointer'
                                                         >
                                                             <p className="hover:underline">Reply</p>
                                                         </Chip>
@@ -369,6 +372,7 @@ export function PostRepliesComponent({user, postDetails, initialPostReplies}: Pr
                                                 <Chip
                                                     startContent={<LikeIcon width={18}/>}
                                                     variant="light"
+                                                    className='cursor-pointer'
                                                 >
                                                     <p className="hover:underline">Like</p>
                                                 </Chip>
@@ -378,6 +382,7 @@ export function PostRepliesComponent({user, postDetails, initialPostReplies}: Pr
                                                 <Chip
                                                     startContent={<ShareIcon width={18}/>}
                                                     variant="light"
+                                                    className='cursor-pointer'
                                                 >
                                                     <p className="hover:underline">Share</p>
                                                 </Chip>

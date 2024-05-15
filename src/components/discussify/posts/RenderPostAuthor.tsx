@@ -30,6 +30,7 @@ export function RenderPostAuthor({user, postDetails, setShowEditPost, updateAuth
                                 author={postDetails.user}
                                 userHasFollowedAuthor={postDetails.userHasFollowedAuthor}
                                 updateAuthorFollowStatus={updateAuthorFollowStatus}
+                                followButtonDisabled={false}
                             />
                         </h4>
                         <h5 className="text-small tracking-tight text-default-400 dark:text-white">

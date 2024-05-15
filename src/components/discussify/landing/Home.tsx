@@ -201,7 +201,7 @@ export default function Home() {
                     {/*cover post section*/}
                     <CoverPosts/>
 
-                    <Card className='mt-4 mb-4 p-4 dark:bg-boxdark-mode'>
+                    <Card className='mt-2 mb-2 p-1 pl-2 pr-2 dark:bg-boxdark-mode'>
                         <form>
                             <Input
                                 value={startQuickThread ? createPostRequest.title : ''}
@@ -357,6 +357,7 @@ export default function Home() {
                                                                                         author={post.user}
                                                                                         userHasFollowedAuthor={post.userHasFollowedAuthor}
                                                                                         updateAuthorFollowStatus={updateAuthorFollowStatus}
+                                                                                        followButtonDisabled={false}
                                                             />
                                                             <p className={'font-bold text-medium'}>.</p>
                                                             <Tooltip content={formatDateWithTime(post.createdAt)}
