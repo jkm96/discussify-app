@@ -11,6 +11,7 @@
 
 export function AuthProvider({ children }: AuthContextProps) {
   const [user, setUser] = useState<User | null>(null);
+  const [isGracePeriodExpired, setIsGracePeriodExpired] = useState(false); // Add state for grace period
   const [loading, setLoading] = useState(true);
 
   const storeAuthToken = async (tokenData: AccessTokenModel):Promise<boolean> => {
@@ -40,6 +41,7 @@ export function AuthProvider({ children }: AuthContextProps) {
           profileCoverUrl: tokenData.user.profileCoverUrl ?? ''
         };
         setUser(userObject);
+        setIsGracePeriodExpired(tokenData.user.isGracePeriodExpired); // Set grace period state
         return true;
       } else {
         return false;
@@ -60,6 +62,7 @@ export function AuthProvider({ children }: AuthContextProps) {
       if (response.statusCode === 200) {
         const tokenResponse = JSON.parse(response.data);
         setUser(tokenResponse.user);
+        setIsGracePeriodExpired(tokenResponse.user.isGracePeriodExpired); // Set grace period state
       } else {
         setUser(null);
       }

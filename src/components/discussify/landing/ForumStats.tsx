@@ -5,6 +5,7 @@ import {toast} from "react-toastify";
 import {ForumStatsResponse} from "@/boundary/interfaces/forum";
 import {getForumStatsAsync} from "@/lib/services/discussify/forumService";
 import {formatDateWithYear} from "@/helpers/dateHelpers";
+import {count} from "@ckeditor/ckeditor5-utils";
 
 const SkeletonForumStats = () => {
     return (
@@ -57,7 +58,7 @@ export default function ForumStats() {
                 <SkeletonForumStats />
             ) : (
                 <>
-                    {forumStats && !isLoadingDetails && (
+                    {forumStats && forumStats.forumName && forumStats.forumDescription && !isLoadingDetails && (
                         <Card className="w-full" radius='sm'>
                             <CardHeader className="justify-between">
                             <div className="flex gap-5">

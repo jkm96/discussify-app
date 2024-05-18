@@ -89,10 +89,12 @@ export default function PostOverview({slug}: { slug: string }) {
 
     const handleEditPost = async (e: any) => {
         e.preventDefault();
+        setIsSubmitting(true)
         const response = await editPostAsync(editPostRequest);
         if (response.statusCode === 200) {
             toast.success(response.message);
             setShowEditPost(false)
+            setIsSubmitting(false)
             setPostDetails({...postDetails, description: editPostRequest.description})
         } else {
             toast.error(response.message ?? 'Unknown error occurred');

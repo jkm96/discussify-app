@@ -5,8 +5,8 @@ import React, {useEffect, useState} from "react";
 import {usePathname, useRouter} from "next/navigation";
 import {toast} from "react-toastify";
 import {NAVIGATION_LINKS} from "@/boundary/configs/navigationConfig";
-import {ForumPostsResponse} from "@/boundary/interfaces/forum";
-import {getForumPosts} from "@/lib/services/discussify/forumService";
+import {ForumPostsResponse, ForumResponse} from "@/boundary/interfaces/forum";
+import {getForumBySlugAsync, getForumPosts} from "@/lib/services/discussify/forumService";
 import {ForumPostsQueryParameters} from "@/boundary/parameters/forumPostsQueryParameters";
 import {convertSlugToTitleCase} from "@/lib/utils/seoUtils";
 import ForumStats from "@/components/discussify/landing/ForumStats";
@@ -17,6 +17,7 @@ import {formatDateWithoutTime, formatDateWithTime} from "@/helpers/dateHelpers";
 import {CommentIcon, EyeIcon, PeopleIcon} from "@/components/shared/icons/LikeIcon";
 import {PagingMetaData} from "@/boundary/paging/paging";
 import Pagination from "@/components/discussify/forums/Pagination";
+import {getCommentsAsync} from "@/lib/services/discussify/commentService";
 
 const SkeletonForumPost = () => {
     return (
@@ -38,17 +39,43 @@ const SkeletonForumPost = () => {
 };
 
 export default function ForumOverview({slug}: { slug: string }) {
-    const {user} = useAuth();
+    const {user,loading} = useAuth();
+    const router = useRouter();
     const [queryParams, setQueryParams] = useState<ForumPostsQueryParameters>(new ForumPostsQueryParameters());
     const [pagingMetaData, setPagingMetaData] = useState<PagingMetaData>({} as PagingMetaData);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [forumPosts, setForumPosts] = useState<ForumPostsResponse>({} as ForumPostsResponse);
+    const [forumDetails, setForumDetails] = useState<ForumResponse>({} as ForumResponse);
     const [isLoadingForumPosts, setIsLoadingForumPosts] = useState(true);
+    const [isFetchingForum, setIsFetchingForum] = useState(true);
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [isInitialLoad, setIsInitialLoad] = useState(true);
     // const searchParams = useSearchParams();
     const pathname = usePathname();
     const {replace} = useRouter();
+
+    const fetchForum = async (forumSlug: any) => {
+        setIsFetchingForum(true);
+        await getForumBySlugAsync(forumSlug)
+            .then((response) => {
+                if (response.statusCode === 200) {
+                    setForumDetails(response.data);
+                }
+            })
+            .catch((error) => {
+                toast.error(`Error fetching forum: ${error}`);
+            })
+            .finally(() => {
+                setIsFetchingForum(false);
+            });
+    };
+
+    useEffect(() => {
+        if (slug) {
+            fetchForum(slug);
+        }
+    }, [slug]);
+
 
     const fetchForumPosts = async (queryParams: ForumPostsQueryParameters,currentPage:number) => {
         setIsLoadingForumPosts(true);
@@ -118,6 +145,15 @@ export default function ForumOverview({slug}: { slug: string }) {
         }
     };
 
+    const handleSStartThread = async () => {
+        if (!loading && user !== null && !user.isEmailVerified){
+            toast.warning('PLease verify you email address to create thread')
+            return
+        }
+
+        router.push(`${NAVIGATION_LINKS.FORUM_OVERVIEW}/${slug}/create-thread`)
+    }
+
     return (
         <>
             <div className="">
@@ -126,14 +162,26 @@ export default function ForumOverview({slug}: { slug: string }) {
 
                         <h1 className={'text-title-md'}>{convertSlugToTitleCase(slug)}</h1>
 
-                        <div className='gap-3 hidden lg:block'>
-                            <Link href={`${NAVIGATION_LINKS.FORUM_OVERVIEW}/${slug}/create-thread`}>
+                        {forumDetails && !isFetchingForum && !forumDetails.isSystem && (
+                            <div className='gap-3 hidden lg:block'>
                                 <Button startContent={<PlusIcon/>}
+                                        onClick={handleSStartThread}
                                         color='primary'>
                                     Create Thread
                                 </Button>
-                            </Link>
-                        </div>
+                            </div>
+                        )}
+
+                        {user?.isModerator && (
+                            <div className='gap-3 hidden lg:block'>
+                                <Button startContent={<PlusIcon/>}
+                                        onClick={handleSStartThread}
+                                        color='primary'>
+                                    Create Thread
+                                </Button>
+                            </div>
+                        )}
+
                     </div>
                 </div>
 

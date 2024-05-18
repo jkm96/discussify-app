@@ -148,9 +148,23 @@ export default function Home() {
             router.push(NAVIGATION_LINKS.LOGIN)
             return
         }
+
+        if (!user.isEmailVerified){
+            toast.warning('PLease verify you email address to create thread')
+            return
+        }
+
         const response = await getForums();
         if (response.statusCode === 200) {
-            setForums(response.data)
+
+            let filteredForums;
+            if (user?.isModerator) {
+                const forumData:ForumResponse[] = response.data;
+                filteredForums = forumData.filter(forum => !forum.isSystem);
+            } else {
+                filteredForums = response.data;
+            }
+            setForums(filteredForums)
         }
         setStartQuickThread(true)
     }

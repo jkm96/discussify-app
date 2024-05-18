@@ -33,43 +33,47 @@ const Pagination = ({ currentPage, totalPages, onPageChange }:PaginationProps) =
     };
 
     return (
-        <div className="flex items-center justify-center">
-            <button
-                onClick={handlePrevious}
-                disabled={currentPage === 1}
-                className="px-1 mx-1 text-sm font-medium text-white bg-gray-500 rounded disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-600"
-            >
-                Previous
-            </button>
+        <>
+            {totalPages > 10 && (
+                <div className="flex items-center justify-center">
+                    <button
+                        onClick={handlePrevious}
+                        disabled={currentPage === 1}
+                        className="px-1 mx-1 text-sm font-medium text-white bg-gray-500 rounded disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-600"
+                    >
+                        Previous
+                    </button>
 
-            <button
-                onClick={handleFirst}
-                disabled={currentPage === 1}
-                className="px-1 text-sm font-medium text-white bg-gray-500 rounded disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-600"
-            >
-                1
-            </button>
+                    <button
+                        onClick={handleFirst}
+                        disabled={currentPage === 1}
+                        className="px-1 text-sm font-medium text-white bg-gray-500 rounded disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-600"
+                    >
+                        1
+                    </button>
 
-            <Chip color="primary">
-                {`${currentPage} of ${totalPages}`}
-            </Chip>
+                    <Chip color="primary">
+                        {`${currentPage} of ${totalPages}`}
+                    </Chip>
 
-            <button
-                onClick={handleLast}
-                disabled={currentPage === totalPages}
-                className="px-1 text-sm font-medium text-white bg-gray-500 rounded disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-600"
-            >
-                {totalPages}
-            </button>
+                    <button
+                        onClick={handleLast}
+                        disabled={currentPage === totalPages}
+                        className="px-1 text-sm font-medium text-white bg-gray-500 rounded disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-600"
+                    >
+                        {totalPages}
+                    </button>
 
-            <button
-                onClick={handleNext}
-                disabled={currentPage === totalPages}
-                className="px-1 mx-1 text-sm font-medium text-white bg-gray-500 rounded disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-600"
-            >
-                Next
-            </button>
-        </div>
+                    <button
+                        onClick={handleNext}
+                        disabled={currentPage === totalPages}
+                        className="px-1 mx-1 text-sm font-medium text-white bg-gray-500 rounded disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-600"
+                    >
+                        Next
+                    </button>
+                </div>
+            )}
+        </>
     );
 };
 

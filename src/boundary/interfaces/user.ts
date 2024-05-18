@@ -6,6 +6,7 @@ export interface User {
   profileCoverUrl: string;
   isEmailVerified: boolean;
   isSubscribed: boolean;
+  isModerator: boolean;
   isAdmin: boolean;
   postsCount: number;
   postRepliesCount: number;

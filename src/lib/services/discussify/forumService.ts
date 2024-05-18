@@ -37,6 +37,24 @@ export async function getForums() {
     }
 }
 
+export async function getForumBySlugAsync(slug:string) {
+    try {
+        const apiUrl = `${internalBaseUrl}/api/forum/${slug}`;
+        const response = await fetch(apiUrl, {
+            method: 'GET',
+            headers: {
+                'x-api-key': `${apiKey}`,
+                'Content-type': 'application/json',
+            },
+            body: null,
+        });
+
+        return response.json();
+    } catch (error) {
+        throw error;
+    }
+}
+
 export async function getForumPosts(queryParams: ForumPostsQueryParameters) {
     try {
         const apiUrl = `${internalBaseUrl}/api/forum/posts`;

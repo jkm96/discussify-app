@@ -7,6 +7,7 @@ export interface ForumResponse {
     slug: string;
     description: string;
     avatarUrl: string;
+    isSystem:boolean;
     createdAt: string;
     updatedAt: string;
 }

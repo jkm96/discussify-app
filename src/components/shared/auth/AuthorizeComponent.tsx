@@ -14,8 +14,7 @@ const AuthorizeComponent = (requiredPermissions: any) => (WrappedComponent: any)
     useEffect(() => {
       const checkPermissions = async () => {
         try {
-          const permissionStatus = true;
-          setHasPermission(permissionStatus);
+          setHasPermission(true);
           const emailVerificationStatus = await checkEmailVerificationStatus();
           setIsEmailVerified(emailVerificationStatus);
         } catch (error) {
