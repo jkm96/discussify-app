@@ -7,7 +7,7 @@ export class ForumPostsQueryParameters extends RequestParameters {
   public forumSlug: string;
 
   constructor() {
-    super(10, 1, 'createdOn desc');
+    super(2, 1, 'createdOn desc');
     this.searchTerm = '';
     this.periodFrom = '';
     this.periodTo = '';

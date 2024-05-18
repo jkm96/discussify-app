@@ -27,6 +27,8 @@ import RecordAuthorStatsComponent, {CreatedAtCard} from "@/components/discussify
 import {formatDateWithoutTime, formatDateWithTime} from "@/helpers/dateHelpers";
 import {CardBody} from "@nextui-org/card";
 import {CommentIcon, EyeIcon, PeopleIcon, TimerIcon} from "@/components/shared/icons/LikeIcon";
+import {PagingMetaData} from "@/boundary/paging/paging";
+import Pagination from "@/components/discussify/forums/Pagination";
 
 const SkeletonForumPost = () => {
     return (
@@ -50,6 +52,8 @@ const SkeletonForumPost = () => {
 export default function ForumOverview({slug}: { slug: string }) {
     const {user} = useAuth();
     const [queryParams, setQueryParams] = useState<ForumPostsQueryParameters>(new ForumPostsQueryParameters());
+    const [pagingMetaData, setPagingMetaData] = useState<PagingMetaData>({} as PagingMetaData);
+    const [currentPage, setCurrentPage] = useState<number>(1);
     const [forumPosts, setForumPosts] = useState<ForumPostsResponse>({} as ForumPostsResponse);
     const [isLoadingForumPosts, setIsLoadingForumPosts] = useState(true);
     const [searchTerm, setSearchTerm] = useState<string>('');
@@ -58,15 +62,16 @@ export default function ForumOverview({slug}: { slug: string }) {
     const pathname = usePathname();
     const {replace} = useRouter();
 
-    const fetchForumPosts = async (queryParams: ForumPostsQueryParameters) => {
+    const fetchForumPosts = async (queryParams: ForumPostsQueryParameters,currentPage:number) => {
         setIsLoadingForumPosts(true);
         queryParams.forumSlug = slug;
-        await getForumPosts(queryParams)
+        await getForumPosts({...queryParams, pageNumber: currentPage})
             .then((response) => {
                 if (response.statusCode === 200) {
                     const parsedData = response.data;
                     const {data, pagingMetaData} = parsedData;
                     setForumPosts(data);
+                    setPagingMetaData(pagingMetaData);
                 } else {
                     toast.error(`Error fetching forum posts: ${response.message}`);
                 }
@@ -85,16 +90,16 @@ export default function ForumOverview({slug}: { slug: string }) {
         const searchTerm = searchParams.get('searchTerm') ?? '';
         queryParams.searchTerm = searchTerm;
         setSearchTerm(searchTerm);
-        fetchForumPosts(queryParams);
+        fetchForumPosts(queryParams,currentPage);
     }, []); // Empty dependency array to ensure it runs only on mount
 
     useEffect(() => {
         if (!isInitialLoad) {
-            fetchForumPosts(queryParams);
+            fetchForumPosts(queryParams,currentPage);
         } else {
             setIsInitialLoad(false);
         }
-    }, [queryParams]); // Fetch data only when queryParams change
+    }, [queryParams,currentPage]); // Fetch data only when queryParams change
 
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
@@ -164,6 +169,17 @@ export default function ForumOverview({slug}: { slug: string }) {
                                     </>
                                 ) : (
                                     <>
+                                        <div className="flex justify-between items-start mt-2 mb-2">
+                                            <div>Filters</div>
+                                            <div>
+                                                <Pagination
+                                                    currentPage={pagingMetaData.currentPage}
+                                                    totalPages={pagingMetaData.totalPages}
+                                                    onPageChange={setCurrentPage}
+                                                />
+                                            </div>
+                                        </div>
+
                                         {forumPosts.posts.map((forumPost) => (
                                             <Card key={forumPost.id} className="w-full mb-2">
                                                 <CardHeader className="flex gap-3 p-1">
