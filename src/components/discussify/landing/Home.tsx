@@ -158,7 +158,7 @@ export default function Home() {
         if (response.statusCode === 200) {
 
             let filteredForums;
-            if (user?.isModerator) {
+            if (!user?.isModerator) {
                 const forumData:ForumResponse[] = response.data;
                 filteredForums = forumData.filter(forum => !forum.isSystem);
             } else {
