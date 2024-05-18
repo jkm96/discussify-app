@@ -1,32 +1,20 @@
 'use client';
 
-import {
-    Avatar,
-    Button,
-    Card,
-    CardFooter,
-    CardHeader, Chip,
-    CircularProgress,
-    Link,
-    Skeleton, Slider,
-    Tooltip
-} from "@nextui-org/react";
+import {Avatar, Button, Card, CardHeader, Chip, Link, Skeleton, Tooltip} from "@nextui-org/react";
 import React, {useEffect, useState} from "react";
-import {usePathname, useRouter, useSearchParams} from "next/navigation";
+import {usePathname, useRouter} from "next/navigation";
 import {toast} from "react-toastify";
 import {NAVIGATION_LINKS} from "@/boundary/configs/navigationConfig";
 import {ForumPostsResponse} from "@/boundary/interfaces/forum";
 import {getForumPosts} from "@/lib/services/discussify/forumService";
 import {ForumPostsQueryParameters} from "@/boundary/parameters/forumPostsQueryParameters";
-import {EditIcon, Eye} from "@nextui-org/shared-icons";
 import {convertSlugToTitleCase} from "@/lib/utils/seoUtils";
 import ForumStats from "@/components/discussify/landing/ForumStats";
 import {PlusIcon} from "@/components/shared/icons/PlusIcon";
 import {useAuth} from "@/hooks/useAuth";
-import RecordAuthorStatsComponent, {CreatedAtCard} from "@/components/discussify/Shared/RecordAuthorStatsComponent";
+import RecordAuthorStatsComponent from "@/components/discussify/Shared/RecordAuthorStatsComponent";
 import {formatDateWithoutTime, formatDateWithTime} from "@/helpers/dateHelpers";
-import {CardBody} from "@nextui-org/card";
-import {CommentIcon, EyeIcon, PeopleIcon, TimerIcon} from "@/components/shared/icons/LikeIcon";
+import {CommentIcon, EyeIcon, PeopleIcon} from "@/components/shared/icons/LikeIcon";
 import {PagingMetaData} from "@/boundary/paging/paging";
 import Pagination from "@/components/discussify/forums/Pagination";
 

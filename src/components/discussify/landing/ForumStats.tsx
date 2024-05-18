@@ -1,8 +1,6 @@
-import {Card, CardFooter, CardHeader, CircularProgress, Skeleton} from "@nextui-org/react";
+import {Card, CardFooter, CardHeader, Skeleton} from "@nextui-org/react";
 import {CardBody} from "@nextui-org/card";
 import React, {useEffect, useState} from "react";
-import {getPostDetailsAsync} from "@/lib/services/discussify/postService";
-import {EditPostRequest, PostResponse} from "@/boundary/interfaces/post";
 import {toast} from "react-toastify";
 import {ForumStatsResponse} from "@/boundary/interfaces/forum";
 import {getForumStatsAsync} from "@/lib/services/discussify/forumService";

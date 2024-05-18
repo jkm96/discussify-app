@@ -1,14 +1,14 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { apiKey, cookieName, internalBaseUrl } from '@/boundary/constants/appConstants';
-import { getAccessToken } from '@/lib/services/token/tokenService';
+import {NextRequest, NextResponse} from 'next/server';
+import {apiKey, cookieName, internalBaseUrl} from '@/boundary/constants/appConstants';
+import {getAccessToken} from '@/lib/services/token/tokenService';
 import {
-  authRoutes,
-  NAVIGATION_LINKS,
-  protectedRoutes,
-  publicRoutes,
-  specialRoutes,
+    authRoutes,
+    NAVIGATION_LINKS,
+    protectedRoutes,
+    publicRoutes,
+    specialRoutes,
 } from '@/boundary/configs/navigationConfig';
-import { AccessTokenModel } from '@/boundary/interfaces/token';
+import {AccessTokenModel} from '@/boundary/interfaces/token';
 
 export const config = {
   matcher: [

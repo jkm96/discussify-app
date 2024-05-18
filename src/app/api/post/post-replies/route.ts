@@ -1,7 +1,7 @@
 import {handleApiException, handleAxiosResponse} from '@/helpers/responseHelpers';
 import discussifyApiClient, {getAxiosConfigs} from '@/lib/axios/axiosClient';
 import {NextRequest} from 'next/server';
-import {getPostQueryParams, getPostReplyQueryParams} from "@/helpers/urlHelpers";
+import {getPostReplyQueryParams} from "@/helpers/urlHelpers";
 
 export async function POST(request: NextRequest) {
   try {

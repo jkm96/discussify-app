@@ -1,7 +1,6 @@
 import {handleApiException, handleAxiosResponse} from '@/helpers/responseHelpers';
 import discussifyApiClient, {getAxiosConfigs} from '@/lib/axios/axiosClient';
 import {NextRequest} from 'next/server';
-import {getForumPostsQueryParams} from '@/helpers/urlHelpers';
 
 export async function POST(request: NextRequest) {
   try {

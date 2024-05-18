@@ -1,6 +1,6 @@
 'use client';
 
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {
     Avatar,
     Button,
@@ -20,7 +20,6 @@ import {
 import {NAVIGATION_LINKS} from '@/boundary/configs/navigationConfig';
 import {useAuth} from '@/hooks/useAuth';
 import {ThemeSwitcher} from "@/components/shared/navs/ThemeSwitcher";
-import useLocalStorage from "@/hooks/useLocalStorage";
 import {UserResponse} from "@/boundary/interfaces/user";
 import {useRouter} from "next/navigation";
 

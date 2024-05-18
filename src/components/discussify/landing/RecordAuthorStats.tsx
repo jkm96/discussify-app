@@ -7,7 +7,6 @@ import {useAuth} from "@/hooks/useAuth";
 import {toggleFollowLikeAsync} from "@/lib/services/discussify/sharedService";
 import {ToggleFollowLikeRequest} from "@/boundary/interfaces/shared";
 import {toast} from "react-toastify";
-import {unique} from "next/dist/build/utils";
 
 type RecordAuthorStatsProps = {
     uniqueId: string;

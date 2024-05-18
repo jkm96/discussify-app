@@ -1,7 +1,5 @@
-import {PostQueryParameters} from "@/boundary/parameters/postQueryParameters";
 import {apiKey, internalBaseUrl} from "@/boundary/constants/appConstants";
 import {ForumPostsQueryParameters} from "@/boundary/parameters/forumPostsQueryParameters";
-import {json} from "node:stream/consumers";
 
 export async function getForumStatsAsync() {
     try {

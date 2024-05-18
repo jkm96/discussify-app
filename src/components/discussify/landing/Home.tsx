@@ -3,7 +3,8 @@
 import {
     Avatar,
     Button,
-    Card, CardFooter,
+    Card,
+    CardFooter,
     CardHeader,
     CircularProgress,
     Input,
@@ -13,7 +14,7 @@ import {
     Tooltip
 } from "@nextui-org/react";
 import React, {useEffect, useState} from "react";
-import {usePathname, useRouter, useSearchParams} from "next/navigation";
+import {usePathname, useRouter} from "next/navigation";
 import {PostResponse} from "@/boundary/interfaces/post";
 import {PostQueryParameters} from "@/boundary/parameters/postQueryParameters";
 import {toast} from "react-toastify";
@@ -25,9 +26,7 @@ import CoverPosts from "@/components/discussify/landing/CoverPosts";
 import RecordAuthorStatsComponent from "@/components/discussify/Shared/RecordAuthorStatsComponent";
 import {useAuth} from "@/hooks/useAuth";
 import {ReplyIcon} from "@/components/shared/icons/ReplyIcon";
-import {PlusIcon} from "@/components/shared/icons/PlusIcon";
 import {EditIcon} from "@nextui-org/shared-icons";
-import {start} from "node:repl";
 import Spinner from "@/components/shared/icons/Spinner";
 import {initialPostFormState} from "@/components/discussify/forums/CreateForumPost";
 import dynamic from "next/dynamic";

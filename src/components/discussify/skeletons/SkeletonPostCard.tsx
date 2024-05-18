@@ -1,4 +1,4 @@
-import { Avatar, Button, Card, CardFooter, CardHeader, Divider, Skeleton } from "@nextui-org/react";
+import {Avatar, Card, CardFooter, CardHeader, Divider, Skeleton} from "@nextui-org/react";
 import React from "react";
 import {CardBody} from "@nextui-org/card";
 

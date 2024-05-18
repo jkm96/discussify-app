@@ -3,7 +3,6 @@
 import {useAuth} from '@/hooks/useAuth';
 import {useRouter} from 'next/navigation';
 import {deleteAccessToken} from '@/lib/services/token/tokenService';
-import LogoutIcon from '@/components/shared/icons/LogoutIcon';
 import {NAVIGATION_LINKS} from '@/boundary/configs/navigationConfig';
 import React, {useEffect, useState} from 'react';
 import {toast} from 'react-toastify';

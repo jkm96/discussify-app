@@ -2,7 +2,6 @@
 
 import {NAVIGATION_LINKS} from '@/boundary/configs/navigationConfig';
 import {useAuth} from '@/hooks/useAuth';
-import {Divider} from "@nextui-org/react";
 
 export function Footer() {
     const {user} = useAuth();

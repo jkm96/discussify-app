@@ -5,7 +5,7 @@ import {EditPostRequest, PostReplyRequest, PostResponse} from "@/boundary/interf
 import React, {useEffect, useState} from "react";
 import {toast} from "react-toastify";
 import {editPostAsync, getPostDetailsAsync} from "@/lib/services/discussify/postService";
-import {Avatar, AvatarGroup, Button, Card, CardFooter, CardHeader, Chip, Divider, Link} from "@nextui-org/react";
+import {Avatar, AvatarGroup, Button, Card, CardFooter, CardHeader, Chip, Divider} from "@nextui-org/react";
 import {CardBody} from "@nextui-org/card";
 import {RenderPostTitle} from "@/components/discussify/posts/RenderPostTitle";
 import {RenderPostAuthor} from "@/components/discussify/posts/RenderPostAuthor";
@@ -23,9 +23,6 @@ import {ToggleFollowLikeRequest} from "@/boundary/interfaces/shared";
 import {toggleFollowLikeAsync} from "@/lib/services/discussify/sharedService";
 import {LikedIcon, LikeIcon} from "@/components/shared/icons/LikeIcon";
 import {PostRepliesComponent} from "@/components/discussify/posts/PostRepliesComponent";
-import RecordAuthorStatsComponent from "@/components/discussify/Shared/RecordAuthorStatsComponent";
-import {formatDateWithYear} from "@/helpers/dateHelpers";
-import {EditIcon} from "@nextui-org/shared-icons";
 import {ReplyIcon} from "@/components/shared/icons/ReplyIcon";
 
 const CustomEditor = dynamic(() => {
