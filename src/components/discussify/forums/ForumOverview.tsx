@@ -58,7 +58,7 @@ export default function ForumOverview({slug}: { slug: string }) {
     const [isLoadingForumPosts, setIsLoadingForumPosts] = useState(true);
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [isInitialLoad, setIsInitialLoad] = useState(true);
-    const searchParams = useSearchParams();
+    // const searchParams = useSearchParams();
     const pathname = usePathname();
     const {replace} = useRouter();
 
@@ -101,23 +101,23 @@ export default function ForumOverview({slug}: { slug: string }) {
         }
     }, [queryParams,currentPage]); // Fetch data only when queryParams change
 
-    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-        e.preventDefault();
-        const searchTerm = e.target.value;
-        const params = new URLSearchParams(searchParams);
-
-        if (searchTerm) {
-            params.set('searchTerm', searchTerm);
-        } else {
-            params.delete('searchTerm');
-        }
-
-        replace(`${pathname}?${params.toString()}`);
-
-        if (searchTerm.length >= 3 || searchTerm === '') {
-            setQueryParams((prevParams) => ({...prevParams, searchTerm: searchTerm}));
-        }
-    };
+    // const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //     e.preventDefault();
+    //     const searchTerm = e.target.value;
+    //     const params = new URLSearchParams(searchParams);
+    //
+    //     if (searchTerm) {
+    //         params.set('searchTerm', searchTerm);
+    //     } else {
+    //         params.delete('searchTerm');
+    //     }
+    //
+    //     replace(`${pathname}?${params.toString()}`);
+    //
+    //     if (searchTerm.length >= 3 || searchTerm === '') {
+    //         setQueryParams((prevParams) => ({...prevParams, searchTerm: searchTerm}));
+    //     }
+    // };
 
     const updateAuthorFollowStatus = (uniqueId: string, authorId: number, followed: boolean) => {
         if (uniqueId === "forum-overview") {

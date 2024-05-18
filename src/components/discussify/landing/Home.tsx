@@ -53,7 +53,7 @@ export default function Home() {
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [totalPages, setTotalPages] = useState<number>(0);
     const [isOpen, setIsOpen] = React.useState(false);
-    const searchParams = useSearchParams();
+    // const searchParams = useSearchParams();
 
     const fetchLatestPosts = async (queryParams: PostQueryParameters, currentPage: number) => {
         setIsLoadingMorePosts(true);
@@ -102,23 +102,23 @@ export default function Home() {
         }
     }, [queryParams]); // Fetch data only when queryParams change
 
-    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-        e.preventDefault();
-        const searchTerm = e.target.value;
-        const params = new URLSearchParams(searchParams);
-
-        if (searchTerm) {
-            params.set('searchTerm', searchTerm);
-        } else {
-            params.delete('searchTerm');
-        }
-
-        replace(`${pathname}?${params.toString()}`);
-
-        if (searchTerm.length >= 3 || searchTerm === '') {
-            setQueryParams((prevParams) => ({...prevParams, searchTerm: searchTerm}));
-        }
-    };
+    // const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //     e.preventDefault();
+    //     const searchTerm = e.target.value;
+    //     const params = new URLSearchParams(searchParams);
+    //
+    //     if (searchTerm) {
+    //         params.set('searchTerm', searchTerm);
+    //     } else {
+    //         params.delete('searchTerm');
+    //     }
+    //
+    //     replace(`${pathname}?${params.toString()}`);
+    //
+    //     if (searchTerm.length >= 3 || searchTerm === '') {
+    //         setQueryParams((prevParams) => ({...prevParams, searchTerm: searchTerm}));
+    //     }
+    // };
 
     const handleLoadMore = () => {
         const nextPage = currentPage + 1;
