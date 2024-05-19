@@ -3,7 +3,8 @@
  import {User} from '@/boundary/interfaces/user';
  import AuthContext from './authContext';
  import {AccessTokenModel} from '@/boundary/interfaces/token';
- import {getAccessToken, storeAccessTokenInCookie} from '@/lib/services/token/tokenService';
+ import {deleteAccessToken, getAccessToken, storeAccessTokenInCookie} from '@/lib/services/token/tokenService';
+ import {toast} from "react-toastify";
 
  type AuthContextProps = {
   children: React.ReactNode;
@@ -54,7 +55,10 @@ export function AuthProvider({ children }: AuthContextProps) {
   };
 
   const clearAuthToken = async () => {
-    setUser(null);
+    const response = await deleteAccessToken();
+    if (response.statusCode === 200) {
+      setUser(null);
+    }
   };
 
   useEffect(() => {

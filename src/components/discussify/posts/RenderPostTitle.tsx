@@ -5,7 +5,7 @@ import {convertStringToList} from "@/helpers/stylingHelpers";
 import TagsIcon from "@/components/shared/icons/TagsIcon";
 import {formatDateWithoutTime} from "@/helpers/dateHelpers";
 import {CommentIcon, EyeIcon, PeopleIcon, TimerIcon} from "@/components/shared/icons/LikeIcon";
-import {EditIcon} from "@nextui-org/shared-icons";
+import {CloseIcon, EditIcon} from "@nextui-org/shared-icons";
 import {User} from "@/boundary/interfaces/user";
 import {toast} from "react-toastify";
 import {editPostAsync} from "@/lib/services/discussify/postService";
@@ -29,8 +29,8 @@ export function RenderPostTitle({user, postDetails}: { user: User | null, postDe
             setInputTitleErrors(inputTitleErrors);
             return;
         }
-        const editTitle:EditPostRequest = {
-            type:"title",
+        const editTitle: EditPostRequest = {
+            type: "title",
             description: postDetails.description,
             postId: postDetails.id,
             title: newTitle,
@@ -57,8 +57,8 @@ export function RenderPostTitle({user, postDetails}: { user: User | null, postDe
             setInputTagsErrors(inputTagsErrors);
             return;
         }
-        const editTags:EditPostRequest = {
-            type:"tags",
+        const editTags: EditPostRequest = {
+            type: "tags",
             description: postDetails.description,
             postId: postDetails.id,
             title: postDetails.title,
@@ -81,16 +81,16 @@ export function RenderPostTitle({user, postDetails}: { user: User | null, postDe
             <CardHeader className="justify-between pl-0">
                 <div className="gap-5 w-full">
                     <div className="flex justify-between items-center gap-1">
-                        <div className="justify-start font-semibold leading-none w-1/2">
+                        <div className="justify-start font-semibold leading-none w-3/4">
 
                             {showEditTitle ? (
-                                <>
+                                <div className='flex items-center'>
                                     <Input
-                                        labelPlacement={'outside'}
+                                        labelPlacement='outside'
                                         name='tags'
                                         variant='underlined'
                                         value={newTitle}
-                                        description={'Hit enter to save changes'}
+                                        description='Hit enter to save changes'
                                         isInvalid={inputTitleErrors !== ''}
                                         errorMessage={inputTitleErrors}
                                         onChange={handleEditPostTitleChange}
@@ -99,20 +99,23 @@ export function RenderPostTitle({user, postDetails}: { user: User | null, postDe
                                                 handleEditPostTitle(e);
                                             }
                                         }}/>
-                                </>
+
+                                </div>
                             ) : (
                                 <h4>{postDetails.title}</h4>
                             )}
                         </div>
-                        <div className='flex justify-end w-1/2'>
+                        <div className='flex justify-end w-1/4'>
                             {user && (
                                 <>
                                     {user.username == postDetails.user.username && (
-                                        <Link underline="hover"
-                                              className='dark:text-white text-small hover:underline cursor-pointer text-default-500'
-                                              onClick={() => setShowEditTitle(true)}>
-                                            <EditIcon/>
-                                        </Link>
+                                        <>
+                                            <Link underline="hover"
+                                                  className='dark:text-white text-small hover:underline cursor-pointer text-default-500'
+                                                  onClick={() => setShowEditTitle(!showEditTitle)}>
+                                                {showEditTitle ? <CloseIcon /> : <EditIcon />}
+                                            </Link>
+                                        </>
                                     )}
                                 </>
                             )}
@@ -138,7 +141,7 @@ export function RenderPostTitle({user, postDetails}: { user: User | null, postDe
                                 />
                             ) : (
                                 <>
-                                    <span onClick={()=>setShowEditTags(true)}>
+                                    <span onClick={() => setShowEditTags(true)}>
                                         <TagsIcon/>
                                     </span>
                                     {convertStringToList(postDetails.tags).map((tag) => (

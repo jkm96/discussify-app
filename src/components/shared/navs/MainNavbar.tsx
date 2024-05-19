@@ -46,7 +46,7 @@ export default function MainNavbar() {
 
     return (
         <>
-            <Navbar maxWidth={"full"} className='dark:bg-boxdark-mode' isMenuOpen={isMenuOpen}
+            <Navbar maxWidth={"full"} className='shadow-medium dark:bg-boxdark-mode' isMenuOpen={isMenuOpen}
                     onMenuOpenChange={setIsMenuOpen}>
                 <NavbarContent>
                     <NavbarMenuToggle

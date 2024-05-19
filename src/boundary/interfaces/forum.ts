@@ -8,6 +8,8 @@ export interface ForumResponse {
     description: string;
     avatarUrl: string;
     isSystem:boolean;
+    views: number;
+    postCount : number;
     createdAt: string;
     updatedAt: string;
 }

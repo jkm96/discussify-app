@@ -7,7 +7,7 @@ import {getForumStatsAsync} from "@/lib/services/discussify/forumService";
 import {formatDateWithYear} from "@/helpers/dateHelpers";
 import {count} from "@ckeditor/ckeditor5-utils";
 
-const SkeletonForumStats = () => {
+export const SkeletonForumStats = () => {
     return (
         <Card className="w-full" radius="sm">
             <div className="animate-pulse p-4">

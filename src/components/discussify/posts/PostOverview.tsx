@@ -24,6 +24,7 @@ import {toggleFollowLikeAsync} from "@/lib/services/discussify/sharedService";
 import {LikedIcon, LikeIcon} from "@/components/shared/icons/LikeIcon";
 import {PostRepliesComponent} from "@/components/discussify/posts/PostRepliesComponent";
 import {ReplyIcon} from "@/components/shared/icons/ReplyIcon";
+import PostDescription from "@/components/discussify/posts/PostDescription";
 
 const CustomEditor = dynamic(() => {
     return import( '@/components/ckeditor5/custom-editor' );
@@ -59,7 +60,7 @@ export default function PostOverview({slug}: { slug: string }) {
                         ...post,
                         postLikes: postLikes
                     };
-
+                    console.info('description',post.description)
                     setPostDetails(postWithLikes);
                     const editRequest: EditPostRequest = {
                         type: "description",
@@ -215,6 +216,7 @@ export default function PostOverview({slug}: { slug: string }) {
                                     <RenderPostAuthor user={user}
                                                       postDetails={postDetails}
                                                       setShowEditPost={setShowEditPost}
+                                                      showEditPost={showEditPost}
                                                       updateAuthorFollowStatus={updateAuthorFollowStatus}
                                     />
 
@@ -246,7 +248,7 @@ export default function PostOverview({slug}: { slug: string }) {
                                         </>
                                     ) : (
                                         <>
-                                            <p dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(postDetails.description)}}/>
+                                            <PostDescription description={postDetails.description}/>
 
                                             {postDetails.postLikes !== undefined && postDetails.postLikes.likes > 0 && (
                                                 <div className='flex gap-2 mt-1'>

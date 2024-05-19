@@ -1,6 +1,6 @@
 'use client';
 
-import {Avatar, Button, Card, CardHeader, Chip, Link, Skeleton, Tooltip} from "@nextui-org/react";
+import {Avatar, Button, Card, CardFooter, CardHeader, Chip, Link, Skeleton, Tooltip} from "@nextui-org/react";
 import React, {useEffect, useState} from "react";
 import {usePathname, useRouter} from "next/navigation";
 import {toast} from "react-toastify";
@@ -9,15 +9,16 @@ import {ForumPostsResponse, ForumResponse} from "@/boundary/interfaces/forum";
 import {getForumBySlugAsync, getForumPosts} from "@/lib/services/discussify/forumService";
 import {ForumPostsQueryParameters} from "@/boundary/parameters/forumPostsQueryParameters";
 import {convertSlugToTitleCase} from "@/lib/utils/seoUtils";
-import ForumStats from "@/components/discussify/landing/ForumStats";
+import ForumStats, {SkeletonForumStats} from "@/components/discussify/landing/ForumStats";
 import {PlusIcon} from "@/components/shared/icons/PlusIcon";
 import {useAuth} from "@/hooks/useAuth";
 import RecordAuthorStatsComponent from "@/components/discussify/Shared/RecordAuthorStatsComponent";
-import {formatDateWithoutTime, formatDateWithTime} from "@/helpers/dateHelpers";
+import {formatDateWithoutTime, formatDateWithTime, formatDateWithYear} from "@/helpers/dateHelpers";
 import {CommentIcon, EyeIcon, PeopleIcon} from "@/components/shared/icons/LikeIcon";
 import {PagingMetaData} from "@/boundary/paging/paging";
 import Pagination from "@/components/discussify/forums/Pagination";
 import {getCommentsAsync} from "@/lib/services/discussify/commentService";
+import {CardBody} from "@nextui-org/card";
 
 const SkeletonForumPost = () => {
     return (
@@ -75,7 +76,6 @@ export default function ForumOverview({slug}: { slug: string }) {
             fetchForum(slug);
         }
     }, [slug]);
-
 
     const fetchForumPosts = async (queryParams: ForumPostsQueryParameters,currentPage:number) => {
         setIsLoadingForumPosts(true);
@@ -162,7 +162,7 @@ export default function ForumOverview({slug}: { slug: string }) {
 
                         <h1 className={'text-title-md'}>{convertSlugToTitleCase(slug)}</h1>
 
-                        {forumDetails && !isFetchingForum && !forumDetails.isSystem && (
+                        {forumDetails && !isFetchingForum && !forumDetails.isSystem ? (
                             <div className='gap-3 hidden lg:block'>
                                 <Button startContent={<PlusIcon/>}
                                         onClick={handleSStartThread}
@@ -170,16 +170,18 @@ export default function ForumOverview({slug}: { slug: string }) {
                                     Create Thread
                                 </Button>
                             </div>
-                        )}
-
-                        {user?.isModerator && (
-                            <div className='gap-3 hidden lg:block'>
-                                <Button startContent={<PlusIcon/>}
-                                        onClick={handleSStartThread}
-                                        color='primary'>
-                                    Create Thread
-                                </Button>
-                            </div>
+                        ):(
+                            <>
+                                {user?.isModerator == true && (
+                                    <div className='gap-3 hidden lg:block'>
+                                        <Button startContent={<PlusIcon/>}
+                                                onClick={handleSStartThread}
+                                                color='primary'>
+                                            Create Thread
+                                        </Button>
+                                    </div>
+                                )}
+                            </>
                         )}
 
                     </div>
@@ -371,7 +373,43 @@ export default function ForumOverview({slug}: { slug: string }) {
 
                     {/*forum stats section*/}
                     <div className="w-2/12 mr-4 hidden md:block">
-                        <ForumStats/>
+                        <>
+                            {isFetchingForum  ? (
+                                <SkeletonForumStats />
+                            ) : (
+                                <>
+                                    {forumDetails && forumDetails.title && forumDetails.description && !isFetchingForum && (
+                                        <Card className="w-full" radius='sm'>
+                                            <CardHeader className="justify-between">
+                                                <div className="flex gap-5">
+                                                    <div className="flex flex-col gap-1 items-start justify-center">
+                                                        <h4 className="font-semibold leading-none text-default-600">{forumDetails.title}</h4>
+                                                        <h5 className="text-small tracking-tight text-default-400">@{forumDetails.title.toLowerCase()}</h5>
+                                                    </div>
+                                                </div>
+                                            </CardHeader>
+                                            <CardBody className="px-3 py-0 text-small text-black dark:text-white">
+                                                <p>{forumDetails.description}</p>
+                                            </CardBody>
+                                            <CardFooter className="gap-3 text-small text-black dark:text-white">
+                                                <div className="flex gap-1">
+                                                    <p className="font-semibold">Since</p>
+                                                    <p className=" ">{formatDateWithoutTime(forumDetails.createdAt)}</p>
+                                                </div>
+                                                <div className="flex gap-1">
+                                                    <p className="font-semibold ">{forumDetails.views}</p>
+                                                    <p className="">views</p>
+                                                </div>
+                                                <div className="flex gap-1">
+                                                    <p className="font-semibold ">{forumDetails.postCount}</p>
+                                                    <p className="">posts</p>
+                                                </div>
+                                            </CardFooter>
+                                        </Card>
+                                    )}
+                                </>
+                            )}
+                        </>
                     </div>
                 </div>
             </div>

@@ -1,7 +1,7 @@
 import {PostResponse} from "@/boundary/interfaces/post";
 import {Avatar, Card, CardHeader, Link} from "@nextui-org/react";
 import React from "react";
-import {EditIcon} from "@nextui-org/shared-icons";
+import {CloseIcon, EditIcon} from "@nextui-org/shared-icons";
 import {User} from "@/boundary/interfaces/user";
 import RecordAuthorStatsComponent from "@/components/discussify/Shared/RecordAuthorStatsComponent";
 import {formatDateWithYear} from "@/helpers/dateHelpers";
@@ -10,10 +10,11 @@ interface Props {
     user: User | null;
     postDetails: PostResponse;
     setShowEditPost: React.Dispatch<React.SetStateAction<boolean>>;
+    showEditPost: boolean;
     updateAuthorFollowStatus: (uniqueId: string, authorId: number, followed: boolean) => void;
 }
 
-export function RenderPostAuthor({user, postDetails, setShowEditPost, updateAuthorFollowStatus}: Props) {
+export function RenderPostAuthor({user, postDetails, setShowEditPost,showEditPost, updateAuthorFollowStatus}: Props) {
     return (
         <Card className="w-full pl-0"
               shadow={"none"}
@@ -41,11 +42,13 @@ export function RenderPostAuthor({user, postDetails, setShowEditPost, updateAuth
                 </div>
                 <Link underline="hover"
                       className='dark:text-white text-small hover:underline cursor-pointer text-default-500'
-                      onClick={() => setShowEditPost(true)}>
+                      onClick={() => setShowEditPost(!showEditPost)}>
                     {user && (
                         <>
                             {user.username == postDetails.user.username && (
-                                <EditIcon/>
+                                <>
+                                    {showEditPost ? <CloseIcon /> : <EditIcon />}
+                                </>
                             )}
                         </>
                     )}
