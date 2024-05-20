@@ -150,7 +150,7 @@ export default function Home() {
         }
 
         if (!user.isEmailVerified){
-            toast.warning('PLease verify you email address to create thread')
+            toast.warning('Please verify you email address to create thread')
             return
         }
 
@@ -208,7 +208,7 @@ export default function Home() {
 
     return (
         <>
-            <div className="flex w-full h-full mt-5 mb-5">
+            <div className="flex w-full h-full mt-2.5 mb-5">
                 {/*main forum section*/}
                 <div className="md:w-10/12 md:mr-4 w-full ml-1 mr-1">
                     {/*cover post section*/}

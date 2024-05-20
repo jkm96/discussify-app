@@ -158,30 +158,64 @@ export function RenderPostTitle({user, postDetails}: { user: User | null, postDe
                     )}
                 </div>
             </CardHeader>
-            <CardFooter className="gap-3 pl-0 text-default-400 text-small dark:text-white">
-                <div className="flex gap-1">
-                    <p className="font-bold text-small">
-                        <TimerIcon width={15} height={20}/>
-                    </p>
-                    <p className=" text-small">{formatDateWithoutTime(postDetails.createdAt)}</p>
+            <CardFooter className="gap-3 pl-0 text-default-400 items-center text-small dark:text-white">
+                <div className="flex items-center">
+                    <Chip
+                        startContent={<TimerIcon width={15} height={20}/>}
+                        className="font-semibold p-0 px-0 h-0"
+                        classNames={{
+                            content: "px-1 text-white",
+                        }}
+                        variant="light"
+                        color="default"
+                    >
+                        {formatDateWithoutTime(postDetails.createdAt)}
+                    </Chip>
                 </div>
-                <div className="flex gap-1">
-                    <p className="font-semibold text-small">
-                        <EyeIcon width={15} height={20}/>
-                    </p>
-                    <p className="">{postDetails.views} views</p>
+
+                <div className="flex items-center">
+                    <Chip
+                        startContent={<EyeIcon width={15} height={20}/>}
+                        className="font-semibold p-0 px-0 h-0"
+                        classNames={{
+                            content: "px-1 text-white",
+                        }}
+                        variant="light"
+                        color="default"
+                    >
+                        {postDetails.views}
+                    </Chip>
+                    <p className="hidden md:block">views</p>
                 </div>
-                <div className="flex gap-1">
-                    <p className="font-semibold text-small">
-                        <CommentIcon width={15} height={20}/>
-                    </p>
-                    <p className="">{postDetails.postRepliesCount} replies</p>
+
+                <div className="flex items-center">
+                    <Chip
+                        startContent={<CommentIcon width={15} height={20}/>}
+                        className="font-semibold p-0 px-0 h-0"
+                        classNames={{
+                            content: "px-1 text-white",
+                        }}
+                        variant="light"
+                        color="default"
+                    >
+                        {postDetails.postRepliesCount}
+                    </Chip>
+                    <p className="hidden md:block">replies</p>
                 </div>
-                <div className="flex gap-1">
-                    <p className="font-semibold text-small">
-                        <PeopleIcon width={15} height={20}/>
-                    </p>
-                    <p className="">{postDetails.participants} participants</p>
+
+                <div className="flex items-center">
+                    <Chip
+                        startContent={<PeopleIcon width={15} height={20}/>}
+                        className="font-semibold p-0 px-0 h-0"
+                        classNames={{
+                            content: "px-1 text-white",
+                        }}
+                        variant="light"
+                        color="default"
+                    >
+                        {postDetails.participants}
+                    </Chip>
+                    <p className="hidden md:block">participants</p>
                 </div>
             </CardFooter>
         </Card>

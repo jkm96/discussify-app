@@ -10,6 +10,7 @@ export async function getForumStatsAsync() {
                 'x-api-key': `${apiKey}`,
                 'Content-type': 'application/json',
             },
+            next: {revalidate: 60},
             body: null,
         });
 
@@ -37,7 +38,7 @@ export async function getForums() {
     }
 }
 
-export async function getForumBySlugAsync(slug:string) {
+export async function getForumBySlugAsync(slug: string) {
     try {
         const apiUrl = `${internalBaseUrl}/api/forum/${slug}`;
         const response = await fetch(apiUrl, {
@@ -65,7 +66,7 @@ export async function getForumPosts(queryParams: ForumPostsQueryParameters) {
                 'Content-type': 'application/json',
             },
             body: JSON.stringify({
-                'queryParams':queryParams
+                'queryParams': queryParams
             }),
         });
 

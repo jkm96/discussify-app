@@ -67,6 +67,7 @@ export async function getCoverPostsAsync() {
                 'x-api-key': `${apiKey}`,
                 'Content-type': 'application/json',
             },
+            next: {revalidate: 60},
             body: null,
         });
 

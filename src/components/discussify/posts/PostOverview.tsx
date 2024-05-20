@@ -60,7 +60,7 @@ export default function PostOverview({slug}: { slug: string }) {
                         ...post,
                         postLikes: postLikes
                     };
-                    console.info('description',post.description)
+
                     setPostDetails(postWithLikes);
                     const editRequest: EditPostRequest = {
                         type: "description",
@@ -196,7 +196,7 @@ export default function PostOverview({slug}: { slug: string }) {
 
     return (
         <>
-            <div className="flex w-full mt-5 md:mt-5 mb-5">
+            <div className="flex w-full mt-2.5 mb-5">
                 {/*post overview section*/}
                 <div className="md:w-10/12 md:mr-4 w-full ml-1 mr-1">
                     {isLoadingDetails ? (
