@@ -214,11 +214,14 @@ export default function Home() {
                     {/*cover post section*/}
                     <CoverPosts/>
 
-                    <Card className='mt-2 mb-2 p-1 pl-2 pr-2 dark:bg-boxdark-mode'>
+                    <Card className={`mt-2 mb-2 dark:bg-boxdark-mode ${startQuickThread ? 'p-1 pl-2 pr-2':''}`}>
                         <form>
                             <Input
                                 value={startQuickThread ? createPostRequest.title : ''}
-                                className='mt-2 mb-2'
+                                className={startQuickThread ? 'mt-2 mb-2' : ''}
+                                classNames={{
+                                    inputWrapper:'border-small'
+                                }}
                                 type="text"
                                 radius='sm'
                                 size='md'
@@ -277,7 +280,10 @@ export default function Home() {
 
                                     <Input
                                         label='Tags'
-                                        labelPlacement={'outside'}
+                                        labelPlacement='outside'
+                                        classNames={{
+                                            inputWrapper:'border-sm'
+                                        }}
                                         name='tags'
                                         onChange={handleChange}
                                         value={createPostRequest.tags}

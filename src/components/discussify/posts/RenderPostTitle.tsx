@@ -164,7 +164,7 @@ export function RenderPostTitle({user, postDetails}: { user: User | null, postDe
                         startContent={<TimerIcon width={15} height={20}/>}
                         className="font-semibold p-0 px-0 h-0"
                         classNames={{
-                            content: "px-1 text-white",
+                            content: "px-1",
                         }}
                         variant="light"
                         color="default"
@@ -178,7 +178,7 @@ export function RenderPostTitle({user, postDetails}: { user: User | null, postDe
                         startContent={<EyeIcon width={15} height={20}/>}
                         className="font-semibold p-0 px-0 h-0"
                         classNames={{
-                            content: "px-1 text-white",
+                            content: "px-1",
                         }}
                         variant="light"
                         color="default"
@@ -193,7 +193,7 @@ export function RenderPostTitle({user, postDetails}: { user: User | null, postDe
                         startContent={<CommentIcon width={15} height={20}/>}
                         className="font-semibold p-0 px-0 h-0"
                         classNames={{
-                            content: "px-1 text-white",
+                            content: "px-1",
                         }}
                         variant="light"
                         color="default"
@@ -208,7 +208,7 @@ export function RenderPostTitle({user, postDetails}: { user: User | null, postDe
                         startContent={<PeopleIcon width={15} height={20}/>}
                         className="font-semibold p-0 px-0 h-0"
                         classNames={{
-                            content: "px-1 text-white",
+                            content: "px-1",
                         }}
                         variant="light"
                         color="default"
