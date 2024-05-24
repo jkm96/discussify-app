@@ -334,7 +334,7 @@ export default function PostOverview({slug}: { slug: string }) {
                             </Card>
 
                             {/*form to add replies to a post section*/}
-                            <Card radius='sm' className='mt-5'>
+                            <Card radius='sm' className='mt-5 p-1'>
                                 {showAddPostReplyForm && (
                                     <>
                                         <CustomEditor

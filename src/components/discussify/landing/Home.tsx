@@ -33,12 +33,14 @@ import dynamic from "next/dynamic";
 import {ForumResponse} from "@/boundary/interfaces/forum";
 import {getForums} from "@/lib/services/discussify/forumService";
 import {validateCreatePostFormInputErrors} from "@/helpers/validationHelpers";
+import { useMediaQuery } from 'usehooks-ts'
 
 const CustomEditor = dynamic(() => {
     return import( '@/components/ckeditor5/custom-editor' );
 }, {ssr: false});
 
 export default function Home() {
+    const isMediumOrLarger = useMediaQuery('(min-width: 768px)');
     const {user} = useAuth();
     const pathname = usePathname();
     const router = useRouter();
@@ -211,6 +213,11 @@ export default function Home() {
             <div className="flex w-full h-full mt-2.5 mb-5">
                 {/*main forum section*/}
                 <div className="md:w-10/12 md:mr-4 w-full ml-1 mr-1">
+                    {!isMediumOrLarger && (
+                        <div className="md:hidden mb-4">
+                            <ForumStats viewType='mobile'/>
+                        </div>
+                    )}
                     {/*cover post section*/}
                     <CoverPosts/>
 
@@ -424,9 +431,11 @@ export default function Home() {
                 </div>
 
                 {/*forum stats section*/}
-                <div className="w-2/12 mr-4 hidden md:block">
-                    <ForumStats/>
-                </div>
+                {isMediumOrLarger && (
+                    <div className="w-2/12 mr-4 hidden md:block">
+                        <ForumStats viewType='web'/>
+                    </div>
+                )}
             </div>
 
         </>

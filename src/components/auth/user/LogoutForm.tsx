@@ -37,12 +37,10 @@ export default function LogoutForm() {
     }, [status]);
 
     return (
-        <>
+        <div className='grid place-items-center items-center'>
             {isLoggingOut ?
                 (
-                    <div className='grid place-items-center'>
-                        <CircularProgress color='primary' className='p-4' label='Logging you out...'/>
-                    </div>
+                    <CircularProgress color='primary' className='p-4' label='Logging you out...'/>
                 )
                 :
                 (
@@ -50,6 +48,6 @@ export default function LogoutForm() {
                         You have been logged out successfully
                     </div>
                 )}
-        </>
+        </div>
     );
 }

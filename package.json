@@ -19,7 +19,8 @@
     "next-themes": "^0.3.0",
     "react": "^18",
     "react-dom": "^18",
-    "react-toastify": "^10.0.5"
+    "react-toastify": "^10.0.5",
+    "usehooks-ts": "^3.1.0"
   },
   "devDependencies": {
     "@types/dompurify": "^3.0.5",
