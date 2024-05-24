@@ -5,7 +5,6 @@ import {toast} from "react-toastify";
 import {ForumStatsResponse} from "@/boundary/interfaces/forum";
 import {getForumStatsAsync} from "@/lib/services/discussify/forumService";
 import {formatDateWithYear} from "@/helpers/dateHelpers";
-import {count} from "@ckeditor/ckeditor5-utils";
 
 export const SkeletonForumStats = () => {
     return (

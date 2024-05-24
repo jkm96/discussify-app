@@ -33,7 +33,7 @@ import dynamic from "next/dynamic";
 import {ForumResponse} from "@/boundary/interfaces/forum";
 import {getForums} from "@/lib/services/discussify/forumService";
 import {validateCreatePostFormInputErrors} from "@/helpers/validationHelpers";
-import { useMediaQuery } from 'usehooks-ts'
+import {useMediaQuery} from 'usehooks-ts'
 
 const CustomEditor = dynamic(() => {
     return import( '@/components/ckeditor5/custom-editor' );

@@ -4,7 +4,6 @@
  import AuthContext from './authContext';
  import {AccessTokenModel} from '@/boundary/interfaces/token';
  import {deleteAccessToken, getAccessToken, storeAccessTokenInCookie} from '@/lib/services/token/tokenService';
- import {toast} from "react-toastify";
 
  type AuthContextProps = {
   children: React.ReactNode;

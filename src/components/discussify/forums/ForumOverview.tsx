@@ -9,15 +9,14 @@ import {ForumPostsResponse, ForumResponse} from "@/boundary/interfaces/forum";
 import {getForumBySlugAsync, getForumPosts} from "@/lib/services/discussify/forumService";
 import {ForumPostsQueryParameters} from "@/boundary/parameters/forumPostsQueryParameters";
 import {convertSlugToTitleCase} from "@/lib/utils/seoUtils";
-import ForumStats, {SkeletonForumStats} from "@/components/discussify/landing/ForumStats";
+import {SkeletonForumStats} from "@/components/discussify/landing/ForumStats";
 import {PlusIcon} from "@/components/shared/icons/PlusIcon";
 import {useAuth} from "@/hooks/useAuth";
 import RecordAuthorStatsComponent from "@/components/discussify/Shared/RecordAuthorStatsComponent";
-import {formatDateWithoutTime, formatDateWithTime, formatDateWithYear} from "@/helpers/dateHelpers";
+import {formatDateWithoutTime, formatDateWithTime} from "@/helpers/dateHelpers";
 import {CommentIcon, EyeIcon, PeopleIcon} from "@/components/shared/icons/LikeIcon";
 import {PagingMetaData} from "@/boundary/paging/paging";
 import Pagination from "@/components/discussify/forums/Pagination";
-import {getCommentsAsync} from "@/lib/services/discussify/commentService";
 import {CardBody} from "@nextui-org/card";
 
 const SkeletonForumPost = () => {

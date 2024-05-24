@@ -9,7 +9,6 @@ import {Avatar, AvatarGroup, Button, Card, CardFooter, CardHeader, Chip, Divider
 import {CardBody} from "@nextui-org/card";
 import {RenderPostTitle} from "@/components/discussify/posts/RenderPostTitle";
 import {RenderPostAuthor} from "@/components/discussify/posts/RenderPostAuthor";
-import DOMPurify from 'dompurify';
 import dynamic from "next/dynamic";
 import Spinner from "@/components/shared/icons/Spinner";
 import {NAVIGATION_LINKS} from "@/boundary/configs/navigationConfig";
@@ -334,8 +333,8 @@ export default function PostOverview({slug}: { slug: string }) {
                             </Card>
 
                             {/*form to add replies to a post section*/}
-                            <Card radius='sm' className='mt-5 p-1'>
-                                {showAddPostReplyForm && (
+                            {showAddPostReplyForm && (
+                                <Card radius='sm' className='mt-5 p-1'>
                                     <>
                                         <CustomEditor
                                             initialData={postReplyRequest.description}
@@ -361,8 +360,8 @@ export default function PostOverview({slug}: { slug: string }) {
                                             </Button>
                                         </div>
                                     </>
-                                )}
-                            </Card>
+                                </Card>
+                            )}
 
                             {/*post replies sections*/}
                             <PostRepliesComponent user={user}
