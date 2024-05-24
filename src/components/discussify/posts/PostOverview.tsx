@@ -376,7 +376,7 @@ export default function PostOverview({slug}: { slug: string }) {
 
                 {/*forum stats section*/}
                 <div className="w-2/12 mr-4 hidden md:block">
-                    <ForumStats/>
+                    <ForumStats viewType='web'/>
                 </div>
             </div>
         </>
