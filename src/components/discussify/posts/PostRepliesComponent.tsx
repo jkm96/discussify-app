@@ -240,7 +240,7 @@ export function PostRepliesComponent({user, postDetails, initialPostReplies}: Pr
                 <>
                     {postReplies.length > 0 && (
                         <>
-                            <div>
+                            <div className='mt-1'>
                                 Sort by:
                                 <Dropdown>
                                     <DropdownTrigger>

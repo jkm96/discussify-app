@@ -121,11 +121,11 @@ export default function ForumStats({viewType}: { viewType: string }) {
                                             <p className=" ">{formatDateWithYear(forumStats.createdAt)}</p>
                                         </div>
                                         <div className="flex gap-1">
-                                            <p className="font-semibold ">{forumStats.members}</p>
+                                            <p className="font-semibold">{forumStats.members}</p>
                                             <p className="">members</p>
                                         </div>
                                         <div className="flex gap-1">
-                                            <p className="font-semibold ">{forumStats.posts}</p>
+                                            <p className="font-semibold">{forumStats.posts}</p>
                                             <p className="">posts</p>
                                         </div>
                                     </CardFooter>

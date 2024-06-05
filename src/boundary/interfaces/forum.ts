@@ -12,6 +12,7 @@ export interface ForumResponse {
     postCount : number;
     createdAt: string;
     updatedAt: string;
+    latestPost: PostResponse;
 }
 
 export interface ForumStatsResponse{

@@ -39,14 +39,9 @@ export default function MainNavbar() {
         setIsMenuOpen(false); // Close the menu when a menu item is clicked
     };
 
-    function handleLogout() {
-        console.info("logout")
-        router.push(NAVIGATION_LINKS.LOGOUT)
-    }
-
     return (
         <>
-            <Navbar maxWidth={"full"} className='shadow-medium dark:bg-boxdark-mode' isMenuOpen={isMenuOpen}
+            <Navbar maxWidth="full" className='shadow-medium dark:bg-boxdark-mode' isMenuOpen={isMenuOpen}
                     onMenuOpenChange={setIsMenuOpen}>
                 <NavbarContent>
                     <NavbarMenuToggle
@@ -62,6 +57,10 @@ export default function MainNavbar() {
 
                 <NavbarContent as="div" justify='end'>
                     <ThemeSwitcher/>
+
+                    <Link href={NAVIGATION_LINKS.FORUM_OVERVIEW}>
+                        Menu
+                    </Link>
 
                     {user && !loading && (
                         <>

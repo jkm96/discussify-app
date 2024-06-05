@@ -6,10 +6,26 @@ import {getCoverPostsAsync} from "@/lib/services/discussify/postService";
 import {formatDateWithoutTime} from "@/helpers/dateHelpers";
 import {SkeletonCard} from "@/components/discussify/skeletons/SkeletonPostCard";
 import {NAVIGATION_LINKS} from "@/boundary/configs/navigationConfig";
-import {useMediaQuery} from "usehooks-ts";
 
 export default function CoverPosts() {
-    const isMediumOrLarger = useMediaQuery('(min-width: 768px)');
+    const [isClient, setIsClient] = useState(false);
+    const [isMediumOrLarger, setIsMediumOrLarger] = useState(false);
+
+    useEffect(() => {
+        setIsClient(true);
+
+        const handleResize = () => {
+            const query = window.matchMedia('(min-width: 768px)');
+            setIsMediumOrLarger(query.matches);
+        };
+
+        handleResize(); // Set initial value
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
     const [postResponses, setPostResponses] = useState<PostResponse[]>([]);
     const [isLoadingPosts, setIsLoadingPosts] = useState(true);
 
@@ -48,7 +64,13 @@ export default function CoverPosts() {
                                             className="block rounded-lg shadow-secondary-1 dark:bg-surface-dark dark:text-white text-surface">
                                             <Card isFooterBlurred className="h-[200px] sm:col-span-7">
                                                 <CardHeader className="absolute z-10 top-1 flex-col items-start">
-                                                    <p className="text-tiny font-bold text-white">{postResponses[0]?.forum.title}</p>
+                                                    <p className="text-tiny font-bold text-white">
+                                                        <Link underline="hover"
+                                                              className='dark:text-white text-default-500 text-small'
+                                                              href={`${NAVIGATION_LINKS.FORUM_OVERVIEW}/${postResponses[0]?.forum.slug}`}>
+                                                            {postResponses[0]?.forum.title}
+                                                        </Link>
+                                                    </p>
                                                     <h4 className="text-medium text-white">
                                                         <Link className='text-white'
                                                               underline='hover'
@@ -105,7 +127,13 @@ export default function CoverPosts() {
 
                                                 <Card isFooterBlurred className="h-[200px] sm:col-span-7">
                                                     <CardHeader className="absolute z-10 top-1 flex-col items-start">
-                                                        <p className="text-tiny font-bold text-white">{post.forum.title}</p>
+                                                        <p className="text-tiny font-bold text-white">
+                                                            <Link underline="hover"
+                                                                  className='dark:text-white text-default-500 text-small'
+                                                                  href={`${NAVIGATION_LINKS.FORUM_OVERVIEW}/${postResponses[0]?.forum.slug}`}>
+                                                                {postResponses[0]?.forum.title}
+                                                            </Link>
+                                                        </p>
                                                         <h4 className="text-medium text-white">
                                                             <Link className='text-white'
                                                                   underline='hover'

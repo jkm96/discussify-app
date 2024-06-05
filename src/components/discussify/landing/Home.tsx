@@ -33,14 +33,15 @@ import dynamic from "next/dynamic";
 import {ForumResponse} from "@/boundary/interfaces/forum";
 import {getForums} from "@/lib/services/discussify/forumService";
 import {validateCreatePostFormInputErrors} from "@/helpers/validationHelpers";
-import {useMediaQuery} from 'usehooks-ts'
+import useClientMediaQuery from "@/hooks/useClientMediaQuery";
 
 const CustomEditor = dynamic(() => {
     return import( '@/components/ckeditor5/custom-editor' );
 }, {ssr: false});
 
 export default function Home() {
-    const isMediumOrLarger = useMediaQuery('(min-width: 768px)');
+    const {  matches: isMediumOrLarger } = useClientMediaQuery('(min-width: 768px)');
+
     const {user} = useAuth();
     const pathname = usePathname();
     const router = useRouter();
@@ -207,130 +208,138 @@ export default function Home() {
             toast.error(response.message ?? 'Unknown error occurred');
         }
     }
+    //
+    // if (!isClient) {
+    //     return null; // Avoid rendering anything until the component is mounted on the client side
+    // }
 
     return (
         <>
             <div className="flex w-full h-full mt-2.5 mb-5">
                 {/*main forum section*/}
                 <div className="md:w-10/12 md:mr-4 w-full ml-1 mr-1">
-                    {!isMediumOrLarger && (
+
                         <div className="md:hidden mb-4">
+                            {!isMediumOrLarger && (
                             <ForumStats viewType='mobile'/>
+                            )}
                         </div>
-                    )}
+
                     {/*cover post section*/}
                     <CoverPosts/>
 
-                    <Card className={`mt-2 mb-2 dark:bg-boxdark-mode ${startQuickThread ? 'p-1 pl-2 pr-2':''}`}>
-                        <form>
-                            <Input
-                                value={startQuickThread ? createPostRequest.title : ''}
-                                className={startQuickThread ? 'mt-2 mb-2' : ''}
-                                classNames={{
-                                    inputWrapper:'border-small'
-                                }}
-                                type="text"
-                                radius='sm'
-                                size='md'
-                                onChange={handleChange}
-                                name='title'
-                                variant='bordered'
-                                label={startQuickThread ? 'Title' : ''}
-                                labelPlacement="outside"
-                                placeholder={startQuickThread ? 'Thread title' : 'Start a quick thread'}
-                                onClick={handleStartQuickThread}
-                                onInput={() => {
-                                    setInputErrors({...inputErrors, title: ''});
-                                }}
-                                startContent={
-                                    <EditIcon height={20} width={20}/>
-                                }
-                                isInvalid={inputErrors.title !== ''}
-                                errorMessage={inputErrors.title}
-                            />
-                        </form>
+                    {!isLoadingPosts && (
+                        <Card className={`mt-2 mb-2 dark:bg-boxdark-mode ${startQuickThread ? 'p-1 pl-2 pr-2':''}`}>
+                            <form>
+                                <Input
+                                    value={startQuickThread ? createPostRequest.title : ''}
+                                    className={startQuickThread ? 'mt-2 mb-2' : ''}
+                                    classNames={{
+                                        inputWrapper:'border-small'
+                                    }}
+                                    type="text"
+                                    radius='sm'
+                                    size='md'
+                                    onChange={handleChange}
+                                    name='title'
+                                    variant='bordered'
+                                    label={startQuickThread ? 'Title' : ''}
+                                    labelPlacement="outside"
+                                    placeholder={startQuickThread ? 'Thread title' : 'Start a quick thread'}
+                                    onClick={handleStartQuickThread}
+                                    onInput={() => {
+                                        setInputErrors({...inputErrors, title: ''});
+                                    }}
+                                    startContent={
+                                        <EditIcon height={20} width={20}/>
+                                    }
+                                    isInvalid={inputErrors.title !== ''}
+                                    errorMessage={inputErrors.title}
+                                />
+                            </form>
 
-                        {startQuickThread && (
-                            <>
-                                <div className='grid md:grid-cols-1 md:gap-6 mt-2 mb-2'>
-                                    <Select
-                                        label='Forum'
-                                        labelPlacement='outside'
-                                        placeholder="Select a forum"
-                                        variant='bordered'
-                                        size='md'
-                                        onSelectionChange={() => {
-                                            setInputErrors({...inputErrors, forumSlug: ''});
-                                        }}
-                                        onChange={(e) => {
-                                            const selectedSlug = e.target.value;
-                                            setCreatePostRequest({
-                                                ...createPostRequest,
-                                                forumSlug: selectedSlug
-                                            })
-                                        }}
-                                        isInvalid={inputErrors.forumSlug !== ''}
-                                        errorMessage={inputErrors.forumSlug}
-                                    >
-                                        {forums.map((forum) => (
-                                            <SelectItem key={forum.slug} value={forum.slug}>
-                                                {forum.title}
-                                            </SelectItem>
-                                        ))}
-                                    </Select>
+                            {startQuickThread && (
+                                <>
+                                    <div className='grid md:grid-cols-1 md:gap-6 mt-2 mb-2'>
+                                        <Select
+                                            label='Forum'
+                                            labelPlacement='outside'
+                                            placeholder="Select a forum"
+                                            variant='bordered'
+                                            size='md'
+                                            onSelectionChange={() => {
+                                                setInputErrors({...inputErrors, forumSlug: ''});
+                                            }}
+                                            onChange={(e) => {
+                                                const selectedSlug = e.target.value;
+                                                setCreatePostRequest({
+                                                    ...createPostRequest,
+                                                    forumSlug: selectedSlug
+                                                })
+                                            }}
+                                            isInvalid={inputErrors.forumSlug !== ''}
+                                            errorMessage={inputErrors.forumSlug}
+                                        >
+                                            {forums.map((forum) => (
+                                                <SelectItem key={forum.slug} value={forum.slug}>
+                                                    {forum.title}
+                                                </SelectItem>
+                                            ))}
+                                        </Select>
 
-                                    <h3>Thread message</h3>
-                                    <CustomEditor
-                                        initialData={createPostRequest.description}
-                                        onChange={handleEditorChange}
-                                    />
+                                        <h3>Thread message</h3>
+                                        <CustomEditor
+                                            initialData={createPostRequest.description}
+                                            onChange={handleEditorChange}
+                                        />
 
-                                    <Input
-                                        label='Tags'
-                                        labelPlacement='outside'
-                                        classNames={{
-                                            inputWrapper:'border-sm'
-                                        }}
-                                        name='tags'
-                                        onChange={handleChange}
-                                        value={createPostRequest.tags}
-                                        variant='bordered'
-                                        description={'More than one tags should be separated by comma'}
-                                        placeholder={'Enter thread tags'}
-                                        isInvalid={inputErrors.tags !== ''}
-                                        errorMessage={inputErrors.tags}/>
-                                </div>
+                                        <Input
+                                            label='Tags'
+                                            labelPlacement='outside'
+                                            classNames={{
+                                                inputWrapper:'border-sm'
+                                            }}
+                                            name='tags'
+                                            onChange={handleChange}
+                                            value={createPostRequest.tags}
+                                            variant='bordered'
+                                            description={'More than one tags should be separated by comma'}
+                                            placeholder={'Enter thread tags'}
+                                            isInvalid={inputErrors.tags !== ''}
+                                            errorMessage={inputErrors.tags}/>
+                                    </div>
 
-                                <CardFooter>
-                                    <Button color='primary'
-                                            type='submit'
-                                            isLoading={isSubmitting}
-                                            spinner={<Spinner/>}
-                                            size='sm'
-                                            onClick={handleCreatePost}>
-                                        {isSubmitting ? 'Submitting...' : 'Submit Thread'}
-                                    </Button>
+                                    <CardFooter>
+                                        <Button color='primary'
+                                                type='submit'
+                                                isLoading={isSubmitting}
+                                                spinner={<Spinner/>}
+                                                size='sm'
+                                                onClick={handleCreatePost}>
+                                            {isSubmitting ? 'Submitting...' : 'Submit Thread'}
+                                        </Button>
 
-                                    <Button color='default'
-                                            type='submit'
-                                            size='sm'
-                                            className='ml-2'
-                                            spinner={<Spinner/>}
-                                            onClick={() => {
-                                                setStartQuickThread(false)
-                                                setInputErrors(initialPostFormState)
-                                            }}>
-                                        Cancel
-                                    </Button>
-                                </CardFooter>
-                            </>
-                        )}
-                    </Card>
+                                        <Button color='default'
+                                                type='submit'
+                                                size='sm'
+                                                className='ml-2'
+                                                spinner={<Spinner/>}
+                                                onClick={() => {
+                                                    setStartQuickThread(false)
+                                                    setInputErrors(initialPostFormState)
+                                                }}>
+                                            Cancel
+                                        </Button>
+                                    </CardFooter>
+                                </>
+                            )}
+                        </Card>
+                    )}
 
                     {/*latest post section*/}
                     {isLoadingPosts ? (
-                        <div className={'grid place-items-center'}>
-                            <CircularProgress color={'primary'} className={'p-4'} label='Loading posts...'/>
+                        <div className='grid place-items-center'>
+                            <CircularProgress color='primary' className='p-4' label='Loading posts...'/>
                         </div>
                     ) : (
                         <>
@@ -347,7 +356,7 @@ export default function Home() {
                                             <Card key={post.id} className="w-full mb-2">
                                                 <CardHeader className="flex gap-3 p-1">
                                                     <Avatar
-                                                        alt="nextui logo"
+                                                        alt={post.title}
                                                         className="ml-1"
                                                         src={post.user.profileUrl || ''}
                                                         size='lg'
@@ -431,13 +440,13 @@ export default function Home() {
                 </div>
 
                 {/*forum stats section*/}
-                {isMediumOrLarger && (
-                    <div className="w-2/12 mr-4 hidden md:block">
-                        <ForumStats viewType='web'/>
-                    </div>
-                )}
-            </div>
 
+                    <div className="w-2/12 mr-4 hidden md:block">
+                        {isMediumOrLarger && (
+                        <ForumStats viewType='web'/>
+                        )}
+                    </div>
+            </div>
         </>
     );
 }
