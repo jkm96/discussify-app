@@ -10,7 +10,7 @@ export const NAVIGATION_LINKS = {
 
     FORUM_OVERVIEW: '/forums',
     CREATE_POST: '/create-thread',
-    POST_OVERVIEW: '/posts',
+    POST_OVERVIEW: '/threads',
     SETTINGS: '/dashboard/settings',
 
     ADMIN_LOGIN: '/auth/admin/login',

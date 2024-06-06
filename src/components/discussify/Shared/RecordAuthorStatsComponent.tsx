@@ -8,7 +8,7 @@ type RecordAuthorStatsProps = {
     uniqueId: string;
     author: UserResponse;
     userHasFollowedAuthor: boolean;
-    updateAuthorFollowStatus: (uniqueId: string,authorId: number,followed: boolean) => void;
+    updateAuthorFollowStatus?: (uniqueId: string,authorId: number,followed: boolean) => void;
     followButtonDisabled:boolean;
 };
 

@@ -93,7 +93,7 @@ export default function Home() {
         const searchTerm = searchParams.get('searchTerm') ?? '';
         queryParams.searchTerm = searchTerm;
         setSearchTerm(searchTerm);
-        fetchLatestPosts(queryParams, currentPage); // Fetch posts for initial page
+        fetchLatestPosts(queryParams, currentPage); // Fetch threads for initial page
     }, []); // Empty dependency array to ensure it runs only on mount
 
     useEffect(() => {

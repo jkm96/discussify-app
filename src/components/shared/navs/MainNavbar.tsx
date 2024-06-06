@@ -90,7 +90,7 @@ export default function MainNavbar() {
                                     <DropdownItem key="logout"
                                                   href={NAVIGATION_LINKS.LOGOUT}
                                                   color="danger">
-                                            Log Out
+                                        Log Out
                                     </DropdownItem>
                                 </DropdownMenu>
                             </Dropdown>
@@ -114,21 +114,21 @@ export default function MainNavbar() {
                 </NavbarContent>
 
                 <NavbarMenu>
-                    {menuItems.map((item, index) => (
-                        <NavbarMenuItem key={`${item.label}-${index}`}>
-                            <Link
-                                color={
-                                    index === 2 ? 'primary' : index === menuItems.length - 1 ? 'danger' : 'foreground'
-                                }
-                                className='w-full'
-                                href={`#${item.id}`}
-                                size='lg'
-                                onPress={handleMenuItemClick}
-                            >
-                                {item.label}
-                            </Link>
-                        </NavbarMenuItem>
-                    ))}
+                    <NavbarMenuItem>
+                        <Link className='w-full'
+                              href={NAVIGATION_LINKS.HOME}
+                              size='lg'
+                        >
+                            Home
+                        </Link>
+
+                        <Link className='w-full'
+                              href={NAVIGATION_LINKS.FORUM_OVERVIEW}
+                              size='lg'
+                        >
+                            Forums
+                        </Link>
+                    </NavbarMenuItem>
                 </NavbarMenu>
             </Navbar>
         </>

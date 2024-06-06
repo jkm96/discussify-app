@@ -12,7 +12,7 @@ type RecordAuthorStatsProps = {
     uniqueId: string;
     author: UserResponse;
     userHasFollowedAuthor: boolean;
-    updateAuthorFollowStatus: (uniqueId: string,authorId: number,followed: boolean) => void;
+    updateAuthorFollowStatus?: (uniqueId: string,authorId: number,followed: boolean) => void;
     followButtonDisabled:boolean;
 };
 
@@ -41,7 +41,7 @@ export const RecordAuthorStats = ({uniqueId, author, userHasFollowedAuthor,updat
             if (response.statusCode === 200) {
                 toast.success(response.message);
                 const followed = response.message.trim() !== "User unfollowed successfully"
-                updateAuthorFollowStatus(uniqueId,authorId, followed);
+                updateAuthorFollowStatus ? updateAuthorFollowStatus(uniqueId, authorId, followed) : '';
                 setFollowStatus(prevState => ({
                     ...prevState,
                     [authorId]: !prevState[authorId]

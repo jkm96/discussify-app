@@ -4,11 +4,13 @@ import React, {useEffect, useState} from "react";
 import {CategoryResponse} from "@/boundary/interfaces/category";
 import {toast} from "react-toastify";
 import {getCategoriesWithForumsAsync} from "@/lib/services/discussify/categoryService";
-import {Avatar, Card, CardBody, CardFooter, CardHeader, CircularProgress, Link} from "@nextui-org/react";
+import {Avatar, Card, CardBody, CardFooter, CardHeader, Chip, CircularProgress, Link} from "@nextui-org/react";
 import useClientMediaQuery from "@/hooks/useClientMediaQuery";
 import ForumStats from "@/components/discussify/landing/ForumStats";
 import {NAVIGATION_LINKS} from "@/boundary/configs/navigationConfig";
 import {formatDateWithTime} from "@/helpers/dateHelpers";
+import {CommentIcon, EyeIcon, PeopleIcon} from "@/components/shared/icons/LikeIcon";
+import RecordAuthorStatsComponent from "@/components/discussify/Shared/RecordAuthorStatsComponent";
 
 export function CategoriesOverview() {
     const {matches: isMediumOrLarger} = useClientMediaQuery('(min-width: 768px)');
@@ -73,28 +75,73 @@ export function CategoriesOverview() {
                                                                             {categoryForum.title}
                                                                         </Link>
                                                                     </h4>
+
                                                                     {categoryForum.description}
-                                                                </div>
-                                                                <div
-                                                                    className="flex w-1/3 items-center justify-items-center">
-                                                                    <div
-                                                                        className="grid grid-rows-2 grid-flow-col w-full justify-items-center">
-                                                                        <div className='justify-items-end'>Threads</div>
-                                                                        <div>2k</div>
-                                                                        <div className='justify-items-start'>Messages
+
+                                                                    {!isMediumOrLarger && (
+                                                                        <div>
+                                                                            <Chip
+                                                                                startContent={<EyeIcon width={15}/>}
+                                                                                variant="light"
+                                                                                color="default"
+                                                                                radius='sm'
+                                                                                size='sm'
+                                                                            >
+                                                                                {categoryForum.views}
+                                                                            </Chip>
+
+                                                                            <Chip
+                                                                                startContent={<CommentIcon width={15}/>}
+                                                                                variant="light"
+                                                                                color="default"
+                                                                                radius='sm'
+                                                                                size='sm'
+                                                                            >
+                                                                                {categoryForum.postCount}
+                                                                            </Chip>
+
+                                                                            <Chip
+                                                                                startContent={<PeopleIcon width={15}/>}
+                                                                                variant="light"
+                                                                                color="default"
+                                                                                radius='sm'
+                                                                                size='sm'
+                                                                            >
+                                                                                2k
+                                                                            </Chip>
                                                                         </div>
-                                                                        <div>4k</div>
-                                                                        <div className='justify-items-end'>Views</div>
-                                                                        <div>2k</div>
-                                                                    </div>
+                                                                    )}
                                                                 </div>
-                                                                <div className="flex w-1/3 justify-items-center">
-                                                                    {categoryForum.latestPost ? (
+
+                                                                {isMediumOrLarger && (
+                                                                    <div
+                                                                        className="flex w-1/3 items-center justify-items-center">
+                                                                        <div
+                                                                            className="grid grid-rows-2 grid-flow-col w-full justify-items-center">
+                                                                            <div
+                                                                                className='justify-items-end'>Threads
+                                                                            </div>
+                                                                            <div>2k</div>
+                                                                            <div
+                                                                                className='justify-items-start'>Messages
+                                                                            </div>
+                                                                            <div>4k</div>
+                                                                            <div
+                                                                                className='justify-items-end'>Views
+                                                                            </div>
+                                                                            <div>2k</div>
+                                                                        </div>
+                                                                    </div>
+                                                                )}
+
+                                                                <div
+                                                                    className="flex w-1/3 justify-items-center">
+                                                                    {categoryForum.latestPost && (
                                                                         <>
                                                                             <div
-                                                                                className="flex flex-col items-center mr-3">
+                                                                                className={`flex flex-col mr-3 ${isMediumOrLarger ? 'items-center' : 'items-end w-full'}`}>
                                                                                 <Avatar
-                                                                                    alt="nextui logo"
+                                                                                    alt={categoryForum.title}
                                                                                     className="ml-1"
                                                                                     src={categoryForum.latestPost.user.profileUrl || ''}
                                                                                     size='md'
@@ -102,20 +149,26 @@ export function CategoriesOverview() {
                                                                                     radius='sm'
                                                                                 />
                                                                             </div>
-                                                                            <div className="flex flex-col">
-                                                                                <Link key={categoryForum.id}
-                                                                                      underline='hover'
-                                                                                      className='dark:text-white text-blue-600'
-                                                                                      href={`${NAVIGATION_LINKS.POST_OVERVIEW}/${categoryForum.latestPost.slug}`}>
-                                                                                    {categoryForum.latestPost.title.substring(0, 20)} ...
-                                                                                </Link>
-                                                                                <p className='dark:text-white text-default-500 text-small'>
-                                                                                    {formatDateWithTime(categoryForum.latestPost.createdAt)}. By {categoryForum.latestPost.user.username}
-                                                                                </p>
-                                                                            </div>
+                                                                            {isMediumOrLarger && (
+                                                                                <div className="flex flex-col">
+                                                                                    <Link key={categoryForum.id}
+                                                                                          underline='hover'
+                                                                                          className='dark:text-white text-blue-600'
+                                                                                          href={`${NAVIGATION_LINKS.POST_OVERVIEW}/${categoryForum.latestPost.slug}`}>
+                                                                                        {categoryForum.latestPost.title.substring(0, 20)} ...
+                                                                                    </Link>
+                                                                                    <p className='dark:text-white text-default-500 text-small'>
+                                                                                        {formatDateWithTime(categoryForum.latestPost.createdAt)}.
+                                                                                        <RecordAuthorStatsComponent
+                                                                                        uniqueId="forum-overview-last-author"
+                                                                                        author={categoryForum.latestPost.user}
+                                                                                        userHasFollowedAuthor={false}
+                                                                                        followButtonDisabled={true}
+                                                                                    />
+                                                                                    </p>
+                                                                                </div>
+                                                                            )}
                                                                         </>
-                                                                    ) : (
-                                                                        <></>
                                                                     )}
                                                                 </div>
                                                             </div>

@@ -6,26 +6,10 @@ import {getCoverPostsAsync} from "@/lib/services/discussify/postService";
 import {formatDateWithoutTime} from "@/helpers/dateHelpers";
 import {SkeletonCard} from "@/components/discussify/skeletons/SkeletonPostCard";
 import {NAVIGATION_LINKS} from "@/boundary/configs/navigationConfig";
+import useClientMediaQuery from "@/hooks/useClientMediaQuery";
 
 export default function CoverPosts() {
-    const [isClient, setIsClient] = useState(false);
-    const [isMediumOrLarger, setIsMediumOrLarger] = useState(false);
-
-    useEffect(() => {
-        setIsClient(true);
-
-        const handleResize = () => {
-            const query = window.matchMedia('(min-width: 768px)');
-            setIsMediumOrLarger(query.matches);
-        };
-
-        handleResize(); // Set initial value
-        window.addEventListener('resize', handleResize);
-
-        return () => {
-            window.removeEventListener('resize', handleResize);
-        };
-    }, []);
+    const {  matches: isMediumOrLarger } = useClientMediaQuery('(min-width: 768px)');
     const [postResponses, setPostResponses] = useState<PostResponse[]>([]);
     const [isLoadingPosts, setIsLoadingPosts] = useState(true);
 
@@ -66,7 +50,7 @@ export default function CoverPosts() {
                                                 <CardHeader className="absolute z-10 top-1 flex-col items-start">
                                                     <p className="text-tiny font-bold text-white">
                                                         <Link underline="hover"
-                                                              className='dark:text-white text-default-500 text-small'
+                                                              className='text-white text-small'
                                                               href={`${NAVIGATION_LINKS.FORUM_OVERVIEW}/${postResponses[0]?.forum.slug}`}>
                                                             {postResponses[0]?.forum.title}
                                                         </Link>
@@ -111,7 +95,7 @@ export default function CoverPosts() {
                     </div>
                 )}
 
-                {/* Show all posts on medium and larger screens */}
+                {/* Show all threads on medium and larger screens */}
                 {isMediumOrLarger && (
                     <div className="hidden md:grid md:grid-cols-4 md:gap-2">
                         {isLoadingPosts ? (
