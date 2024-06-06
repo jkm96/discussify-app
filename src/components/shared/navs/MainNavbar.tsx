@@ -22,22 +22,12 @@ import {useAuth} from '@/hooks/useAuth';
 import {ThemeSwitcher} from "@/components/shared/navs/ThemeSwitcher";
 import {UserResponse} from "@/boundary/interfaces/user";
 import {useRouter} from "next/navigation";
+import useClientMediaQuery from "@/hooks/useClientMediaQuery";
 
 export default function MainNavbar() {
-    const router = useRouter();
     const {user, loading} = useAuth();
     const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-    const [loggedUser, setLoggedUser] = useState({} as UserResponse);
-
-    const menuItems = [
-        {label: 'Home', id: 'home'},
-        {label: 'Features', id: 'features'},
-        {label: 'Pricing', id: 'pricing'},
-    ];
-
-    const handleMenuItemClick = () => {
-        setIsMenuOpen(false); // Close the menu when a menu item is clicked
-    };
+    const {matches: isMediumOrLarger} = useClientMediaQuery('(min-width: 768px)');
 
     return (
         <>
@@ -58,9 +48,11 @@ export default function MainNavbar() {
                 <NavbarContent as="div" justify='end'>
                     <ThemeSwitcher/>
 
-                    <Link href={NAVIGATION_LINKS.FORUM_OVERVIEW}>
-                        Menu
-                    </Link>
+                    {isMediumOrLarger && (
+                        <Link href={NAVIGATION_LINKS.FORUM_OVERVIEW}>
+                            Forums
+                        </Link>
+                    )}
 
                     {user && !loading && (
                         <>
