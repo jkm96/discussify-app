@@ -49,9 +49,11 @@ export default function MainNavbar() {
                     <ThemeSwitcher/>
 
                     {isMediumOrLarger && (
-                        <Link href={NAVIGATION_LINKS.FORUM_OVERVIEW}>
-                            Forums
-                        </Link>
+                        <NavbarItem>
+                            <Link href={NAVIGATION_LINKS.FORUM_OVERVIEW}>
+                                Forums
+                            </Link>
+                        </NavbarItem>
                     )}
 
                     {user && !loading && (

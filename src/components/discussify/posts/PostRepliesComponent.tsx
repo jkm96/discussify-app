@@ -30,6 +30,9 @@ import {CommentRequest, CommentResponse} from "@/boundary/interfaces/comment";
 import dynamic from "next/dynamic";
 import {addCommentAsync, getCommentsAsync} from "@/lib/services/discussify/commentService";
 import {ReplyIcon} from "@/components/shared/icons/ReplyIcon";
+import Pagination from "@/components/discussify/forums/Pagination";
+import {PagingMetaData} from "@/boundary/paging/paging";
+import Filter from "@/components/discussify/forums/Filter";
 
 const CustomEditor = dynamic(() => {
     return import( '@/components/ckeditor5/custom-editor' );
@@ -56,7 +59,9 @@ interface EditPostReplyFormState {
 }
 
 export function PostRepliesComponent({user, postDetails, initialPostReplies}: Props) {
-    const [selectedKeys, setSelectedKeys] = useState<string>('latest_first');
+    const [selectedKey, setSelectedKey] = useState<string>('latest');
+    const [pagingMetaData, setPagingMetaData] = useState<PagingMetaData>({} as PagingMetaData);
+    const [currentPage, setCurrentPage] = useState<number>(1);
 
     const [postReplies, setPostReplies] = useState<PostRepliesResponse[]>([]);
     const [queryParams, setQueryParams] = useState<PostRepliesQueryParameters>(new PostRepliesQueryParameters());
@@ -80,18 +85,6 @@ export function PostRepliesComponent({user, postDetails, initialPostReplies}: Pr
         }));
     };
 
-    const handleDropdownSelection = (key: string) => {
-        setSelectedKeys(key);
-
-        const newQueryParams = new PostRepliesQueryParameters(); // Create a new instance or copy the existing state
-        if (key === 'oldest_first') {
-            newQueryParams.sortBy = 'oldest';
-        } else if (key === 'latest_first') {
-            newQueryParams.sortBy = 'latest';
-        }
-        setQueryParams(newQueryParams);
-    };
-
     useEffect(() => {
         if (initialPostReplies.length !== 0) {
             // Use map to add unique keys to the new replies
@@ -106,14 +99,15 @@ export function PostRepliesComponent({user, postDetails, initialPostReplies}: Pr
         }
     }, [initialPostReplies]);
 
-    const fetchPostReplies = async (postSlug: any,queryParams:PostRepliesQueryParameters) => {
+    const fetchPostReplies = async (postSlug: any, queryParams: PostRepliesQueryParameters) => {
         setIsLoadingReplies(true);
-        await getPostRepliesAsync(postSlug,queryParams)
+        await getPostRepliesAsync(postSlug, queryParams)
             .then((response) => {
                 if (response.statusCode === 200) {
                     const parsedData = response.data;
                     const {data, pagingMetaData} = parsedData;
                     setPostReplies(data);
+                    setPagingMetaData(pagingMetaData);
                 }
             })
             .catch((error) => {
@@ -125,8 +119,8 @@ export function PostRepliesComponent({user, postDetails, initialPostReplies}: Pr
     };
 
     useEffect(() => {
-        fetchPostReplies(postDetails.slug,queryParams);
-    }, [postDetails.slug,queryParams]);
+        fetchPostReplies(postDetails.slug, {...queryParams, pageNumber: currentPage,sortBy:selectedKey});
+    }, [postDetails.slug, queryParams,currentPage,selectedKey]);
 
     const handleEditPostReplyEditorChange = (data: string) => {
         setEditPostReplyRequest({...editPostReplyRequest, description: data});
@@ -169,7 +163,7 @@ export function PostRepliesComponent({user, postDetails, initialPostReplies}: Pr
                 if (response.statusCode === 200) {
                     const parsedData = response.data;
                     const {data, pagingMetaData} = parsedData;
-                    setPostReplies(data);
+                    // setPostReplies(data);
                 }
             })
             .catch((error) => {
@@ -215,8 +209,8 @@ export function PostRepliesComponent({user, postDetails, initialPostReplies}: Pr
         }
     };
 
-    const updateAuthorFollowStatus = (uniqueId: string,authorId: number, followed: boolean) => {
-        if (uniqueId === 'post-reply'){
+    const updateAuthorFollowStatus = (uniqueId: string, authorId: number, followed: boolean) => {
+        if (uniqueId === 'post-reply') {
             const updatedPostReplies = postReplies.map(reply => {
                 if (reply.user.id === authorId) {
                     return {
@@ -240,28 +234,21 @@ export function PostRepliesComponent({user, postDetails, initialPostReplies}: Pr
                 <>
                     {postReplies.length > 0 && (
                         <>
-                            <div className='mt-1'>
-                                Sort by:
-                                <Dropdown>
-                                    <DropdownTrigger>
-                                        <Button
-                                            variant="bordered"
-                                        >
-                                            {selectedKeys === 'oldest_first' ? 'Oldest First' : 'Latest First'}
-                                        </Button>
-                                    </DropdownTrigger>
-                                    <DropdownMenu
-                                        aria-label="Sort by:"
-                                        variant="flat"
-                                        disallowEmptySelection
-                                        selectionMode="single"
-                                        selectedKeys={selectedKeys}
-                                        onAction={(key: Key) => handleDropdownSelection(key as string)}
-                                    >
-                                        <DropdownItem key="oldest_first">Oldest First</DropdownItem>
-                                        <DropdownItem key="latest_first">Latest First</DropdownItem>
-                                    </DropdownMenu>
-                                </Dropdown>
+                            <div className="flex w-full justify-between items-center mt-2">
+                                <div className='flex w-1/2 justify-start'>
+                                    Sort by:
+                                    <Filter
+                                        selectedKey={selectedKey}
+                                        onSelect={setSelectedKey}
+                                    />
+                                </div>
+                                <div className='flex w-1/2 justify-end'>
+                                    <Pagination
+                                        currentPage={pagingMetaData.currentPage}
+                                        totalPages={pagingMetaData.totalPages}
+                                        onPageChange={setCurrentPage}
+                                    />
+                                </div>
                             </div>
 
                             {postReplies.map((postReply) => (

@@ -18,6 +18,7 @@ import {CommentIcon, EyeIcon, PeopleIcon} from "@/components/shared/icons/LikeIc
 import {PagingMetaData} from "@/boundary/paging/paging";
 import Pagination from "@/components/discussify/forums/Pagination";
 import {CardBody} from "@nextui-org/card";
+import Filter from "@/components/discussify/forums/Filter";
 
 const SkeletonForumPost = () => {
     return (
@@ -41,6 +42,7 @@ const SkeletonForumPost = () => {
 export default function ForumOverview({slug}: { slug: string }) {
     const {user,loading} = useAuth();
     const router = useRouter();
+    const [selectedKey, setSelectedKey] = useState<string>('latest');
     const [queryParams, setQueryParams] = useState<ForumPostsQueryParameters>(new ForumPostsQueryParameters());
     const [pagingMetaData, setPagingMetaData] = useState<PagingMetaData>({} as PagingMetaData);
     const [currentPage, setCurrentPage] = useState<number>(1);
@@ -76,10 +78,10 @@ export default function ForumOverview({slug}: { slug: string }) {
         }
     }, [slug]);
 
-    const fetchForumPosts = async (queryParams: ForumPostsQueryParameters,currentPage:number) => {
+    const fetchForumPosts = async (queryParams: ForumPostsQueryParameters) => {
         setIsLoadingForumPosts(true);
         queryParams.forumSlug = slug;
-        await getForumPosts({...queryParams, pageNumber: currentPage})
+        await getForumPosts(queryParams)
             .then((response) => {
                 if (response.statusCode === 200) {
                     const parsedData = response.data;
@@ -104,16 +106,16 @@ export default function ForumOverview({slug}: { slug: string }) {
         const searchTerm = searchParams.get('searchTerm') ?? '';
         queryParams.searchTerm = searchTerm;
         setSearchTerm(searchTerm);
-        fetchForumPosts(queryParams,currentPage);
+        fetchForumPosts({...queryParams, pageNumber: currentPage});
     }, []); // Empty dependency array to ensure it runs only on mount
 
     useEffect(() => {
         if (!isInitialLoad) {
-            fetchForumPosts(queryParams,currentPage);
+            fetchForumPosts({...queryParams, pageNumber: currentPage,sortBy:selectedKey});
         } else {
             setIsInitialLoad(false);
         }
-    }, [queryParams,currentPage]); // Fetch data only when queryParams change
+    }, [queryParams,currentPage,selectedKey]); // Fetch data only when queryParams change
 
     // const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     //     e.preventDefault();
@@ -207,7 +209,13 @@ export default function ForumOverview({slug}: { slug: string }) {
                                 ) : (
                                     <>
                                         <div className="flex justify-between items-start mt-2 mb-2">
-                                            <div>Filters</div>
+                                            <div>
+                                                Sort By:
+                                                <Filter
+                                                    selectedKey={selectedKey}
+                                                    onSelect={setSelectedKey}
+                                                />
+                                            </div>
                                             <div>
                                                 <Pagination
                                                     currentPage={pagingMetaData.currentPage}

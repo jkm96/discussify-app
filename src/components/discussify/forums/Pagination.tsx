@@ -39,7 +39,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }:PaginationProps) =
                     <button
                         onClick={handlePrevious}
                         disabled={currentPage === 1}
-                        className="px-1 mx-1 text-sm font-medium text-white bg-gray-500 rounded disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-600"
+                        className="px-1 mx-1 text-sm font-medium dark:text-white bg-gray-500 rounded disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-600"
                     >
                         Previous
                     </button>
@@ -47,7 +47,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }:PaginationProps) =
                     <button
                         onClick={handleFirst}
                         disabled={currentPage === 1}
-                        className="px-1 text-sm font-medium text-white bg-gray-500 rounded disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-600"
+                        className="px-1 text-sm font-medium dark:text-white bg-gray-500 rounded disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-600"
                     >
                         1
                     </button>
@@ -59,7 +59,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }:PaginationProps) =
                     <button
                         onClick={handleLast}
                         disabled={currentPage === totalPages}
-                        className="px-1 text-sm font-medium text-white bg-gray-500 rounded disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-600"
+                        className="px-1 text-sm font-medium dark:text-white bg-gray-500 rounded disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-600"
                     >
                         {totalPages}
                     </button>
@@ -67,7 +67,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }:PaginationProps) =
                     <button
                         onClick={handleNext}
                         disabled={currentPage === totalPages}
-                        className="px-1 mx-1 text-sm font-medium text-white bg-gray-500 rounded disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-600"
+                        className="px-1 mx-1 text-sm font-medium dark:text-white bg-gray-500 rounded disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-600"
                     >
                         Next
                     </button>

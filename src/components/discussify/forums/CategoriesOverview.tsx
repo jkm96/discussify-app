@@ -66,7 +66,8 @@ export function CategoriesOverview() {
                                                     <Card key={categoryForum.id} className="w-full mb-2">
                                                         <CardBody className="flex gap-4">
                                                             <div className="flex gap-4">
-                                                                <div className="w-2/3">
+                                                                <div
+                                                                    className={categoryForum.latestPost ? 'w-2/3' : 'w-full'}>
                                                                     <h4 className="font-bold">
                                                                         <Link key={categoryForum.id}
                                                                               underline="hover"
@@ -76,7 +77,7 @@ export function CategoriesOverview() {
                                                                         </Link>
                                                                     </h4>
 
-                                                                    {categoryForum.description}
+                                                                    <span className={isMediumOrLarger ? '':'text-small'}>{categoryForum.description}</span>
 
                                                                     {!isMediumOrLarger && (
                                                                         <div>
@@ -134,43 +135,42 @@ export function CategoriesOverview() {
                                                                     </div>
                                                                 )}
 
-                                                                <div
-                                                                    className="flex w-1/3 justify-items-center">
-                                                                    {categoryForum.latestPost && (
-                                                                        <>
-                                                                            <div
-                                                                                className={`flex flex-col mr-3 ${isMediumOrLarger ? 'items-center' : 'items-end w-full'}`}>
-                                                                                <Avatar
-                                                                                    alt={categoryForum.title}
-                                                                                    className="ml-1"
-                                                                                    src={categoryForum.latestPost.user.profileUrl || ''}
-                                                                                    size='md'
-                                                                                    isBordered={true}
-                                                                                    radius='sm'
-                                                                                />
-                                                                            </div>
-                                                                            {isMediumOrLarger && (
-                                                                                <div className="flex flex-col">
-                                                                                    <Link key={categoryForum.id}
-                                                                                          underline='hover'
-                                                                                          className='dark:text-white text-blue-600'
-                                                                                          href={`${NAVIGATION_LINKS.POST_OVERVIEW}/${categoryForum.latestPost.slug}`}>
-                                                                                        {categoryForum.latestPost.title.substring(0, 20)} ...
-                                                                                    </Link>
-                                                                                    <p className='dark:text-white text-default-500 text-small'>
-                                                                                        {formatDateWithTime(categoryForum.latestPost.createdAt)}.
-                                                                                        <RecordAuthorStatsComponent
+                                                                {categoryForum.latestPost && (
+                                                                    <div
+                                                                        className="flex w-1/3 justify-items-center">
+
+                                                                        <div
+                                                                            className={`flex flex-col mr-3 ${isMediumOrLarger ? 'items-center' : 'items-end w-full'}`}>
+                                                                            <Avatar
+                                                                                alt={categoryForum.title}
+                                                                                className="ml-1"
+                                                                                src={categoryForum.latestPost.user.profileUrl || ''}
+                                                                                size='md'
+                                                                                isBordered={true}
+                                                                                radius='sm'
+                                                                            />
+                                                                        </div>
+                                                                        {isMediumOrLarger && (
+                                                                            <div className="flex flex-col">
+                                                                                <Link key={categoryForum.id}
+                                                                                      underline='hover'
+                                                                                      className='dark:text-white text-blue-600'
+                                                                                      href={`${NAVIGATION_LINKS.POST_OVERVIEW}/${categoryForum.latestPost.slug}`}>
+                                                                                    {categoryForum.latestPost.title.substring(0, 20)} ...
+                                                                                </Link>
+                                                                                <p className='dark:text-white text-default-500 text-small'>
+                                                                                    {formatDateWithTime(categoryForum.latestPost.createdAt)}.
+                                                                                    <RecordAuthorStatsComponent
                                                                                         uniqueId="forum-overview-last-author"
                                                                                         author={categoryForum.latestPost.user}
                                                                                         userHasFollowedAuthor={false}
                                                                                         followButtonDisabled={true}
                                                                                     />
-                                                                                    </p>
-                                                                                </div>
-                                                                            )}
-                                                                        </>
-                                                                    )}
-                                                                </div>
+                                                                                </p>
+                                                                            </div>
+                                                                        )}
+                                                                    </div>
+                                                                )}
                                                             </div>
                                                         </CardBody>
                                                     </Card>

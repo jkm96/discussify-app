@@ -31,12 +31,13 @@ export function getForumPostsQueryParams(searchParams: ForumPostsQueryParameters
   const pageSize = searchParams.pageSize;
   const pageNumber = searchParams.pageNumber;
   const orderBy = searchParams.orderBy;
+  const sortBy = searchParams.sortBy;
   const searchTerm = searchParams.searchTerm ?? '';
   const periodFrom = searchParams.periodFrom ?? '';
   const periodTo = searchParams.periodTo ?? '';
   const forumSlug = searchParams.forumSlug ?? '';
 
-  return { pageSize, pageNumber, orderBy, searchTerm, periodFrom, periodTo,forumSlug };
+  return { pageSize, pageNumber, orderBy,sortBy, searchTerm, periodFrom, periodTo,forumSlug };
 }
 
 export function getUserQueryParams(queryParams: string) {
