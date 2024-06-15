@@ -33,6 +33,7 @@ import {ReplyIcon} from "@/components/shared/icons/ReplyIcon";
 import Pagination from "@/components/discussify/forums/Pagination";
 import {PagingMetaData} from "@/boundary/paging/paging";
 import Filter from "@/components/discussify/forums/Filter";
+import CommentComponent from "@/components/discussify/posts/CommentComponent";
 
 const CustomEditor = dynamic(() => {
     return import( '@/components/ckeditor5/custom-editor' );
@@ -71,7 +72,6 @@ export function PostRepliesComponent({user, postDetails, initialPostReplies}: Pr
 
     const [showAddCommentForm, setShowAddCommentForm] = useState<number | null>(null);
     const [commentRequest, setCommentRequest] = useState({} as CommentRequest);
-    const [commentResponse, setCommentResponse] = useState<CommentResponse[]>([]);
 
     const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -119,8 +119,8 @@ export function PostRepliesComponent({user, postDetails, initialPostReplies}: Pr
     };
 
     useEffect(() => {
-        fetchPostReplies(postDetails.slug, {...queryParams, pageNumber: currentPage,sortBy:selectedKey});
-    }, [postDetails.slug, queryParams,currentPage,selectedKey]);
+        fetchPostReplies(postDetails.slug, {...queryParams, pageNumber: currentPage, sortBy: selectedKey});
+    }, [postDetails.slug, queryParams, currentPage, selectedKey]);
 
     const handleEditPostReplyEditorChange = (data: string) => {
         setEditPostReplyRequest({...editPostReplyRequest, description: data});
@@ -156,37 +156,12 @@ export function PostRepliesComponent({user, postDetails, initialPostReplies}: Pr
         }
     };
 
-    const fetchComments = async (postReplyId: any) => {
-        setIsLoadingReplies(true);
-        await getCommentsAsync(postReplyId)
-            .then((response) => {
-                if (response.statusCode === 200) {
-                    const parsedData = response.data;
-                    const {data, pagingMetaData} = parsedData;
-                    // setPostReplies(data);
-                }
-            })
-            .catch((error) => {
-                toast.error(`Error fetching post reply comments: ${error}`);
-            })
-            .finally(() => {
-                setIsLoadingReplies(false);
-            });
-    };
-
-    useEffect(() => {
-        if (postReplies && !isLoadingReplies) {
-            fetchComments(postDetails.slug);
-        }
-    }, [postDetails.slug]);
-
     const handleAddPostReplyCommentEditorChange = (data: string) => {
         setCommentRequest({...commentRequest, description: data});
     };
 
     const handleAddComment = async (postReplyId: number, e: any) => {
         e.preventDefault();
-        console.info("add comment", postReplyId)
         const comment = commentRequest.description;
         if (!comment || comment.trim() === '') {
             toast.error("Please enter a valid comment");
@@ -199,11 +174,7 @@ export function PostRepliesComponent({user, postDetails, initialPostReplies}: Pr
             toast.success(response.message);
             setShowAddCommentForm(null);
             setCommentRequest(initialComment);
-            // Assuming response.data contains the newly added comment
-            // const updatedReplies = postReplies.map(reply =>
-            //     reply.id === postId ? { ...reply, comments: [response.data, ...reply.comments] } : reply
-            // );
-            // setPostReplies(updatedReplies);
+            setFetchingCommentsFor({postReplyId, isFetched: true});
         } else {
             toast.error(response.message ?? 'Unknown error occurred');
         }
@@ -223,6 +194,15 @@ export function PostRepliesComponent({user, postDetails, initialPostReplies}: Pr
             setPostReplies(updatedPostReplies);
         }
     };
+
+    const [fetchingCommentsFor, setFetchingCommentsFor] = useState<{
+        postReplyId: number | null,
+        isFetched: boolean
+    }>({postReplyId: null, isFetched: false});
+
+    function handleLoadComments(postReplyId: number) {
+        setFetchingCommentsFor({postReplyId, isFetched: true});
+    }
 
     return (
         <>
@@ -377,11 +357,25 @@ export function PostRepliesComponent({user, postDetails, initialPostReplies}: Pr
                                                 </Chip>
                                             </div>
                                         </CardFooter>
+
+                                        {postReply.commentsCount > 0 && (
+                                            <div className='flex items-center justify-center mb-1'>
+                                                {(!fetchingCommentsFor.isFetched || fetchingCommentsFor.postReplyId !== postReply.id) && (
+                                                    <Chip radius="sm"
+                                                          size='sm'
+                                                          className='place-items-center cursor-pointer hover:underline'
+                                                          onClick={() => handleLoadComments(postReply.id)}
+                                                    >
+                                                        Load comments
+                                                    </Chip>
+                                                )}
+                                            </div>
+                                        )}
                                     </Card>
 
                                     {/*form to add comment to a postReply*/}
                                     {showAddCommentForm === postReply.id && (
-                                        <div key={postReply.createdAt}>
+                                        <div className='mt-4' key={postReply.createdAt}>
                                             <CustomEditor
                                                 initialData={commentRequest.description || postReply.id}
                                                 onChange={handleAddPostReplyCommentEditorChange}
@@ -406,6 +400,14 @@ export function PostRepliesComponent({user, postDetails, initialPostReplies}: Pr
                                                 </Button>
                                             </div>
                                         </div>
+                                    )}
+
+                                    {fetchingCommentsFor.postReplyId === postReply.id && (
+                                        <CommentComponent key={postReply.user.createdAt}
+                                                          user={user}
+                                                          postReplyId={postReply.id}
+                                                          sortBy={queryParams.sortBy}
+                                        />
                                     )}
                                 </div>
                             ))}

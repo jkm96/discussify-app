@@ -36,6 +36,7 @@ export interface PostRepliesResponse {
     createdAt: string;
     updatedAt: string;
     userHasFollowedAuthor: boolean;
+    commentsCount: number;
     user: UserResponse;
     forum: ForumResponse;
 }

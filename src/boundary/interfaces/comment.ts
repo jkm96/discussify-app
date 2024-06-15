@@ -14,3 +14,9 @@ export interface CommentRequest {
     postReplyId: number;
     description: string;
 }
+
+export interface EditCommentRequest {
+    commentId: number;
+    postReplyId: number;
+    description: string;
+}
