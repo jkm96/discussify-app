@@ -7,6 +7,7 @@ export interface CommentResponse {
     description: string;
     createdAt: string;
     updatedAt: string;
+    repliesCount: number;
     user: UserResponse;
 }
 

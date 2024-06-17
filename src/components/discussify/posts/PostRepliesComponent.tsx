@@ -274,7 +274,7 @@ export function PostRepliesComponent({user, postDetails, initialPostReplies}: Pr
                                                         </div>
                                                     </div>
                                                     <Link underline="hover"
-                                                          className='dark:text-white text-default-500'
+                                                          className='dark:text-white text-default-500 cursor-pointer'
                                                           onClick={() => toggleEditFormVisibility(postReply.id)}>
                                                         {user && (
                                                             <>

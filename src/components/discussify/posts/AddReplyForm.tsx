@@ -17,7 +17,7 @@ interface AddReplyFormProps {
     onToggle: (isActive: boolean) => void;
     recordId: number;
     parentRecordId: number | null;
-    onReplyAdded: () => void;
+    onReplyAdded: (commentId: number, description: string) => void;
     user: User | null;
 }
 const AddReplyForm = ({ parentRecordId, recordId, onReplyAdded, user, isActive, onToggle }:AddReplyFormProps) => {
@@ -43,7 +43,7 @@ const AddReplyForm = ({ parentRecordId, recordId, onReplyAdded, user, isActive, 
             toast.success(response.message);
             onToggle(false); // Close the form
             setUpsertReplyRequest(initialComment);
-            onReplyAdded();
+            onReplyAdded(recordId,upsertReplyRequest.description);
         } else {
             toast.error(response.message ?? 'Unknown error occurred');
         }

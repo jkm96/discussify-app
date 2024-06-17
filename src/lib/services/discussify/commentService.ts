@@ -76,3 +76,23 @@ export async function getCommentsAsync(postReplyId: number,queryParams:PostRepli
         throw error;
     }
 }
+
+export async function getRepliesAsync(commentId: number,queryParams:PostRepliesQueryParameters) {
+    try {
+        const response = await fetch(`${internalBaseUrl}/api/comments/nested-replies`, {
+            method: 'POST',
+            headers: {
+                'x-api-key': `${apiKey}`,
+                'Content-type': 'application/json',
+            },
+            body: JSON.stringify({
+                'commentId':commentId,
+                'queryParams':queryParams
+            }),
+        });
+
+        return response.json();
+    } catch (error) {
+        throw error;
+    }
+}
