@@ -20,3 +20,10 @@ export interface EditCommentRequest {
     postReplyId: number;
     description: string;
 }
+
+export interface UpsertReplyRequest {
+    command: number;
+    parentRecordId: number|null;
+    recordId: number|null;
+    description: string;
+}

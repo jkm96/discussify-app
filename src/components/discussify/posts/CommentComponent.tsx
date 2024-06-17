@@ -19,6 +19,8 @@ import {User} from "@/boundary/interfaces/user";
 import dynamic from "next/dynamic";
 import {editPostReplyAsync} from "@/lib/services/discussify/postReplyService";
 import {EditPostReplyRequest} from "@/boundary/interfaces/post";
+import AddReplyForm from "@/components/discussify/posts/AddReplyForm";
+import EditReplyForm from "@/components/discussify/posts/EditReplyForm";
 
 const CustomEditor = dynamic(() => {
     return import( '@/components/ckeditor5/custom-editor' );
@@ -29,9 +31,9 @@ const initialEditCommentFormState: EditCommentRequest = {
 };
 
 interface Props {
-    user:User | null;
-    postReplyId:number;
-    sortBy:string;
+    user: User | null;
+    postReplyId: number;
+    sortBy: string;
 }
 
 interface EditCommentFormState {
@@ -40,7 +42,7 @@ interface EditCommentFormState {
     };
 }
 
-export default function CommentComponent({user,postReplyId,sortBy}:Props) {
+export default function CommentComponent({user, postReplyId, sortBy}: Props) {
     const [isLoadingComments, setIsLoadingComments] = useState(true);
     const [commentResponse, setCommentResponse] = useState<CommentResponse[]>([]);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -58,7 +60,7 @@ export default function CommentComponent({user,postReplyId,sortBy}:Props) {
     const fetchComments = async (postReplyId: any) => {
         setIsLoadingComments(true);
         const queryParams = new PostRepliesQueryParameters();
-        await getCommentsAsync(postReplyId,{...queryParams,sortBy:sortBy})
+        await getCommentsAsync(postReplyId, {...queryParams, sortBy: sortBy})
             .then((response) => {
                 if (response.statusCode === 200) {
                     const parsedData = response.data;
@@ -67,7 +69,7 @@ export default function CommentComponent({user,postReplyId,sortBy}:Props) {
                 }
             })
             .catch((error) => {
-                toast.error(`Error fetching post reply comments: ${error}`);
+                toast.error(`Error fetching comments: ${error}`);
             })
             .finally(() => {
                 setIsLoadingComments(false);
@@ -78,40 +80,30 @@ export default function CommentComponent({user,postReplyId,sortBy}:Props) {
         fetchComments(postReplyId);
     }, [postReplyId]);
 
-    const handleEditPostReplyEditorChange = (data: string) => {
-        setEditCommentRequest({...editCommentRequest, description: data});
+    const [activeReplyFormId, setActiveReplyFormId] = useState(null);
+
+    const toggleReplyForm = (id: any) => {
+        setActiveReplyFormId(id === activeReplyFormId ? null : id);
     };
 
-    const handleEditComment = async (commentId: number, e: any) => {
-        e.preventDefault();
-        setIsSubmitting(true);
-        if (editCommentRequest.description.trim() === '') {
-            toast.error("Please enter a valid message")
-            setIsSubmitting(false);
-            return;
-        }
-        editCommentRequest.commentId = commentId;
-        editCommentRequest.postReplyId = postReplyId;
-        const response = await editCommentAsync(editCommentRequest);
-        if (response.statusCode === 200) {
-            toast.success(response.message);
-            setEditCommentFormState((prevState) => ({
-                ...prevState,
-                [commentId]: {
-                    ...prevState[postReplyId],
-                    isVisible: false
-                }
-            }));
+    const handleReplyAdded = () => {
 
-            const updatedComments = commentResponse.map(comment =>
-                comment.id === commentId ? {...comment, description: editCommentRequest.description} : comment
-            );
+    };
 
-            setCommentResponse(updatedComments);
-        } else {
-            setIsSubmitting(false)
-            toast.error(response.message ?? 'Unknown error occurred');
-        }
+    const toggleEditForm = (commentId: number) => {
+        setEditCommentFormState((prevState) => ({
+            ...prevState,
+            [commentId]: {
+                isVisible: !prevState[commentId]?.isVisible,
+            },
+        }));
+    };
+
+    const handleCommentEdited = (commentId: number, description: string) => {
+        const updatedComments = commentResponse.map((comment) =>
+            comment.id === commentId ? { ...comment, description } : comment
+        );
+        setCommentResponse(updatedComments);
     };
 
     return (
@@ -121,13 +113,12 @@ export default function CommentComponent({user,postReplyId,sortBy}:Props) {
                     <CircularProgress color='primary' className='p-4' label='Loading comments...'/>
                 </div>
             ) : (
-                <Card radius='sm' className='mt-4 border-yellow-500 border-1 bg-bodydark1 dark:bg-boxdark-2'>
-                    {commentResponse.map((comment)=>(
+                <Card radius='sm' className='mt-4 border-yellow-500 border-1 bg-grey-200 dark:bg-boxdark-2'>
+                    {commentResponse.map((comment) => (
                         <div key={comment.createdAt}>
-                            <Card key={comment.id} className='m-1 bg-bodydark1 dark:bg-boxdark-2' radius='sm'>
-
+                            <Card key={comment.id} className='m-1 bg-grey-200 dark:bg-boxdark-2' radius='sm'>
                                 <CardBody>
-                                    <Card className="w-full pt-0 pl-0 bg-bodydark1 dark:bg-boxdark-2"
+                                    <Card className="w-full pt-0 pl-0 bg-grey-200 dark:bg-boxdark-2"
                                           shadow={"none"}
                                           radius={"none"}>
                                         <CardHeader className="justify-between pt-0 pl-0">
@@ -146,7 +137,14 @@ export default function CommentComponent({user,postReplyId,sortBy}:Props) {
                                                         />
                                                     </h4>
                                                     <h5 className="text-small dark:text-white text-default-400">
-                                                                            <span
+                                                        {/*<Chip  className={'mr-1 p-0 h-5'}>*/}
+                                                        {/*    Joined {formatDateWithYear(comment.user.createdAt)}*/}
+                                                        {/*</Chip>*/}
+                                                        {/*<Chip className={'ml-1 p-0 h-5'}>*/}
+                                                        {/*    {comment.user.postsCount} posts*/}
+                                                        {/*</Chip>*/}
+
+                                                        <span
                                                                                 className="mr-1">Joined {formatDateWithYear(comment.user.createdAt)}</span>
                                                         <span
                                                             className="ml-1">{comment.user.postsCount} posts</span>
@@ -173,36 +171,15 @@ export default function CommentComponent({user,postReplyId,sortBy}:Props) {
 
                                     {editCommentFormState[comment.id]?.isVisible ? (
                                         <>
-                                            <CustomEditor
+                                            <EditReplyForm
                                                 initialData={comment.description}
-                                                onChange={handleEditPostReplyEditorChange}
+                                                parentRecordId={comment.id}
+                                                recordId={comment.id}
+                                                onCommentEdited={handleCommentEdited}
+                                                user={user}
+                                                onToggle={() => toggleEditForm(comment.id)}
+                                                isActive={editCommentFormState[comment.id]?.isVisible}
                                             />
-
-                                            <div className="flex gap-2 mt-2">
-                                                <Button color='primary'
-                                                        type='submit'
-                                                        size={'sm'}
-                                                        onClick={(e) => handleEditComment(comment.id, e)}
-                                                        isLoading={isSubmitting}
-                                                        spinner={<Spinner/>}>
-                                                    {isSubmitting ? 'Submitting...' : 'Edit Reply'}
-                                                </Button>
-
-                                                <Button color='default'
-                                                        onClick={() =>
-                                                            setEditCommentFormState((prevState) => ({
-                                                                ...prevState,
-                                                                [comment.id]: {
-                                                                    ...prevState[comment.id],
-                                                                    isVisible: false
-                                                                }
-                                                            }))
-                                                        }
-                                                        type='submit'
-                                                        size={'sm'}>
-                                                    Cancel
-                                                </Button>
-                                            </div>
                                         </>
                                     ) : (
                                         <>
@@ -218,7 +195,7 @@ export default function CommentComponent({user,postReplyId,sortBy}:Props) {
                                         {user && (
                                             <>
                                                 <Chip
-                                                    // onClick={() => setShowAddCommentForm(postReply.id)}
+                                                    onClick={() => toggleReplyForm(comment.id)}
                                                     startContent={<ReplyIcon width={18}/>}
                                                     variant="light"
                                                     className='cursor-pointer'
@@ -248,6 +225,16 @@ export default function CommentComponent({user,postReplyId,sortBy}:Props) {
                                     </div>
                                 </CardFooter>
                             </Card>
+
+                            <AddReplyForm
+                                parentRecordId={comment.id}
+                                recordId={0}
+                                onReplyAdded={handleReplyAdded}
+                                user={user}
+                                isActive={activeReplyFormId === comment.id}
+                                onToggle={toggleReplyForm}
+                            />
+
                         </div>
                     ))}
                 </Card>

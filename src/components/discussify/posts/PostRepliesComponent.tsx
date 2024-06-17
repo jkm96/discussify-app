@@ -128,6 +128,7 @@ export function PostRepliesComponent({user, postDetails, initialPostReplies}: Pr
 
     const handleEditPostReply = async (postReplyId: number, e: any) => {
         e.preventDefault();
+        setIsSubmitting(true);
         if (editPostReplyRequest.description.trim() === '') {
             toast.error("Please enter a valid message")
             setIsSubmitting(false);
@@ -149,9 +150,10 @@ export function PostRepliesComponent({user, postDetails, initialPostReplies}: Pr
             const updatedReplies = postReplies.map(reply =>
                 reply.id === postReplyId ? {...reply, description: editPostReplyRequest.description} : reply
             );
-
+            setIsSubmitting(false);
             setPostReplies(updatedReplies);
         } else {
+            setIsSubmitting(false);
             toast.error(response.message ?? 'Unknown error occurred');
         }
     };
@@ -162,6 +164,7 @@ export function PostRepliesComponent({user, postDetails, initialPostReplies}: Pr
 
     const handleAddComment = async (postReplyId: number, e: any) => {
         e.preventDefault();
+        setIsSubmitting(true);
         const comment = commentRequest.description;
         if (!comment || comment.trim() === '') {
             toast.error("Please enter a valid comment");
@@ -174,10 +177,11 @@ export function PostRepliesComponent({user, postDetails, initialPostReplies}: Pr
             toast.success(response.message);
             setShowAddCommentForm(null);
             setCommentRequest(initialComment);
-            setFetchingCommentsFor({postReplyId, isFetched: true});
+            setFetchingCommentsFor({postReplyId, isFetched: false});
         } else {
             toast.error(response.message ?? 'Unknown error occurred');
         }
+        setIsSubmitting(false);
     };
 
     const updateAuthorFollowStatus = (uniqueId: string, authorId: number, followed: boolean) => {
@@ -196,13 +200,19 @@ export function PostRepliesComponent({user, postDetails, initialPostReplies}: Pr
     };
 
     const [fetchingCommentsFor, setFetchingCommentsFor] = useState<{
-        postReplyId: number | null,
+        postReplyId: number,
         isFetched: boolean
-    }>({postReplyId: null, isFetched: false});
+    }>({postReplyId: 0, isFetched: false});
 
     function handleLoadComments(postReplyId: number) {
         setFetchingCommentsFor({postReplyId, isFetched: true});
     }
+
+    useEffect(() => {
+        if (!fetchingCommentsFor.isFetched) {
+            handleLoadComments(fetchingCommentsFor.postReplyId);
+        }
+    }, [fetchingCommentsFor]);
 
     return (
         <>
@@ -402,7 +412,7 @@ export function PostRepliesComponent({user, postDetails, initialPostReplies}: Pr
                                         </div>
                                     )}
 
-                                    {fetchingCommentsFor.postReplyId === postReply.id && (
+                                    {fetchingCommentsFor.isFetched && fetchingCommentsFor.postReplyId === postReply.id && (
                                         <CommentComponent key={postReply.user.createdAt}
                                                           user={user}
                                                           postReplyId={postReply.id}

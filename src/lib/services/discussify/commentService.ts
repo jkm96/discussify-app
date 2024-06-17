@@ -1,5 +1,5 @@
 import {apiKey, internalBaseUrl} from "@/boundary/constants/appConstants";
-import {CommentRequest, EditCommentRequest} from "@/boundary/interfaces/comment";
+import {CommentRequest, EditCommentRequest, UpsertReplyRequest} from "@/boundary/interfaces/comment";
 import {PostRepliesQueryParameters} from "@/boundary/parameters/postRepliesQueryParameters";
 
 export async function addCommentAsync(commentRequest: CommentRequest) {
@@ -38,7 +38,26 @@ export async function editCommentAsync(commentRequest: EditCommentRequest) {
     }
 }
 
-export async function getCommentsAsync(postReplyId: string,queryParams:PostRepliesQueryParameters) {
+
+export async function upsertReplyAsync(replyRequest: UpsertReplyRequest) {
+    try {
+        const apiUrl = `${internalBaseUrl}/api/comments/upsert-replies`;
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+                'x-api-key': `${apiKey}`,
+                'Content-type': 'application/json',
+            },
+            body: JSON.stringify(replyRequest),
+        });
+
+        return response.json();
+    } catch (error) {
+        throw error;
+    }
+}
+
+export async function getCommentsAsync(postReplyId: number,queryParams:PostRepliesQueryParameters) {
     try {
         const response = await fetch(`${internalBaseUrl}/api/post-replies/comments`, {
             method: 'POST',
