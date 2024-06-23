@@ -3,14 +3,16 @@ import {UserQueryParameters} from '@/boundary/parameters/userQueryParameters';
 
 export async function getUsers(queryParams: UserQueryParameters) {
   try {
-    const apiUrl = `${internalBaseUrl}/api/admin/manage-users/list/${JSON.stringify(queryParams)}`;
+    const apiUrl = `${internalBaseUrl}/api/admin/manage-users/list`;
     const response = await fetch(apiUrl, {
-      method: 'GET',
+      method: 'POST',
       headers: {
         'x-api-key': apiKey,
         'Content-type': 'application/json',
       },
-      body: null,
+      body: JSON.stringify({
+        'queryParams': queryParams
+      }),
     });
 
     return response.json();

@@ -11,7 +11,7 @@ import {toast} from 'react-toastify';
 import Spinner from '@/components/shared/icons/Spinner';
 import {NAVIGATION_LINKS} from '@/boundary/configs/navigationConfig';
 import {loginAdmin} from '@/lib/services/auth/adminAuthService';
-import MainNavbar from "@/components/shared/navs/MainNavbar";
+import useLocalStorage from "@/hooks/useLocalStorage";
 
 const initialFormState: LoginUserRequest = {
   username: '', password: '',
@@ -33,7 +33,7 @@ export default function AdminLoginForm() {
     const { name, value } = e.target;
     setLoginFormData({ ...loginFormData, [name]: value });
   };
-
+  const [user, setUser] = useLocalStorage('user', {});
   const handleLoginSubmit = async (e: any) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -54,6 +54,7 @@ export default function AdminLoginForm() {
       let responseData: AccessTokenModel = response.data;
       const success = await storeAuthToken(responseData);
       if (success)
+        setUser(responseData.user)
         setStatus('logged');
     } else {
       setIsSubmitting(false);
@@ -69,11 +70,8 @@ export default function AdminLoginForm() {
 
   return (
     <>
-      <MainNavbar />
-
-      <div className='flex items-center justify-center bg-white'>
-        <div className='md:w-1/2 lg:w-1/2 w-full place-items-center p-4 sm:p-12.5 xl:p-17.5'>
-
+      <div className='flex items-center justify-center bg-white dark:bg-black'>
+        <div className='dark:bg-boxdark-mode shadow-medium mt-3 md:w-1/2 lg:w-1/2 w-full place-items-center p-4 sm:p-12.5 xl:p-17.5'>
           <div className='text-center'>
             <span className='mb-1.5 block font-medium'>Start for free</span>
             <span className='mb-1.5 block font-medium'>or</span>

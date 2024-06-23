@@ -16,7 +16,6 @@ export const NAVIGATION_LINKS = {
     ADMIN_LOGIN: '/auth/admin/login',
     ADMIN_DASHBOARD: '/admin/dashboard',
     ADMIN_MANAGE_USERS: '/admin/dashboard/users',
-    ADMIN_MANAGE_USER_SUBSCRIPTIONS: '/admin/dashboard/user-subscriptions',
     ADMIN_MANAGE_SITE_CONTENT: '/admin/dashboard/site-content',
     ADMIN_MANAGE_CUSTOMER_FEEDBACK: '/admin/dashboard/customer-feedback'
 };
@@ -30,7 +29,12 @@ export const protectedRoutes = [
     NAVIGATION_LINKS.ADMIN_DASHBOARD,
     NAVIGATION_LINKS.ADMIN_MANAGE_USERS,
     NAVIGATION_LINKS.ADMIN_MANAGE_SITE_CONTENT,
-    NAVIGATION_LINKS.ADMIN_MANAGE_USER_SUBSCRIPTIONS,
+];
+
+export const adminProtectedRoutes = [
+    NAVIGATION_LINKS.ADMIN_DASHBOARD,
+    NAVIGATION_LINKS.ADMIN_MANAGE_USERS,
+    NAVIGATION_LINKS.ADMIN_MANAGE_SITE_CONTENT,
 ];
 
 export const authRoutes = [
@@ -42,7 +46,9 @@ export const authRoutes = [
 
 export const publicRoutes = [
     NAVIGATION_LINKS.HOME,
-    NAVIGATION_LINKS.CREATE_POST,
+    // NAVIGATION_LINKS.CREATE_POST,
+    NAVIGATION_LINKS.FORUM_OVERVIEW,
+    NAVIGATION_LINKS.POST_OVERVIEW,
 ];
 
 export const specialRoutes = [

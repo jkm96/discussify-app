@@ -1,26 +1,12 @@
 'use client';
 
-import {Avatar, Button, Card, CardFooter, CardHeader, Chip, CircularProgress, Link} from "@nextui-org/react";
+import {CircularProgress} from "@nextui-org/react";
 import React, {useEffect, useState} from "react";
-import {editCommentAsync, getCommentsAsync} from "@/lib/services/discussify/commentService";
+import {getCommentsAsync} from "@/lib/services/discussify/commentService";
 import {toast} from "react-toastify";
-import {CommentResponse, EditCommentRequest} from "@/boundary/interfaces/comment";
+import {CommentResponse} from "@/boundary/interfaces/comment";
 import {PostRepliesQueryParameters} from "@/boundary/parameters/postRepliesQueryParameters";
-import DOMPurify from "dompurify";
-import {CardBody} from "@nextui-org/card";
-import RecordAuthorStatsComponent from "@/components/discussify/Shared/RecordAuthorStatsComponent";
-import {formatDateWithoutTime, formatDateWithYear} from "@/helpers/dateHelpers";
-import {EditIcon} from "@nextui-org/shared-icons";
-import {LikeIcon, TimerIcon} from "@/components/shared/icons/LikeIcon";
-import Spinner from "@/components/shared/icons/Spinner";
-import {ReplyIcon} from "@/components/shared/icons/ReplyIcon";
-import ShareIcon from "@/components/shared/icons/ShareIcon";
 import {User} from "@/boundary/interfaces/user";
-import dynamic from "next/dynamic";
-import {editPostReplyAsync} from "@/lib/services/discussify/postReplyService";
-import {EditPostReplyRequest} from "@/boundary/interfaces/post";
-import AddReplyForm from "@/components/discussify/posts/AddReplyForm";
-import EditReplyForm from "@/components/discussify/posts/EditReplyForm";
 import RecursiveComment from "@/components/discussify/posts/NestedCommentComponent";
 
 interface Props {

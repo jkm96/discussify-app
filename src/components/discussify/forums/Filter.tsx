@@ -1,5 +1,5 @@
-import { Key } from 'react';
-import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button } from  "@nextui-org/react";
+import {Key} from 'react';
+import {Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger} from "@nextui-org/react";
 
 type SortDropdownProps = {
     selectedKey:string;

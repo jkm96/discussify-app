@@ -138,7 +138,6 @@ export function CategoriesOverview() {
                                                                 {categoryForum.latestPost && (
                                                                     <div
                                                                         className="flex w-1/3 justify-items-center">
-
                                                                         <div
                                                                             className={`flex flex-col mr-3 ${isMediumOrLarger ? 'items-center' : 'items-end w-full'}`}>
                                                                             <Avatar

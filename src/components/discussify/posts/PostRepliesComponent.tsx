@@ -1,23 +1,10 @@
 import {User} from "@/boundary/interfaces/user";
 import {EditPostReplyRequest, PostRepliesResponse, PostResponse} from "@/boundary/interfaces/post";
-import React, {Key, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {PostRepliesQueryParameters} from "@/boundary/parameters/postRepliesQueryParameters";
 import {editPostReplyAsync, getPostRepliesAsync} from "@/lib/services/discussify/postReplyService";
 import {toast} from "react-toastify";
-import {
-    Avatar,
-    Button,
-    Card,
-    CardFooter,
-    CardHeader,
-    Chip,
-    CircularProgress,
-    Dropdown,
-    DropdownItem,
-    DropdownMenu,
-    DropdownTrigger,
-    Link
-} from "@nextui-org/react";
+import {Avatar, Button, Card, CardFooter, CardHeader, Chip, CircularProgress, Link} from "@nextui-org/react";
 import {CardBody} from "@nextui-org/card";
 import RecordAuthorStatsComponent from "@/components/discussify/Shared/RecordAuthorStatsComponent";
 import {formatDateWithoutTime, formatDateWithYear} from "@/helpers/dateHelpers";
@@ -26,9 +13,9 @@ import Spinner from "@/components/shared/icons/Spinner";
 import DOMPurify from "dompurify";
 import {LikeIcon, TimerIcon} from "@/components/shared/icons/LikeIcon";
 import ShareIcon from "@/components/shared/icons/ShareIcon";
-import {CommentRequest, CommentResponse} from "@/boundary/interfaces/comment";
+import {CommentRequest} from "@/boundary/interfaces/comment";
 import dynamic from "next/dynamic";
-import {addCommentAsync, getCommentsAsync} from "@/lib/services/discussify/commentService";
+import {addCommentAsync} from "@/lib/services/discussify/commentService";
 import {ReplyIcon} from "@/components/shared/icons/ReplyIcon";
 import Pagination from "@/components/discussify/forums/Pagination";
 import {PagingMetaData} from "@/boundary/paging/paging";
@@ -371,13 +358,12 @@ export function PostRepliesComponent({user, postDetails, initialPostReplies}: Pr
                                         {postReply.commentsCount > 0 && (
                                             <div className='flex items-center justify-center mb-1'>
                                                 {(!fetchingCommentsFor.isFetched || fetchingCommentsFor.postReplyId !== postReply.id) && (
-                                                    <Chip radius="sm"
-                                                          size='sm'
-                                                          className='place-items-center cursor-pointer hover:underline'
+                                                    <Link                                                           size='sm'
+                                                          className='place-items-center cursor-pointer hover:underline dark:text-white text-black'
                                                           onClick={() => handleLoadComments(postReply.id)}
                                                     >
                                                         Load comments
-                                                    </Chip>
+                                                    </Link>
                                                 )}
                                             </div>
                                         )}

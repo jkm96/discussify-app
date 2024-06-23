@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { toast } from 'react-toastify';
-import {addCommentAsync, upsertReplyAsync} from "@/lib/services/discussify/commentService";
+import React, {useState} from 'react';
+import {toast} from 'react-toastify';
+import {upsertReplyAsync} from "@/lib/services/discussify/commentService";
 import dynamic from "next/dynamic";
 import {Button, Spinner} from "@nextui-org/react";
 import {User} from "@/boundary/interfaces/user";

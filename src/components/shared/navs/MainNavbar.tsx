@@ -1,6 +1,6 @@
 'use client';
 
-import React, {useState} from 'react';
+import React from 'react';
 import {
     Avatar,
     Button,
@@ -20,12 +20,14 @@ import {
 import {NAVIGATION_LINKS} from '@/boundary/configs/navigationConfig';
 import {useAuth} from '@/hooks/useAuth';
 import {ThemeSwitcher} from "@/components/shared/navs/ThemeSwitcher";
-import {UserResponse} from "@/boundary/interfaces/user";
-import {useRouter} from "next/navigation";
 import useClientMediaQuery from "@/hooks/useClientMediaQuery";
+import useLocalStorage from "@/hooks/useLocalStorage";
+import {User} from "@/boundary/interfaces/user";
 
 export default function MainNavbar() {
     const {user, loading} = useAuth();
+    // const [user, setUser] = useLocalStorage<User | null>('user', null);
+
     const [isMenuOpen, setIsMenuOpen] = React.useState(false);
     const {matches: isMediumOrLarger} = useClientMediaQuery('(min-width: 768px)');
 
@@ -49,11 +51,15 @@ export default function MainNavbar() {
                     <ThemeSwitcher/>
 
                     {isMediumOrLarger && (
-                        <NavbarItem>
-                            <Link href={NAVIGATION_LINKS.FORUM_OVERVIEW}>
-                                Forums
-                            </Link>
-                        </NavbarItem>
+                        <>
+                            {user && user.isAdmin ? (<></>):(
+                                <NavbarItem>
+                                    <Link href={NAVIGATION_LINKS.FORUM_OVERVIEW}>
+                                        Forums
+                                    </Link>
+                                </NavbarItem>
+                            )}
+                        </>
                     )}
 
                     {user && !loading && (

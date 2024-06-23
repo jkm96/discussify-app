@@ -7,10 +7,12 @@ import {NAVIGATION_LINKS} from '@/boundary/configs/navigationConfig';
 import React, {useEffect, useState} from 'react';
 import {toast} from 'react-toastify';
 import {CircularProgress} from "@nextui-org/react";
+import useLocalStorage from "@/hooks/useLocalStorage";
 
 export default function LogoutForm() {
     const router = useRouter();
     const {clearAuthToken} = useAuth();
+    const [user, setUser] = useLocalStorage('user', null);
     const [status, setStatus] = useState<any>(null);
     const [isLoggingOut, setIsLoggingOut] = useState(true);
 
@@ -19,6 +21,7 @@ export default function LogoutForm() {
         if (response.statusCode === 200) {
             setIsLoggingOut(false)
             clearAuthToken();
+            setUser(null)
             setStatus('deleted');
             toast.success('Logged out successfully.');
         }

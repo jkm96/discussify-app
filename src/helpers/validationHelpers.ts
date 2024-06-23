@@ -5,6 +5,7 @@ import {
     ResetPasswordRequest,
 } from '@/boundary/interfaces/auth';
 import {CreatePostRequest} from "@/boundary/interfaces/post";
+import {CreateSiteContentRequest} from "@/boundary/interfaces/siteContent";
 
 export function isEmailValid(email: string): boolean {
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -143,6 +144,45 @@ export function validateCreatePostFormInputErrors(formData: CreatePostRequest) {
     // Check if there are any errors and return null if all input is valid
     for (const key in errors) {
         if (errors[key as keyof CreatePostRequest] !== '') {
+            return errors;
+        }
+    }
+
+    return null;
+}
+
+function validateTitleAndContent(formData: CreateSiteContentRequest, errors: CreateSiteContentRequest) {
+    if (formData.title.trim() === '') {
+        errors.title = 'Title cannot be empty';
+    } else if (formData.title.trim().length < 8) {
+        errors.title = 'Title must be at least 8 characters long';
+    }
+
+    if (formData.content.trim() === '') {
+        errors.content = 'description cannot be empty';
+    } else if (formData.content.trim().length < 20) {
+        errors.content = 'description must be at least 20 characters long';
+    }
+}
+
+export function validateSiteContentFormInputErrors(formData: CreateSiteContentRequest) {
+    const errors: CreateSiteContentRequest = {
+        content: '', type: '', title: '',
+    };
+
+    if (formData.type.trim() === '') {
+        errors.type = 'Type cannot be empty';
+    }
+
+    if (formData.title.trim() === '') {
+        errors.title = 'Title cannot be empty';
+    } else if (formData.title.trim().length < 8) {
+        errors.title = 'Title must be at least 8 characters long';
+    }
+
+    // Check if there are any errors and return null if all input is valid
+    for (const key in errors) {
+        if (key !== "content" && errors[key as keyof CreateSiteContentRequest] !== '') {
             return errors;
         }
     }

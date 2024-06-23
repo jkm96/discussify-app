@@ -1,13 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { CircularProgress, Avatar, Card, CardBody, CardHeader, CardFooter, Chip, Link } from '@nextui-org/react';
+import React, {useState} from 'react';
+import {Avatar, Card, CardBody, CardFooter, CardHeader, Chip, CircularProgress, Link} from '@nextui-org/react';
 import DOMPurify from 'dompurify';
 import EditReplyForm from './EditReplyForm';
 import AddReplyForm from './AddReplyForm';
-import { toast } from 'react-toastify';
 import RecordAuthorStatsComponent from "@/components/discussify/Shared/RecordAuthorStatsComponent";
 import {CommentResponse} from "@/boundary/interfaces/comment";
 import {User} from "@/boundary/interfaces/user";
-import {Button} from "@nextui-org/react";
 import {formatDateWithoutTime, formatDateWithYear} from "@/helpers/dateHelpers";
 import {EditIcon} from "@nextui-org/shared-icons";
 import {LikeIcon, TimerIcon} from "@/components/shared/icons/LikeIcon";
@@ -161,9 +159,9 @@ const RecursiveComment = ({ comment, user,sortBy, editCommentFormState, toggleEd
                 </CardFooter>
                 {!repliesLoaded && comment.repliesCount > 0 && (
                     <div className='flex items-center justify-center mb-1'>
-                        <Chip  size='sm' radius='sm' color='default' className='cursor-pointer hover:underline'  onClick={handleLoadReplies}>
+                        <Link  size='sm' className='cursor-pointer hover:underline dark:text-white text-black'  onClick={handleLoadReplies}>
                             {isLoadingReplies ? <CircularProgress/> : 'Load Replies'}
-                        </Chip>
+                        </Link>
                     </div>
                 )}
             </Card>
