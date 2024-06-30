@@ -3,7 +3,6 @@ import '../../globals.css';
 import React, {useEffect, useState} from 'react';
 import Loader from "@/components/shared/dashboard/Loader";
 import Sidebar from "@/components/admin/shared/navs/sidebar/SideBar";
-import {useAuth} from "@/hooks/useAuth";
 
 export default function AdminDashboardLayout({ children }: { children: React.ReactNode; }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);

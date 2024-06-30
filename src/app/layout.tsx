@@ -1,4 +1,5 @@
 import './globals.css';
+import '../components/ckeditor5/custom.css'
 import {UIProvider} from '@/context/uiProvider';
 import {AuthProvider} from '@/context/authProvider';
 import React from 'react';
@@ -9,10 +10,11 @@ import NotificationBar from "@/components/shared/notifications/NotificationBar";
 export default function RootLayout({children}: { children: React.ReactNode }) {
     return (
         <html suppressHydrationWarning={true} lang='en'>
+        
         <body>
         <UIProvider>
             <AuthProvider>
-                <ToastContainerWrapper/>
+            <ToastContainerWrapper/>
                 <div className="w-full h-full dark:text-bodydark">
                     <MainNavbar/>
                     <NotificationBar/>

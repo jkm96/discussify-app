@@ -21,8 +21,6 @@ import {NAVIGATION_LINKS} from '@/boundary/configs/navigationConfig';
 import {useAuth} from '@/hooks/useAuth';
 import {ThemeSwitcher} from "@/components/shared/navs/ThemeSwitcher";
 import useClientMediaQuery from "@/hooks/useClientMediaQuery";
-import useLocalStorage from "@/hooks/useLocalStorage";
-import {User} from "@/boundary/interfaces/user";
 
 export default function MainNavbar() {
     const {user, loading} = useAuth();

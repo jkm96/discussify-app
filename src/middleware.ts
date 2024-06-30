@@ -1,6 +1,5 @@
 import {NextRequest, NextResponse} from 'next/server';
 import {apiKey, cookieName, internalBaseUrl} from '@/boundary/constants/appConstants';
-import {getAccessToken} from '@/lib/services/token/tokenService';
 import {
     authRoutes,
     NAVIGATION_LINKS,
@@ -9,7 +8,7 @@ import {
     specialRoutes,
 } from '@/boundary/configs/navigationConfig';
 import {AccessTokenModel} from '@/boundary/interfaces/token';
-import {User, UserResponse} from "@/boundary/interfaces/user";
+import {UserResponse} from "@/boundary/interfaces/user";
 
 export const config = {
     matcher: [
@@ -114,26 +113,26 @@ export async function middleware(request: NextRequest) {
             return handleRedirect(user, pathName, request.url);
         }
 
-        // return NextResponse.next();
+        return NextResponse.next();
     }
 
-    if (request.url.includes(`${internalBaseUrl}`)) {
-        let response = await getAccessToken();
-        if (response.statusCode === 200) {
-            const tokenResponse = response.data;
-            if (tokenResponse) {
-                let response = NextResponse.next();
-                response.cookies.set({
-                    name: `${cookieName}`,
-                    value: JSON.stringify(tokenResponse),
-                    httpOnly: true,
-                    secure: process.env.NODE_ENV !== 'development',
-                    sameSite: 'strict',
-                    path: '/',
-                });
-
-                return response;
-            }
-        }
-    }
+    // if (request.url.includes(`${internalBaseUrl}`)) {
+    //     let response = await getAccessToken();
+    //     if (response.statusCode === 200) {
+    //         const tokenResponse = response.data;
+    //         if (tokenResponse) {
+    //             let response = NextResponse.next();
+    //             response.cookies.set({
+    //                 name: `${cookieName}`,
+    //                 value: JSON.stringify(tokenResponse),
+    //                 httpOnly: true,
+    //                 secure: process.env.NODE_ENV !== 'development',
+    //                 sameSite: 'strict',
+    //                 path: '/',
+    //             });
+    //
+    //             return response;
+    //         }
+    //     }
+    // }
 }

@@ -208,10 +208,6 @@ export default function Home() {
             toast.error(response.message ?? 'Unknown error occurred');
         }
     }
-    //
-    // if (!isClient) {
-    //     return null; // Avoid rendering anything until the component is mounted on the client side
-    // }
 
     return (
         <>

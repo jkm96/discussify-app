@@ -1,15 +1,15 @@
 import React, {useEffect, useState} from 'react';
 import {
-  ChipProps,
-  Selection,
-  SortDescriptor,
-  Spinner,
-  Table,
-  TableBody,
-  TableCell,
-  TableColumn,
-  TableHeader,
-  TableRow,
+    ChipProps,
+    Selection,
+    SortDescriptor,
+    Spinner,
+    Table,
+    TableBody,
+    TableCell,
+    TableColumn,
+    TableHeader,
+    TableRow,
 } from '@nextui-org/react';
 import {toast} from 'react-toastify';
 import {getUsers} from '@/lib/services/admin/manageUserService';

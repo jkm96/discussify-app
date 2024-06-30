@@ -1,0 +1,35 @@
+.dark .ck.ck-toolbar{
+    background: #18181b !important;
+    --ck-color-text: #ffffff !important;
+}
+
+.dark .ck.ck-toolbar .ck-button:hover{
+    background-color: #333 !important;
+    color: #fff !important;
+}
+
+.dark .ck-dropdown__panel > form{
+    background-color: #333 !important;
+}
+
+.dark .ck-dropdown__panel .ck-input-text{
+    background-color: #333 !important;
+}
+
+.dark .ck-dropdown__button:hover{
+    background-color: #333 !important;
+}
+
+.dark .ck.ck-button.ck-on{
+    background-color: #333 !important;
+    color: #ffffff !important;
+}
+
+.dark .ck.ck-toolbar .ck-dropdown__panel .ck-list {
+    background-color: #333 !important;
+    color: #fff !important;
+}
+
+.dark .ck.ck-editor__main > .ck-editor__editable {
+    background: #18181b !important;
+}
