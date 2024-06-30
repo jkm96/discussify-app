@@ -39,16 +39,4 @@ function useLocalStorage<T>(
   return [storedValue, setStoredValue];
 }
 
-function getLocalStorageItem(key: string): string | null {
-  try {
-    if (typeof window !== 'undefined') {
-      const item = window.localStorage.getItem(key);
-      return item ? item : null;
-    }
-  } catch (error) {
-    console.log(error);
-  }
-  return null;
-}
-
-export { useLocalStorage, getLocalStorageItem };
+export default useLocalStorage;

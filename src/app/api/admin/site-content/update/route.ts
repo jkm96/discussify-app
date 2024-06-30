@@ -4,7 +4,7 @@ import {NextRequest} from 'next/server';
 
 export async function POST(request: NextRequest) {
   try {
-    const config = getAxiosConfigs(request);
+    const config = getAxiosConfigs(request,true);
     const requestBody = await request.json();
     const {contentId} = requestBody;
     const{data} = requestBody;
