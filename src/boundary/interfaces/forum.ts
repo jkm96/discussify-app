@@ -9,9 +9,11 @@ export interface ForumResponse {
     avatarUrl: string;
     isSystem:boolean;
     views: number;
-    postCount : number;
+    threads : number;
+    messages : number;
     createdAt: string;
     updatedAt: string;
+    participants: number;
     latestPost: PostResponse;
 }
 

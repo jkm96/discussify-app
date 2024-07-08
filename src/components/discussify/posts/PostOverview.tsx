@@ -24,6 +24,7 @@ import {LikedIcon, LikeIcon} from "@/components/shared/icons/LikeIcon";
 import {PostRepliesComponent} from "@/components/discussify/posts/PostRepliesComponent";
 import {ReplyIcon} from "@/components/shared/icons/ReplyIcon";
 import PostDescription from "@/components/discussify/posts/PostDescription";
+import {copyLinkToClipboard} from "@/helpers/appHelpers";
 
 const CustomEditor = dynamic(() => {
     return import( '@/components/ckeditor5/custom-editor' );
@@ -322,6 +323,7 @@ export default function PostOverview({slug}: { slug: string }) {
                                         )}
 
                                         <Chip
+                                            onClick={()=>copyLinkToClipboard(`${NAVIGATION_LINKS.POST_OVERVIEW}/${postDetails.slug}`)}
                                             startContent={<ShareIcon width={18}/>}
                                             variant="light"
                                             size={'sm'}

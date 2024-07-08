@@ -98,7 +98,7 @@ export function CategoriesOverview() {
                                                                                 radius='sm'
                                                                                 size='sm'
                                                                             >
-                                                                                {categoryForum.postCount}
+                                                                                {categoryForum.threads}
                                                                             </Chip>
 
                                                                             <Chip
@@ -108,7 +108,7 @@ export function CategoriesOverview() {
                                                                                 radius='sm'
                                                                                 size='sm'
                                                                             >
-                                                                                2k
+                                                                                {categoryForum.participants}
                                                                             </Chip>
                                                                         </div>
                                                                     )}
@@ -122,15 +122,15 @@ export function CategoriesOverview() {
                                                                             <div
                                                                                 className='justify-items-end'>Threads
                                                                             </div>
-                                                                            <div>2k</div>
+                                                                            <div>{categoryForum.threads}</div>
                                                                             <div
                                                                                 className='justify-items-start'>Messages
                                                                             </div>
-                                                                            <div>4k</div>
+                                                                            <div>{categoryForum.messages}</div>
                                                                             <div
                                                                                 className='justify-items-end'>Views
                                                                             </div>
-                                                                            <div>2k</div>
+                                                                            <div>{categoryForum.views}</div>
                                                                         </div>
                                                                     </div>
                                                                 )}

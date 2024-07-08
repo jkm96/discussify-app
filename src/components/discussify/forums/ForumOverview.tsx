@@ -408,7 +408,7 @@ export default function ForumOverview({slug}: { slug: string }) {
                                                     <p className="">views</p>
                                                 </div>
                                                 <div className="flex gap-1">
-                                                    <p className="font-semibold ">{forumDetails.postCount}</p>
+                                                    <p className="font-semibold ">{forumDetails.threads}</p>
                                                     <p className="">posts</p>
                                                 </div>
                                             </CardFooter>
