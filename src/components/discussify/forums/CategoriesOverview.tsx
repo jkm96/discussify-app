@@ -77,7 +77,8 @@ export function CategoriesOverview() {
                                                                         </Link>
                                                                     </h4>
 
-                                                                    <span className={isMediumOrLarger ? '':'text-small'}>{categoryForum.description}</span>
+                                                                    <span
+                                                                        className={isMediumOrLarger ? '' : 'text-small'}>{categoryForum.description}</span>
 
                                                                     {!isMediumOrLarger && (
                                                                         <div>
@@ -175,10 +176,10 @@ export function CategoriesOverview() {
                                                     </Card>
                                                 ))}
                                             </CardBody>
-
-                                            <CardFooter>
-                                                Stats
-                                            </CardFooter>
+                                            {/*TODO add forum total aggregates*/}
+                                            {/*<CardFooter>*/}
+                                            {/*    Stats*/}
+                                            {/*</CardFooter>*/}
                                         </Card>
                                     ))}
                                 </>

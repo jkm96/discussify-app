@@ -2,9 +2,10 @@ import React, {useState} from 'react';
 import {toast} from 'react-toastify';
 import {upsertReplyAsync} from "@/lib/services/discussify/commentService";
 import dynamic from "next/dynamic";
-import {Button, Spinner} from "@nextui-org/react";
+import {Button} from "@nextui-org/react";
 import {User} from "@/boundary/interfaces/user";
 import {UpsertReplyRequest} from "@/boundary/interfaces/comment";
+import Spinner from "@/components/shared/icons/Spinner";
 
 const initialComment:UpsertReplyRequest = {command: 1, description: '', parentRecordId: null, recordId: null };
 
@@ -66,12 +67,12 @@ const EditReplyForm = ({ initialData,parentRecordId, recordId, onCommentEdited, 
                         <Button
                             color='primary'
                             type='submit'
-                            size={'sm'}
+                            size='sm'
                             isLoading={isSubmitting}
-                            spinner={<Spinner />}
+                            spinner={<Spinner/>}
                             onClick={handleEditReply}
                         >
-                            {isSubmitting ? 'Submitting...' : 'Update Comment'}
+                            {isSubmitting ? 'Submitting...' : 'Update'}
                         </Button>
                         <Button
                             color='default'

@@ -26,7 +26,18 @@ interface RecursiveCommentProps {
     handleReplyAdded: (commentId: number, description: string) => void;
 }
 
-const RecursiveComment = ({ comment, user,sortBy, editCommentFormState, toggleEditFormVisibility, handleCommentEdited, toggleReplyForm, activeReplyFormId, handleReplyAdded }:RecursiveCommentProps) => {
+const RenderRecursiveComments = (
+    {
+        comment,
+        user,
+        sortBy,
+        editCommentFormState,
+        toggleEditFormVisibility,
+        handleCommentEdited,
+        toggleReplyForm,
+        activeReplyFormId,
+        handleReplyAdded
+    }: RecursiveCommentProps) => {
     const [replies, setReplies] = useState<CommentResponse[]>([]);
     const [isLoadingReplies, setIsLoadingReplies] = useState(false);
     const [repliesLoaded, setRepliesLoaded] = useState(false);
@@ -35,7 +46,7 @@ const RecursiveComment = ({ comment, user,sortBy, editCommentFormState, toggleEd
         setIsLoadingReplies(true);
         try {
             const params = new PostRepliesQueryParameters();
-            const response = await getRepliesAsync(comment.id,{...params,sortBy:sortBy});
+            const response = await getRepliesAsync(comment.id, {...params, sortBy: sortBy});
             if (response.statusCode === 200) {
                 const parsedData = response.data;
                 const {data, pagingMetaData} = parsedData;
@@ -49,13 +60,16 @@ const RecursiveComment = ({ comment, user,sortBy, editCommentFormState, toggleEd
         }
     };
 
-    const handleReplyEdited = (commentId:number, description:string) => {
-        setReplies((prevReplies) => prevReplies.map((reply) => reply.id === commentId ? { ...reply, description } : reply));
+    const handleReplyEdited = (commentId: number, description: string) => {
+        setReplies((prevReplies) => prevReplies.map((reply) => reply.id === commentId ? {
+            ...reply,
+            description
+        } : reply));
         handleCommentEdited(commentId, description);
     };
 
-    const handleReplyAddedWithReload = (commentId:number, description:string) => {
-        handleReplyAdded(commentId,description)
+    const handleReplyAddedWithReload = (commentId: number, description: string) => {
+        handleReplyAdded(commentId, description)
         handleLoadReplies();
     };
 
@@ -81,7 +95,8 @@ const RecursiveComment = ({ comment, user,sortBy, editCommentFormState, toggleEd
                                         />
                                     </h4>
                                     <h5 className="text-small dark:text-white text-default-400">
-                                        <span className="mr-1">Joined {formatDateWithYear(comment.user.createdAt)}</span>
+                                        <span
+                                            className="mr-1">Joined {formatDateWithYear(comment.user.createdAt)}</span>
                                         <span className="ml-1">{comment.user.postsCount} posts</span>
                                     </h5>
                                 </div>
@@ -137,14 +152,14 @@ const RecursiveComment = ({ comment, user,sortBy, editCommentFormState, toggleEd
                                 </Chip>
                             </>
                         )}
-
-                        <Chip
-                            startContent={<LikeIcon width={18}/>}
-                            variant="light"
-                            className='cursor-pointer'
-                        >
-                            <p className="hover:underline">Like</p>
-                        </Chip>
+                        {/*TODO enable like for replies and comments*/}
+                        {/*<Chip*/}
+                        {/*    startContent={<LikeIcon width={18}/>}*/}
+                        {/*    variant="light"*/}
+                        {/*    className='cursor-pointer'*/}
+                        {/*>*/}
+                        {/*    <p className="hover:underline">Like</p>*/}
+                        {/*</Chip>*/}
                     </div>
 
                     <div className="flex justify-end w-1/2">
@@ -159,7 +174,8 @@ const RecursiveComment = ({ comment, user,sortBy, editCommentFormState, toggleEd
                 </CardFooter>
                 {!repliesLoaded && comment.repliesCount > 0 && (
                     <div className='flex items-center justify-center mb-1'>
-                        <Link  size='sm' className='cursor-pointer hover:underline dark:text-white text-black'  onClick={handleLoadReplies}>
+                        <Link size='sm' className='cursor-pointer hover:underline dark:text-white text-black'
+                              onClick={handleLoadReplies}>
                             {isLoadingReplies ? <CircularProgress/> : 'Load Replies'}
                         </Link>
                     </div>
@@ -179,7 +195,7 @@ const RecursiveComment = ({ comment, user,sortBy, editCommentFormState, toggleEd
             {repliesLoaded && (
                 <div className='mt-2 mb-2 ml-2 border-l-2 border-l-yellow-500'>
                     {replies.map(reply => (
-                        <RecursiveComment
+                        <RenderRecursiveComments
                             key={reply.id}
                             comment={reply}
                             user={user}
@@ -199,4 +215,4 @@ const RecursiveComment = ({ comment, user,sortBy, editCommentFormState, toggleEd
     );
 };
 
-export default RecursiveComment;
+export default RenderRecursiveComments;

@@ -334,14 +334,14 @@ export function PostRepliesComponent({user, postDetails, initialPostReplies}: Pr
                                                         </Chip>
                                                     </>
                                                 )}
-
-                                                <Chip
-                                                    startContent={<LikeIcon width={18}/>}
-                                                    variant="light"
-                                                    className='cursor-pointer'
-                                                >
-                                                    <p className="hover:underline">Like</p>
-                                                </Chip>
+                                                {/*TODO enable like for replies and comments*/}
+                                                {/*<Chip*/}
+                                                {/*    startContent={<LikeIcon width={18}/>}*/}
+                                                {/*    variant="light"*/}
+                                                {/*    className='cursor-pointer'*/}
+                                                {/*>*/}
+                                                {/*    <p className="hover:underline">Like</p>*/}
+                                                {/*</Chip>*/}
                                             </div>
 
                                             <div className="flex justify-end w-1/2">

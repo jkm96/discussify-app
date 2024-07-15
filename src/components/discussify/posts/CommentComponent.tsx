@@ -7,7 +7,7 @@ import {toast} from "react-toastify";
 import {CommentResponse} from "@/boundary/interfaces/comment";
 import {PostRepliesQueryParameters} from "@/boundary/parameters/postRepliesQueryParameters";
 import {User} from "@/boundary/interfaces/user";
-import RecursiveComment from "@/components/discussify/posts/NestedCommentComponent";
+import RenderRecursiveComments from "@/components/discussify/posts/RenderRecursiveComments";
 
 interface Props {
     user: User | null;
@@ -24,14 +24,11 @@ interface EditCommentFormState {
 export default function CommentComponent({user, postReplyId, sortBy}: Props) {
     const [isLoadingComments, setIsLoadingComments] = useState(true);
     const [commentResponse, setCommentResponse] = useState<CommentResponse[]>([]);
-
     const [editCommentFormState, setEditCommentFormState] = useState<EditCommentFormState>({});
     const toggleEditFormVisibility = (postId: number): void => {
         setEditCommentFormState((prevState) => ({
             ...prevState,
-            [postId]: {
-                isVisible: !prevState[postId]?.isVisible || true
-            }
+            [postId]: {isVisible: !prevState[postId]?.isVisible}
         }));
     };
     const fetchComments = async (postReplyId: any) => {
@@ -64,23 +61,21 @@ export default function CommentComponent({user, postReplyId, sortBy}: Props) {
     };
 
     const handleReplyAdded = (commentId: number, description: string) => {
-       if (activeReplyFormId == commentId){
-           fetchComments(postReplyId);
-       }
+        if (activeReplyFormId == commentId) {
+            fetchComments(postReplyId);
+        }
     };
 
     const handleCommentEdited = (commentId: number, description: string) => {
         setCommentResponse(prevComments =>
             prevComments.map(comment =>
-                comment.id === commentId ? { ...comment, description } : comment
+                comment.id === commentId ? {...comment, description} : comment
             )
         );
         // Set edit form visibility to false for the edited comment
         setEditCommentFormState(prevState => ({
             ...prevState,
-            [commentId]: {
-                isVisible: false
-            }
+            [commentId]: {isVisible: false}
         }));
     };
 
@@ -93,7 +88,7 @@ export default function CommentComponent({user, postReplyId, sortBy}: Props) {
             ) : (
                 <div className='mt-2 border-l-2 border-l-yellow-500 bg-grey-200 dark:bg-boxdark-2'>
                     {commentResponse.map((comment) => (
-                        <RecursiveComment
+                        <RenderRecursiveComments
                             key={comment.id}
                             comment={comment}
                             user={user}

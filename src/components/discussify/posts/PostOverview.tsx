@@ -313,17 +313,20 @@ export default function PostOverview({slug}: { slug: string }) {
 
                                     <div className="flex justify-end w-1/2">
                                         {user && (
-                                            <Chip
-                                                startContent={<BookmarkIcon width={18}/>}
-                                                variant="light"
-                                                size={'sm'}
-                                            >
-                                                <p className="hover:underline">Save</p>
-                                            </Chip>
+                                            <>
+                                                {/*TODO add bookmark functionality*/}
+                                                {/*<Chip*/}
+                                                {/*    startContent={<BookmarkIcon width={18}/>}*/}
+                                                {/*    variant="light"*/}
+                                                {/*    size={'sm'}*/}
+                                                {/*>*/}
+                                                {/*    <p className="hover:underline">Save</p>*/}
+                                                {/*</Chip>*/}
+                                            </>
                                         )}
 
                                         <Chip
-                                            onClick={()=>copyLinkToClipboard(`${NAVIGATION_LINKS.POST_OVERVIEW}/${postDetails.slug}`)}
+                                            onClick={() => copyLinkToClipboard(`${NAVIGATION_LINKS.POST_OVERVIEW}/${postDetails.slug}`)}
                                             startContent={<ShareIcon width={18}/>}
                                             variant="light"
                                             size={'sm'}

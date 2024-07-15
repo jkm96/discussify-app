@@ -2,11 +2,12 @@ import React, {useState} from 'react';
 import {toast} from 'react-toastify';
 import {upsertReplyAsync} from "@/lib/services/discussify/commentService";
 import dynamic from "next/dynamic";
-import {Button, Spinner} from "@nextui-org/react";
+import {Button} from "@nextui-org/react";
 import {User} from "@/boundary/interfaces/user";
 import {UpsertReplyRequest} from "@/boundary/interfaces/comment";
+import Spinner from "@/components/shared/icons/Spinner";
 
-const initialComment:UpsertReplyRequest = {command: 0, description: '', parentRecordId: null, recordId: null };
+const initialComment: UpsertReplyRequest = {command: 0, description: '', parentRecordId: null, recordId: null};
 
 const CustomEditor = dynamic(() => {
     return import( '@/components/ckeditor5/custom-editor' );
@@ -20,15 +21,16 @@ interface AddReplyFormProps {
     onReplyAdded: (commentId: number, description: string) => void;
     user: User | null;
 }
-const AddReplyForm = ({ parentRecordId, recordId, onReplyAdded, user, isActive, onToggle }:AddReplyFormProps) => {
+
+const AddReplyForm = ({parentRecordId, recordId, onReplyAdded, user, isActive, onToggle}: AddReplyFormProps) => {
     const [upsertReplyRequest, setUpsertReplyRequest] = useState(initialComment);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const handleAddPostReplyCommentEditorChange = (data:any) => {
-        setUpsertReplyRequest({ ...upsertReplyRequest, description: data });
+    const handleAddPostReplyCommentEditorChange = (data: any) => {
+        setUpsertReplyRequest({...upsertReplyRequest, description: data});
     };
 
-    const handleAddComment = async (e:any) => {
+    const handleAddComment = async (e: any) => {
         e.preventDefault();
         setIsSubmitting(true);
         const comment = upsertReplyRequest.description;
@@ -37,13 +39,13 @@ const AddReplyForm = ({ parentRecordId, recordId, onReplyAdded, user, isActive, 
             setIsSubmitting(false);
             return;
         }
-        const requestPayload = { ...upsertReplyRequest, recordId, parentRecordId };
+        const requestPayload = {...upsertReplyRequest, recordId, parentRecordId};
         const response = await upsertReplyAsync(requestPayload);
         if (response.statusCode === 200) {
             toast.success(response.message);
             onToggle(false); // Close the form
             setUpsertReplyRequest(initialComment);
-            onReplyAdded(recordId,upsertReplyRequest.description);
+            onReplyAdded(recordId, upsertReplyRequest.description);
         } else {
             toast.error(response.message ?? 'Unknown error occurred');
         }
@@ -62,17 +64,16 @@ const AddReplyForm = ({ parentRecordId, recordId, onReplyAdded, user, isActive, 
                         <Button
                             color='primary'
                             type='submit'
-                            size={'sm'}
+                            size='sm'
                             isLoading={isSubmitting}
-                            spinner={<Spinner />}
-                            onClick={handleAddComment}
-                        >
-                            {isSubmitting ? 'Submitting...' : 'Post Comment'}
+                            spinner={<Spinner/>}
+                            onClick={handleAddComment}>
+                            {isSubmitting ? 'Submitting...' : 'Post'}
                         </Button>
                         <Button
                             color='default'
                             type='button'
-                            size={'sm'}
+                            size='sm'
                             onClick={() => onToggle(false)}
                         >
                             Cancel

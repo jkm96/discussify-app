@@ -1,26 +1,28 @@
+import {appName, internalBaseUrl} from "@/boundary/constants/appConstants";
+
 export function getPageMetadata(title: string, description: string) {
   const currentUrl = typeof window !== 'undefined' ? window.location.href : '';
   return {
-    metadataBase: new URL('https://petdiaries.io'),
+    metadataBase: new URL(internalBaseUrl),
     title: title,
     description: description,
     type: 'website',
-    siteName:'Pet Diaries',
+    siteName: appName,
     url: currentUrl,
-    creator : 'Pet Diaries',
+    creator : appName,
     keywords: 'pet diary, online pet diary, pet photo diary, centralized pet memories, pet lovers diary',
     robots : 'index, follow',
     icons:{
       icon: '/favicon.ico'
     },
     openGraph: {
-      metadataBase: new URL('https://petdiaries.io'),
+      metadataBase: new URL(internalBaseUrl),
       title: title,
       description: description,
       type: 'website',
-      siteName:'Pet Diaries',
+      siteName: appName,
       url: currentUrl,
-      creator : 'Pet Diaries',
+      creator : appName,
       keywords: 'pet diary, online pet diary, pet photo diary, centralized pet memories, pet lovers diary',
       robots : 'index, follow',
       icons:{
