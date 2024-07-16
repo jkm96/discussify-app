@@ -48,20 +48,20 @@ export default function CoverPosts() {
                                             className="block rounded-lg shadow-secondary-1 dark:bg-surface-dark dark:text-white text-surface">
                                             <Card isFooterBlurred className="h-[200px] sm:col-span-7">
                                                 <CardHeader className="absolute z-10 top-1 flex-col items-start">
-                                                    <p className="text-tiny font-bold text-white">
+                                                    <p className="text-tiny font-bold">
                                                         <Link underline="hover"
-                                                              className='text-white text-small'
+                                                              className='dark:text-white text-small'
                                                               href={`${NAVIGATION_LINKS.FORUM_OVERVIEW}/${postResponses[0]?.forum.slug}`}>
                                                             {postResponses[0]?.forum.title}
                                                         </Link>
                                                     </p>
-                                                    <h4 className="text-medium text-white">
+                                                    <p className="text-white">
                                                         <Link className='text-white'
                                                               underline='hover'
                                                               href={`${NAVIGATION_LINKS.POST_OVERVIEW}/${postResponses[0]?.slug}`}>
                                                             {postResponses[0]?.title}
                                                         </Link>
-                                                    </h4>
+                                                    </p>
                                                 </CardHeader>
                                                 <img
                                                     loading="lazy"

@@ -61,7 +61,7 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
     return (
         <aside
             ref={sidebar}
-            className={`absolute flex flex-col overflow-y-hidden bg-white duration-300 ease-linear dark:bg-boxdark-mode lg:static lg:translate-x-0 ${
+            className={`absolute flex flex-col overflow-y-hidden duration-300 ease-linear lg:static lg:translate-x-0 ${
                 sidebarOpen ? 'translate-x-0' : '-translate-x-full'
             }`}
         >
@@ -82,21 +82,21 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
                 {/* <!-- Sidebar Menu --> */}
                 <nav className=' py-2 px-2 lg:px-4'>
                     {/* <!-- Menu Group --> */}
+                    {user?.isAdmin && (
+                        <>
+                            <h3 className='mb-4 ml-4 text-sm font-semibold text-bodydark2'>
+                                MENU
+                            </h3>
 
-                    <h3 className='mb-4 ml-4 text-sm font-semibold text-bodydark2'>
-                        MENU
-                    </h3>
+                            <ul className='mb-6 flex flex-col gap-4'>
 
-                    <ul className='mb-6 flex flex-col gap-4'>
-                        {user?.isAdmin && (
-                            <>
                                 <li>
                                     <Link
                                         href={NAVIGATION_LINKS.ADMIN_DASHBOARD}
                                         onClick={() => setSidebarOpen(false)}
                                         className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium 
-                                                            text-bodydark2 duration-300 ease-in-out hover:text-white ${
-                                            pathname === NAVIGATION_LINKS.ADMIN_DASHBOARD && 'text-white'
+                                                             duration-300 ease-in-out hover:text-yellow-500 ${
+                                            pathname === NAVIGATION_LINKS.ADMIN_DASHBOARD && 'dark:text-white text-yellow-400 font-bold'
                                         } `}>
                                         <DashboardIcon/>
                                         Dashboard
@@ -108,8 +108,8 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
                                         href={NAVIGATION_LINKS.ADMIN_MANAGE_USERS}
                                         onClick={() => setSidebarOpen(false)}
                                         className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium 
-                                                            text-bodydark2 duration-300 ease-in-out hover:text-white ${
-                                            pathname === NAVIGATION_LINKS.ADMIN_MANAGE_USERS && 'text-white'
+                                                            duration-300 ease-in-out hover:text-yellow-500 ${
+                                            pathname === NAVIGATION_LINKS.ADMIN_MANAGE_USERS && 'dark:text-white text-yellow-400 font-bold'
                                         } `}>
                                         <DashboardIcon/>
                                         Users
@@ -121,8 +121,8 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
                                         href={NAVIGATION_LINKS.ADMIN_MANAGE_SITE_CONTENT}
                                         onClick={() => setSidebarOpen(false)}
                                         className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium 
-                                                            text-bodydark2 duration-300 ease-in-out hover:text-white ${
-                                            pathname === NAVIGATION_LINKS.ADMIN_MANAGE_SITE_CONTENT && 'text-white'
+                                                            duration-300 ease-in-out hover:text-yellow-500 ${
+                                            pathname === NAVIGATION_LINKS.ADMIN_MANAGE_SITE_CONTENT && 'dark:text-white text-yellow-400 font-bold'
                                         } `}>
                                         <DashboardIcon/>
                                         Site Content
@@ -134,17 +134,16 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
                                         href={NAVIGATION_LINKS.ADMIN_MANAGE_CUSTOMER_FEEDBACK}
                                         onClick={() => setSidebarOpen(false)}
                                         className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium 
-                                                            text-bodydark2 duration-300 ease-in-out hover:text-white ${
-                                            pathname === NAVIGATION_LINKS.ADMIN_MANAGE_CUSTOMER_FEEDBACK && 'text-white'
+                                                            duration-300 ease-in-out hover:text-yellow-500 ${
+                                            pathname === NAVIGATION_LINKS.ADMIN_MANAGE_CUSTOMER_FEEDBACK && 'dark:text-white text-yellow-400 font-bold'
                                         } `}>
                                         <DashboardIcon/>
                                         Feedback
                                     </Link>
                                 </li>
-                            </>
-                        )}
-                    </ul>
-
+                            </ul>
+                        </>
+                    )}
                 </nav>
                 {/* <!-- Sidebar Menu --> */}
             </div>

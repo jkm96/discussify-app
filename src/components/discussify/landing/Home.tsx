@@ -349,7 +349,7 @@ export default function Home() {
                                 ) : (
                                     <>
                                         {postResponses.map((post) => (
-                                            <Card key={post.id} className="w-full mb-2">
+                                            <Card key={post.id} className="w-full mb-2" radius="sm">
                                                 <CardHeader className="flex gap-3 p-1">
                                                     <Avatar
                                                         alt={post.title}
@@ -373,13 +373,13 @@ export default function Home() {
                                                             {user ? (
                                                                 <>
                                                                     {post.userHasViewed ? (
-                                                                        <p className="text-large">{post.title}</p>
+                                                                        <p className="text-medium">{post.title}</p>
                                                                     ) : (
-                                                                        <p className="text-xl font-bold">{post.title}</p>
+                                                                        <p className="font-bold">{post.title}</p>
                                                                     )}
                                                                 </>
                                                             ) : (
-                                                                <p className="text-large">{post.title}</p>
+                                                                <p className="text-medium">{post.title}</p>
                                                             )}
                                                         </Link>
                                                         <div className="flex text-small text-default-500">
@@ -425,7 +425,7 @@ export default function Home() {
 
                             {totalPages > 1 && !isLoadingMorePosts && totalPages !== currentPage && (
                                 <div className="flex justify-center mt-4 mb-4">
-                                    <Button size={'md'} onClick={handleLoadMore}>
+                                    <Button color='primary' size='sm' onClick={handleLoadMore}>
                                         Load More
                                     </Button>
                                 </div>

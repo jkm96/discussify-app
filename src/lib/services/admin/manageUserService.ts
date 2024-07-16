@@ -23,7 +23,7 @@ export async function getUsers(queryParams: UserQueryParameters) {
 
 export async function toggleUser(userId: number) {
   try {
-    const response = await fetch(`${internalBaseUrl}/api/admin/manage-users/toggle`, {
+    const response = await fetch(`${internalBaseUrl}/api/admin/manage-users/toggle-status`, {
       method: 'POST',
       headers: {
         'x-api-key': `${apiKey}`,
