@@ -11,6 +11,7 @@ import {NAVIGATION_LINKS} from "@/boundary/configs/navigationConfig";
 import {formatDateWithTime} from "@/helpers/dateHelpers";
 import {CommentIcon, EyeIcon, PeopleIcon} from "@/components/shared/icons/LikeIcon";
 import RecordAuthorStatsComponent from "@/components/discussify/Shared/RecordAuthorStatsComponent";
+import {bgBlack} from "next/dist/lib/picocolors";
 
 export function CategoriesOverview() {
     const {matches: isMediumOrLarger} = useClientMediaQuery('(min-width: 768px)');
@@ -56,7 +57,7 @@ export function CategoriesOverview() {
                             ) : (
                                 <>
                                     {categoryDetails.map((category) => (
-                                        <Card key={category.id} className="w-full mb-2">
+                                        <Card key={category.id} className="w-full mb-2" shadow={'none'} radius={'none'} classNames={{ base: "bg-yellow-400"}}>
                                             <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
                                                 <h4 className="font-bold">{category.name}</h4>
                                             </CardHeader>

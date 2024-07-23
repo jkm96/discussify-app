@@ -90,10 +90,10 @@ export const RecordAuthorStats = ({uniqueId, author, userHasFollowedAuthor,updat
             <CardBody className="px-3 py-0">
                 <table className="table table-bordered">
                     <tbody>
-                    <tr className={'text-small'}>
+                    <tr className={'text-small text-center'}>
                         <th>Posts</th>
-                        <th>Reaction Score</th>
-                        <th>Points Earned</th>
+                        <th>Score</th>
+                        <th>Awards</th>
                     </tr>
                     <tr className={'text-center'}>
                         <td>{author.postsCount}</td>

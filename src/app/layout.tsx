@@ -10,7 +10,7 @@ import NotificationBar from "@/components/shared/notifications/NotificationBar";
 export default function RootLayout({children}: { children: React.ReactNode }) {
     return (
         <html suppressHydrationWarning={true} lang='en'>
-        
+
         <body>
         <UIProvider>
             <AuthProvider>
